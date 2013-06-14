@@ -1,0 +1,17 @@
+<?php
+// Rename me to config.php!
+
+date_default_timezone_set("America/New_York");
+
+$buildingList = array("High School");
+$issueTypes = array("General Support", "OS", "Screen", "Keyboard", "HDD", "Other (see notes)");
+
+$databaseInfo = array(
+        "host" => "127.0.0.1",
+        "username" => "root",
+        "password" => "",
+        "database" => "OnetoOne"
+);
+?>
+
+

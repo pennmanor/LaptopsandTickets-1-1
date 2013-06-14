@@ -1,0 +1,27 @@
+body
+{
+	padding-bottom: 20px;
+}
+
+.sectionHeader
+{
+	font-weight:bold;
+	font-size: 27px;
+}
+
+.report-title
+{
+	font-weight:bold;
+	font-size: 20px;
+}
+
+.buttonSpacer
+{
+	margin-right:10px;
+}
+
+.notesBox
+{
+	width: 98%;
+	resize: none;
+}
