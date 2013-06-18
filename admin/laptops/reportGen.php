@@ -1,5 +1,6 @@
 <?php
-require_once("../include.php");
+$requiresAdmin = true;
+require_once("../../include.php");
 
 header('Cache-Control: must-revalidate, post-check=0, pre-check=0'); 
 header('Content-Type: application/octet-stream'); 

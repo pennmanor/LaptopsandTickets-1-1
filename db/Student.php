@@ -127,5 +127,16 @@ class Student
 		}
 		return false;
 	}
+	
+	public function isHelper()
+	{
+		global $helpers;
+		foreach ($helpers as $helper)
+		{
+			if ( $helper == $this->getID() )
+				return true;
+		}
+		return false;
+	}
 }
 ?>

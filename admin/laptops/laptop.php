@@ -1,9 +1,12 @@
 <?php
-require_once("../include.php");
+$requiresAdmin = true;
+require_once("../../include.php");
 
 $laptop = false;
 $assignedTo = false;
 $history = false;
+
+htmlspecialcharsArray($_GET);
 
 if ( array_key_exists("delete", $_GET) )
 {
@@ -51,7 +54,7 @@ if ( array_key_exists("service", $_GET) )
 	$laptop = Laptop::getByProperty(PROPERTY_ID, $_GET['service']);
 	if ( $laptop )
 	{
-		addHistoryItem($laptop, -1, HISTORYEVENT_SERVICE, array("notes"=>$_GET['serviceNotes'], "type"=>$_GET['type']));
+		addHistoryItem($laptop, -1, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
 	}
 	echo mysql_error();
 	header("Location: laptop.php?id=".$_GET['service']);
@@ -73,8 +76,8 @@ if ( array_key_exists("id", $_GET) )
 <head>
 	<title>1:1 Inventory</title>
 	<script src="http://code.jquery.com/jquery.js"></script>
-	<link href="../css/bootstrap.css" rel="stylesheet">
-	<link href="../css/style.css" rel="stylesheet">
+	<link href="../../css/bootstrap.css" rel="stylesheet">
+	<link href="../../css/style.css" rel="stylesheet">
 	<script type="text/javascript">
 	var thisLaptopID = <?php echo $_GET['id']; ?>
 	
@@ -134,7 +137,7 @@ if ( array_key_exists("id", $_GET) )
 					<a class="brand" href="../index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
-						<li><a href="./tickets">Tickets</a></li>
+						<li><a href="../tickets">Tickets</a></li>
 						<li class="active"><a href="./index.php">Laptops</a></li>
 					</ul>
 				
@@ -242,7 +245,7 @@ if ( array_key_exists("id", $_GET) )
 				<span class="sectionHeader">History</span>
 				<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
 				<hr>
-				<?php echo getHTMLForHistory($history); ?>
+				<?php echo Laptop::getHTMLForHistory($history); ?>
 				<button class="btn btn-danger pull-right" onClick='confirmDelete(<?php echo $properties[PROPERTY_ID]; ?>)'>Delete Laptop</button>
 			<?php
 			}

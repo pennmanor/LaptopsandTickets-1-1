@@ -24,6 +24,46 @@ class Laptop
 		return $laptop;
 	}
 	
+
+	public static function getHTMLForHistory($history, $laptops = false)
+	{
+		global $issueTypes;
+		$output = "";
+		foreach ($history as $row)
+		{
+			if ( $row['action'] == ACTION_CREATE )
+			{
+				$output .= "<div class=\"alert action-info\"><strong>Created</strong><br>";
+				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was added to the database.<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+			else if ( $row['action'] == ACTION_UNASSIGN )
+			{
+				$output .= "<div class=\"alert\"><strong>Returned</strong><br>";
+				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was returned.<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+			else if ( $row['action'] == ACTION_ASSIGN )
+			{
+				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
+				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to ".$row['student']."<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+			else if ( $row['action'] == HISTORYEVENT_SERVICE )
+			{
+				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['data']['type']]."</strong><br>";
+				$output .= nl_fix($row['data']['notes'])."<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+		}
+		return $output;
+	}
+	
+	
 	public static function searchField($property, $query, $dupCheck = array())
 	{
 		$query = mysql_real_escape_string($query);
@@ -79,7 +119,7 @@ class Laptop
 		while ( $d = mysql_fetch_array($result) )
 		{
 			if ( !empty($d) )
-				$output[] = new Laptop($d['id']);
+				$output[$d['id']] = new Laptop($d['id']);
 		}
 		return $output;
 	}
@@ -128,7 +168,7 @@ class Laptop
 		return new Student(mysql_result($result, 0, "id"));
 	}
 	
-	public function getHistory()
+	public function getHistory($sortBy = SORT_DESC)
 	{
 		$result = mysql_query("SELECT * FROM history WHERE `laptop` = ".$this->getID());
 		$output = array();
@@ -142,7 +182,7 @@ class Laptop
 				$sortPivot[] = $d['timestamp'];
 			}
 		}
-		array_multisort($sortPivot, SORT_DESC, $output);
+		array_multisort($output, $sortBy, $sortPivot);
 		return $output;
 	}
 	

@@ -6,12 +6,17 @@ date_default_timezone_set("America/New_York");
 $buildingList = array("High School");
 $issueTypes = array("General Support", "OS", "Screen", "Keyboard", "HDD", "Other (see notes)");
 
+$helpers = array(127297);
+
 $databaseInfo = array(
-        "host" => "127.0.0.1",
-        "username" => "root",
-        "password" => "",
-        "database" => "OnetoOne"
+	"host" => "127.0.0.1",
+	"username" => "root",
+	"password" => "",
+	"database" => "OnetoOne"
 );
+
+// OpenID 
+$openIDproviderURL = "http://google.com/accounts/o8/site-xrds?hd=lobos.me";
+$openIDbaseURL = "http://127.0.0.1/LaptopInventory/";
+$openIDlogoutURL = "https://www.google.com/accounts/Logout";
 ?>
-
-

@@ -1,6 +1,6 @@
 <?php
-require_once("../include.php");
-
+$requiresAdmin = true;
+require_once("../../include.php");
 $showBox = RESULT_NONE;
 if ( array_key_exists("file", $_FILES) )
 {
@@ -28,6 +28,7 @@ if ( array_key_exists("file", $_FILES) )
 
 if ( array_key_exists("submit", $_POST) )
 {
+	htmlspecialcharsArray($_POST);
 	if ( empty($_POST['hostname']) || empty($_POST['serial']) || empty($_POST['asset']) || empty($_POST['building']) )
 		$showBox = RESULT_FAIL;
 	else if ( Laptop::getByProperty(PROPERTY_HOSTNAME, $_POST['hostname']) || Laptop::getByProperty(PROPERTY_ASSETTAG, $_POST['asset']) || Laptop::getByProperty(PROPERTY_SERIAL, $_POST['serial']) || Laptop::getByProperty(PROPERTY_WMAC, $_POST['wirelessMAC']) || Laptop::getByProperty(PROPERTY_EMAC, $_POST['ethernetMAC']))
@@ -45,8 +46,8 @@ $laptops = Laptop::getAll();
 <html>
 <head>
 	<title>1:1 Inventory</title>
-	<link href="../css/bootstrap.css" rel="stylesheet">
-	<link href="../css/style.css" rel="stylesheet">
+	<link href="../../css/bootstrap.css" rel="stylesheet">
+	<link href="../../css/style.css" rel="stylesheet">
 	<script type="text/javascript">
 	
 	function csvDL()
@@ -73,7 +74,7 @@ $laptops = Laptop::getAll();
 					<a class="brand" href="../index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
-						<li><a href="./tickets">Tickets</a></li>
+						<li><a href="../tickets">Tickets</a></li>
 						<li class="active"><a href="#">Laptops</a></li>
 					</ul>
 				

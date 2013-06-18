@@ -1,18 +1,20 @@
 <?php
-require_once("../include.php");
+$requiresAdmin = true;
+require_once("../../include.php");
 
 $laptops = Laptop::search($_GET['query']);
 if ( count($laptops) == 1 )
 {
 	header("Location: laptop.php?id=".$laptops[0]->getID());
+	die();
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>1:1 Inventory</title>
-	<link href="../css/bootstrap.css" rel="stylesheet">
-	<link href="../css/style.css" rel="stylesheet">
+	<link href="../../css/bootstrap.css" rel="stylesheet">
+	<link href="../../css/style.css" rel="stylesheet">
 	<script type="text/javascript">
 	
 	function csvDL()
@@ -39,7 +41,7 @@ if ( count($laptops) == 1 )
 					<a class="brand" href="../index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
-						<li><a href="./tickets">Tickets</a></li>
+						<li><a href="../tickets">Tickets</a></li>
 						<li class="active"><a href="./index.php">Laptops</a></li>
 					</ul>
 				
