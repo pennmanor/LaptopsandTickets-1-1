@@ -54,7 +54,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			}
 			?>
 			
-			<button class="btn btn-inverse" onclick="window.location = 'all.php'">View All Tickets</button><br><br>
+			<button class="btn btn-small btn-inverse" onclick="window.location = 'all.php'">View All Tickets</button><br><br>
 			<span class="sectionHeader">Unassigned Tickets</span>
 			<hr>
 			<table class="table table-bordered">
