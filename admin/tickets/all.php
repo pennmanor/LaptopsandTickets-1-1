@@ -79,7 +79,7 @@ $tickets = array_subset($tickets, $itemStart, $itemEnd);
 				?>
 			</table>
 			
-			<div class="pagination centered">
+			<div class="pagination pagination-centered">
 			  <ul>
 			    <li class="<?php if ( $pageNumber == 1 ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == 1 ) echo "#"; else echo "all.php?page=".($pageNumber-1); ?>">Prev</a></li>
 				<?php 
