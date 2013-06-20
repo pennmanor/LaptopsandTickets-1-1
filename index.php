@@ -47,33 +47,46 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		<div class="container">
 			<span class="sectionHeader">Tickets</span>
 			<hr>
-
-			<table class="table table-bordered">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Date</th>
-						<th></th>
-					</tr>
-				</thead>
-			
-				<tbody>
-					<?php
-					foreach ($tickets as $ticket)
-					{
-						$properties = $ticket->getProperties();
-					?>
+			<?php
+			if ( count($students) == 0 )
+			{
+			?>
+			<div class="alert">
+				You do not have any tickets.
+			</div>
+			<?php
+			}
+			else
+			{
+			?>
+				<table class="table table-bordered">
+					<thead>
 						<tr>
-							<td><?php echo $properties[PROPERTY_TITLE]."&nbsp;&nbsp;".$ticket->getStateLabel(); ?> </td>
-							<td><?php echo date("M d, Y", $properties[PROPERTY_TIMESTAMP])." at ".date("g:i A", $properties[PROPERTY_TIMESTAMP]); ?></td>
-							<td><button class="btn btn-inverse pull-right" onClick="window.location = 'viewTicket.php?id=<?php echo $properties[PROPERTY_ID]; ?>'">View</button></td>
+							<th>Title</th>
+							<th>Date</th>
+							<th></th>
 						</tr>
-					<?php
-					}
-					?>
-				</tbody>
-			</table>
-
+					</thead>
+			
+					<tbody>
+						<?php
+						foreach ($tickets as $ticket)
+						{
+							$properties = $ticket->getProperties();
+						?>
+							<tr>
+								<td><?php echo $properties[PROPERTY_TITLE]."&nbsp;&nbsp;".$ticket->getStateLabel(); ?> </td>
+								<td><?php echo date("M d, Y", $properties[PROPERTY_TIMESTAMP])." at ".date("g:i A", $properties[PROPERTY_TIMESTAMP]); ?></td>
+								<td><button class="btn btn-inverse pull-right" onClick="window.location = 'viewTicket.php?id=<?php echo $properties[PROPERTY_ID]; ?>'">View</button></td>
+							</tr>
+						<?php
+						}
+						?>
+					</tbody>
+				</table>
+			<?php
+			}
+			?>
 		</div>
 	</body>
 

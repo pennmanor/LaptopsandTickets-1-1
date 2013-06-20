@@ -217,7 +217,7 @@ if ( array_key_exists("id", $_GET) )
 				<span class="sectionHeader">Notes</span>
 				<hr> 
 				<form action="" method="GET">
-					<textarea rows="5" name="notesBox" class="notesBox"><?php echo $properties[PROPERTY_NOTES]; ?></textarea>
+					<textarea rows="5" name="notesBox" class="notesBox"><?php echo stripcslashes($properties[PROPERTY_NOTES]); ?></textarea>
 					<input type="hidden" name="id" value="<?php echo $properties[PROPERTY_ID]; ?>">
 					<input type="submit" class="btn btn-primary pull-right" value="Save">
 				</form>

@@ -13,6 +13,7 @@ if ( array_key_exists("create", $_POST) )
 }
 
 $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 				</div>
 			</div>
 		</div>
-		<br><br>
+		<br>
 		<div class="container">
 			<?php
 			if ( $showBox == RESULT_FAIL )
@@ -53,7 +54,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			}
 			?>
 			
-			
+			<button class="btn btn-inverse" onclick="window.location = 'all.php'">View All Tickets</button><br><br>
 			<span class="sectionHeader">Unassigned Tickets</span>
 			<hr>
 			<table class="table table-bordered">

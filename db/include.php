@@ -11,8 +11,8 @@ require_once(dirname(__FILE__)."/Student.php");
 
 function nl_fix($string)
 {
-	$string = str_replace(array("\r\\n", "\r", "\n"), "<br />", $string);
 	$string = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $string);
+	$string = str_replace(array("\r\\n", "\r", "\n"), "<br />", $string);
 	return $string;
 }
 
@@ -22,5 +22,21 @@ function htmlspecialcharsArray(&$arr)
 	{
 		$arr[$k] = htmlspecialchars($v);
 	}
+}
+
+function array_subset($input, $start, $end)
+{
+	$inputMaxIndex = count($input)-1;
+	
+	if ( $start == $inputMaxIndex )
+		return array($input[$inputMaxIndex]);
+	
+	if ( $end > $inputMaxIndex )
+		$end = $inputMaxIndex;
+	
+	$output = array();
+	for ( $i = $start; $i < $end; $i++ )
+		$output[] = $input[$i];
+	return $output;
 }
 ?>

@@ -39,8 +39,18 @@ if ( array_key_exists("submit", $_POST) )
 		$showBox = RESULT_FAIL;
 }
 
-$laptops = Laptop::getAll();
+$pageNumber = intval($_GET['page']);
+if ( $pageNumber < 1 )
+{
+	$pageNumber = 1;
+}
 
+$laptops = Laptop::getAll();
+$nPages = ceil(count($laptops)/$itemsPerPage);
+
+$itemStart = ($pageNumber-1)*$itemsPerPage;
+$itemEnd = $itemStart+$itemsPerPage;
+$laptops = array_subset($laptops, $itemStart, $itemEnd);
 ?>
 <!DOCTYPE html>
 <html>
@@ -150,7 +160,21 @@ $laptops = Laptop::getAll();
 					?>
 				</tbody>
 			</table>
-			
+			<div class="pagination pagination-centered">
+			  <ul>
+			    <li class="<?php if ( $pageNumber == 1 ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == 1 ) echo "#"; else echo "index.php?page=".($pageNumber-1); ?>">Prev</a></li>
+				<?php 
+				for ( $i = 0; $i < $nPages; $i++ )
+				{
+					$p = $i+1;
+				?>
+			    <li class="<?php if ( $pageNumber == $p ) echo "active"; ?>"><a href="index.php?page=<?php echo $p; ?>"><?php echo $p; ?></a></li>
+				<?php
+				}
+				?>
+			    <li class="<?php if ( $pageNumber == $nPages ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == $nPages ) echo "#"; else echo "index.php?page=".($pageNumber+1); ?>">Next</a></li>
+			  </ul>
+			</div>
 			<br>
 			
 			<span class="sectionHeader">Add</span>

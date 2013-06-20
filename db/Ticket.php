@@ -45,15 +45,20 @@ class Ticket
 		return $output;
 	}
 	
-	public static function getAll()
+	public static function getAll($sortBy = SORT_DESC)
 	{
 		$result = mysql_query("SELECT id FROM tickets");
 		$out = array();
+		$pivot = array();
 		while ( $d = mysql_fetch_array($result) )
 		{
 			if ( !empty($d) )
-				$out[$d['id']] = new Ticket($d['id']);
+			{
+				$out[] = new Ticket($d['id']);
+				$pivot[] = $d['timestamp'];
+			}
 		}
+		array_multisort($out, SORT_DESC, $pivot);
 		return $out;
 	}
 	
@@ -72,7 +77,7 @@ class Ticket
 			else if ( $row['action'] == HISTORYEVENT_TICKET_INFO )
 			{
 				$output .= "<div class=\"alert\">";
-				$output .= "<strong>".$row['data']['body']." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
+				$output .= "<strong>".stripcslashes($row['data']['body'])." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
 				$output .= "</div>";
 			}
 			else if ( $row['action'] == HISTORYEVENT_TICKET_REPLY )
@@ -83,7 +88,7 @@ class Ticket
 				else
 					$output .= "<div class=\"alert alert-info\">";
 				$output .= "<strong>".$author->getName()."</strong> <small>".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small><br>";
-				$output .= nl_fix($row['data']['body']);
+				$output .= stripcslashes(nl_fix($row['data']['body']));
 				$output .= "</div>";
 			}
 		}

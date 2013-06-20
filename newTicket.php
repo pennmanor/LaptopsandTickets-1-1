@@ -37,7 +37,7 @@ if ( array_key_exists("create", $_POST) )
 						<li class="active"><a href="./newTicket.php">New Ticket</a></li>
 						
 					</ul>
-					
+					<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>
 					<?php
 					if ( $session->isHelper() )
 					{

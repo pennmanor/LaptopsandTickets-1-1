@@ -43,7 +43,7 @@ else if ( array_key_exists("reply", $_GET) )
 						<li class="active"><a href="#">View Ticket</a></li>
 						
 					</ul>
-					
+					<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>
 					<?php
 					if ( $session->isHelper() )
 					{

@@ -55,7 +55,7 @@ class Laptop
 			else if ( $row['action'] == HISTORYEVENT_SERVICE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['data']['type']]."</strong><br>";
-				$output .= nl_fix($row['data']['notes'])."<br>";
+				$output .= stripcslashes(nl_fix($row['data']['notes']))."<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
@@ -119,7 +119,7 @@ class Laptop
 		while ( $d = mysql_fetch_array($result) )
 		{
 			if ( !empty($d) )
-				$output[$d['id']] = new Laptop($d['id']);
+				$output[] = new Laptop($d['id']);
 		}
 		return $output;
 	}
