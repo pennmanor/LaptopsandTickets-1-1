@@ -123,6 +123,23 @@ class Laptop
 		}
 		return $output;
 	}
+	
+	public static function getAllHistory()
+	{
+		$output = array();
+		
+		$result = mysql_query("SELECT * FROM `history`");
+		while ( $d = mysql_fetch_array($result) )
+		{
+			if ( !empty($d) )
+			{
+				$d['data'] = unserialize($d['data']);
+				$output[] = $d;
+			}
+		}
+		return $output;
+	}
+	
 
 	public function __construct($id)
 	{
