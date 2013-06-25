@@ -48,7 +48,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			<span class="sectionHeader">Tickets</span>
 			<hr>
 			<?php
-			if ( count($students) == 0 )
+			if ( count($tickets) == 0 )
 			{
 			?>
 			<div class="alert">
