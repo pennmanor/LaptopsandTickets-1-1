@@ -13,7 +13,6 @@ foreach ($laptops as $laptop)
 
 $nLaptops = count($laptops);
 $nLaptopsUnassigned = $nLaptops-$nAssigned;
-
 $tickets = Ticket::getAll();
 $nTickets = count($tickets);
 $nTicketsOpen = count(Ticket::getAllByProperty(PROPERTY_STATE, TICKETSTATE_OPEN));
@@ -48,10 +47,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 			<span class="sectionHeader">Overview</span>
 			<hr>
 			<div class="row">
-				<div class="span3">
-				</div>
-				
-				<div class="span3">
+				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
 							<td><span class="overviewHeader">Laptops</span></td>
@@ -71,7 +67,41 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 					</table>
 				</div>
 				
-				<div class="span3">
+				
+				<div class="span4">
+					<table class="table table-bordered">
+						<tr>
+							<td><span class="overviewHeader">Laptop Service</span></td>
+						</tr>
+						
+						<?php
+						$allHistory = Laptop::getAllHistory();
+						$issueCounts = array();
+						foreach ( $allHistory as $event )
+						{
+							if ( $event['action'] == HISTORYEVENT_SERVICE )
+							{
+								$issueCounts[$event['data']['type']]++;
+							}
+						}
+						
+						foreach ( $issueTypes as $k => $issue )
+						{
+							if ( !array_key_exists($k, $issueCounts) )
+								$issueCounts[$k] = 0;
+						?>
+						<tr>
+							<td><strong><?php echo $issue; ?></strong> <span class="badge badge-info pull-right"><?php echo $issueCounts[$k]; ?></span></td>
+						</tr>
+						<?php
+						}
+						?>
+
+							
+					</table>
+				</div>
+				
+				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
 							<td><span class="overviewHeader">Tickets</span></td>
@@ -90,10 +120,6 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						</tr>
 							
 					</table>
-				</div>
-				
-				<div class="span3">
-					
 				</div>
 			</div>
 		</div>
