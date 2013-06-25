@@ -6,13 +6,15 @@ class Laptop
 {	
 	public static function create($hostname, $serial, $assetTag, $wirelessMAC, $ethernetMAC, $building)
 	{
+		if ( Laptop::getByProperty(PROPERTY_ASSETTAG, $assetTag) )
+			return false;
 		$hostname = mysql_real_escape_string($hostname);
 		$serial = mysql_real_escape_string($serial);
 		if ( ($assetTag = intval($assetTag)) == 0 )
 			return false;
 		$wirelessMAC = mysql_real_escape_string($wirelessMAC);
 		$ethernetMAC = mysql_real_escape_string($ethernetMAC);
-		
+
 		if ( empty($hostname) || empty($assetTag) )
 			return false;
 		
