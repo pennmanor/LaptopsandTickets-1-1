@@ -77,6 +77,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<?php
 						$allHistory = Laptop::getAllHistory();
 						$issueCounts = array();
+						$highestIssueCount = -1;
 						foreach ( $allHistory as $event )
 						{
 							if ( $event['action'] == HISTORYEVENT_SERVICE )
@@ -85,13 +86,29 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 							}
 						}
 						
+						$issueMean = 0;
+						foreach ( $issueTypes as $k => $issue )
+						{
+							if ( $issueCounts[$k] > $highestIssueCount )
+								$highestIssueCount = $issueCounts[$k];
+							$issueMean += $issueCounts[$k];
+						}
+						
+						$issueMean /= count($issueTypes);
+						
 						foreach ( $issueTypes as $k => $issue )
 						{
 							if ( !array_key_exists($k, $issueCounts) )
 								$issueCounts[$k] = 0;
+							
+							$color = "badge-info";
+							if ( $issueCounts[$k] == $highestIssueCount )
+								$color = "badge-important";
+							else if ( $issueCounts[$k] >= $issueMean )
+								$color="badge-warning";
 						?>
 						<tr>
-							<td><strong><?php echo $issue; ?></strong> <span class="badge badge-info pull-right"><?php echo $issueCounts[$k]; ?></span></td>
+							<td><strong><?php echo $issue; ?></strong> <span class="badge <?php echo $color; ?> pull-right"><?php echo $issueCounts[$k]; ?></span></td>
 						</tr>
 						<?php
 						}
