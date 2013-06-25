@@ -100,15 +100,18 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						{
 							if ( !array_key_exists($k, $issueCounts) )
 								$issueCounts[$k] = 0;
-							
+							$count = $issueCounts[$k];
 							$color = "badge-info";
-							if ( $issueCounts[$k] == $highestIssueCount )
+							
+							if ( $count == 0 )
+								$color="";
+							else if ( $count == $highestIssueCount )
 								$color = "badge-important";
-							else if ( $issueCounts[$k] >= $issueMean )
+							else if ( $count >= $issueMean )
 								$color="badge-warning";
 						?>
 						<tr>
-							<td><strong><?php echo $issue; ?></strong> <span class="badge <?php echo $color; ?> pull-right"><?php echo $issueCounts[$k]; ?></span></td>
+							<td><strong><?php echo $issue; ?></strong> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
 						</tr>
 						<?php
 						}
