@@ -222,7 +222,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					
 					<tr>
 						<td></td>
-						<td><input type="submit" name="submit" class="btn btn-primary" value="Add"></td>
+						<td><input type="submit" name="submit" class="btn btn-success" value="Create"></td>
 					</tr>
 				</table>
 			</form>
@@ -232,7 +232,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 			Upload a CSV containing laptop information to add to the database.<br>
 			<form action="" method="post" enctype="multipart/form-data">
 				<input type="file" name="file" id="file">
-				<input type="submit" name="submitfile" class="btn btn-primary" value="Upload">
+				<input type="submit" name="submitfile" class="btn btn-success" value="Upload">
 			</form>
 			<br>
 			Format:<br>

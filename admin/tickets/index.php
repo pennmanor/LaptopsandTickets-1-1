@@ -161,7 +161,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			<form action="" method="post">
 				<input type="text" name="title" placeholder="Title"><br>
 				<input type="text" name="student" placeholder="Student"><br>
-				<input type="submit" name="create" value="Submit" class="btn btn-primary">
+				<input type="submit" name="create" value="Create" class="btn btn-success">
 			</form>
 			<br>
 		</div>

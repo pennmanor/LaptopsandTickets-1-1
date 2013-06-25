@@ -68,7 +68,7 @@ if ( array_key_exists("create", $_POST) )
 			<form action="" method="post">
 				<input class="notesBox" type="text" name="title" placeholder="Title" value="<?php echo $_POST['title']; ?>"><br>
 				<textarea class="notesBox" name="body" rows="10" placeholder="Issue Description"><?php echo $_POST['body']; ?></textarea><br>
-				<input type="submit" name="create" value="Submit" class="btn btn-primary pull-right">
+				<input type="submit" name="create" value="Create" class="btn btn-success pull-right">
 			</form>
 
 		</div>
