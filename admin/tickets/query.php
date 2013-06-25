@@ -1,7 +1,6 @@
 <?php
 $requiresAdmin = true;
 require_once("../../include.php");
-require_once("TicketUtil.php");
 $tickets = Ticket::search($_GET['query']);
 if ( count($tickets) == 1)
 {
@@ -29,7 +28,7 @@ if ( count($tickets) == 1)
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
-					  <input type="text" class="search-query" name="query" placeholder="Search Tickets">
+					  <input type="text" class="search-query" name="query" value="<?php echo $_GET['query']; ?>" placeholder="Search Tickets">
 					</form>
 				</div>
 			</div>
@@ -63,7 +62,7 @@ if ( count($tickets) == 1)
 					<tbody>
 						<tr>
 							<td><?php echo $ticket->getStudent()->getName(); ?></td>
-							<td><?php echo $properties[PROPERTY_TITLE]."&nbsp;&nbsp;".getStateLabel($ticket); ?></td>
+							<td><?php echo $properties[PROPERTY_TITLE]."&nbsp;&nbsp;".$ticket->getStateLabel(); ?></td>
 							<td><?php
 								$helper = $ticket->getHelper();
 								if ( $helper )
