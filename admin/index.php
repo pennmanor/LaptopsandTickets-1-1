@@ -12,7 +12,8 @@ foreach ($laptops as $laptop)
 
 
 $nLaptops = count($laptops);
-$nLaptopsUnassigned = $nLaptops-$nAssigned;
+$nLaptopsUnassigned = $nLaptops-$nLaptopsAssigned;
+
 $tickets = Ticket::getAll();
 $nTickets = count($tickets);
 $nTicketsOpen = count(Ticket::getAllByProperty(PROPERTY_STATE, TICKETSTATE_OPEN));
