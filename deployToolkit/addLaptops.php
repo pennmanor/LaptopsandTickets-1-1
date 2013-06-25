@@ -8,11 +8,11 @@ $building = "High School";
 
 while(true)
 {
-	$asset = getField("Asset Tag");
+	$assetTag = getField("Asset Tag");
 	$serial = getField("Serial");
 	$wMAC = getField("Wireless MAC");
 	$eMAC = getField("Ethernet MAC");
-	$hostname = $hostPrefix.$asset;
+	$hostname = $hostPrefix.$assetTag;
 	$confirm = confirm("Add ".$hostname." with the above information?");
 	if ( $confirm )
 	{
