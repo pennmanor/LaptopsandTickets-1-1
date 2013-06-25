@@ -259,6 +259,10 @@ class Ticket
 		$mostRecentEntry = $mostRecentEntry[0];
 		if ( $this->getProperty(PROPERTY_STATE) == TICKETSTATE_CLOSED )
 			return "<span class=\"label label-inverse\">Closed</span>";
+		else if ( !$this->getHelper() || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_INFO )
+		{
+			return "<span class=\"label label-important\">New Ticket</span>";
+		}
 		else if ( $mostRecentEntry['action'] == HISTORYEVENT_TICKET_REPLY )
 		{
 			$studentReply = new Student($mostRecentEntry['student']);
@@ -271,10 +275,7 @@ class Ticket
 				return "<span class=\"label label-warning\">Student Replied</span>";
 			}
 		}
-		else if ( $mostRecentEntry['action'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_INFO )
-		{
-			return "<span class=\"label label-important\">New Ticket</span>";
-		}
+
 		return "";
 	}
 
