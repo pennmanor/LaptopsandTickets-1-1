@@ -5,9 +5,20 @@ class UserSession
 	{
 		session_start();
 		
-		$this->id = $_SESSION['USER_ID'];
-		$this->name = $_SESSION['USER_NAME'];
-		$this->authenticated = $_SESSION['USER_IS_LOGGEDIN'];
+		$this->id = $this->initSessionVariable('USER_ID');
+		$this->name = $this->initSessionVariable('USER_NAME');
+		$this->authenticated = $this->initSessionVariable('USER_IS_LOGGEDIN');
+	}
+
+	public function initSessionVariable($name)
+	{
+		if ( array_key_exists($name, $_SESSION) )
+			return $_SESSION[$name];
+		else
+		{
+			$_SESSION[$name] = false;
+			return false;
+		}
 	}
 	
 	public function getID()
