@@ -4,10 +4,11 @@ require_once("../../include.php");
 $showBox = RESULT_NONE;
 if ( array_key_exists("file", $_FILES) )
 {
-	$data = @file_get_contents($_FILES['file']['tmp_name']);
+	$data = file_get_contents($_FILES['file']['tmp_name']);
 	if ( $data )
 	{
 		$data = trim($data);
+		$data = str_replace("\r", "\n", $data);
 		$lines = explode("\n", $data);
 		foreach ($lines as $line)
 		{
