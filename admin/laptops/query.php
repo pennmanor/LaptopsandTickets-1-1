@@ -2,7 +2,7 @@
 $requiresAdmin = true;
 require_once("../../include.php");
 
-$laptops = Laptop::search($_GET['query']);
+$laptops = Laptop::search(trim($_GET['query']));
 if ( count($laptops) == 1 )
 {
 	header("Location: laptop.php?id=".$laptops[0]->getID());
