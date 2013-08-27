@@ -149,8 +149,8 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					?>
 					<tr>
 						<td><?php echo $properties[PROPERTY_HOSTNAME]; ?></td>
-						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 						<td><?php echo $properties[PROPERTY_ASSETTAG]; ?></td>
+						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 						<td><?php echo $properties[PROPERTY_EMAC]; ?></td>
 						<td><?php echo $properties[PROPERTY_WMAC]; ?></td>
 						<td><?php echo $properties[PROPERTY_BUILDING]; ?></td>
