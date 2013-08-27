@@ -158,8 +158,9 @@ class Ticket
 		else
 			$obj = new Student($person);
 		
-		if ( ($person = intval($person)) == 0 )
+		if ( !Student::getByProperty(PROPERTY_SID, $person) )
 			return false;
+		
 		$result = $this->setProperty("helper", $person);
 		if ( $result )
 			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_INFO, array("body" => "Ticket assigned to ".$obj->getName()));
