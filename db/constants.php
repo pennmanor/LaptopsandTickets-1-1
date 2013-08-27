@@ -5,6 +5,7 @@ define("ACTION_UNASSIGN", 3);
 
 // Genaric properties
 define("PROPERTY_ID", "id");
+define("PROPERTY_SID", "sid");
 define("PROPERTY_TIMESTAMP", "timestamp");
 
 // Laptop properties

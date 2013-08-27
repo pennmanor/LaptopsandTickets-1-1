@@ -51,17 +51,20 @@ class Student
 	
 	public static function getByProperty($property, $value)
 	{
+		if ( $property == PROPERTY_ID )
+			$property = PROPERTY_SID;
+		
 		$value = mysql_real_escape_string($value);
-		$result = mysql_query("SELECT id FROM students WHERE `".$property."` = '".$value."'");
+		$result = mysql_query("SELECT sid FROM students WHERE `".$property."` = '".$value."'");
 		if ( !$result || mysql_num_rows($result) == 0 )
 			return false;
-		return new Student(mysql_result($result, 0, "id"));
+		return new Student(mysql_result($result, 0, "sid"));
 	}
 
 
 	public function __construct($id)
 	{
-		$this->id = $id;
+		$this->id = mysql_real_escape_string($id);
 	}
 	
 	public function getID()
@@ -71,7 +74,7 @@ class Student
 	
 	public function getName()
 	{
-		$result =  mysql_query("SELECT name FROM `students` WHERE `id` = ".$this->getID());
+		$result =  mysql_query("SELECT name FROM `students` WHERE `sid` = '".$this->getID()."'");
 		if ( !$result || mysql_num_rows($result) == 0 )
 			return false;
 		return mysql_result($result, 0, "name");
@@ -81,12 +84,12 @@ class Student
 	{
 		$this->name = $name;
 		$name = mysql_real_escape_string($name);
-		return mysql_query("UPDATE students SET `name` = '".$name."' WHERE `id` = ".$this->getID());
+		return mysql_query("UPDATE students SET `name` = '".$name."' WHERE `sid` = '".$this->getID()."'");
 	}
 	
 	public function getLaptop()
 	{
-		$laptop = mysql_query("SELECT * FROM `students` WHERE `id` = ".$this->getID());
+		$laptop = mysql_query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
 		if ( !$laptop || mysql_num_rows($laptop) == 0 )
 			return false;
 		
@@ -104,12 +107,13 @@ class Student
 			return false;
 		
 		addHistoryItem($laptop, $this, HISTORYEVENT_ASSIGNMENT);
-		return mysql_query("UPDATE students SET `laptop` = 0 WHERE `id` = ".$this->getID());
+		return mysql_query("UPDATE students SET `laptop` = 0 WHERE `sid` = '".$this->getID()."'");
 	}
 	
 	public function setLaptop($laptop)
 	{
-		$this->clearLaptop();
+		if ( $this->getLaptop() )
+			return false;
 		
 		if ( @get_class($laptop) == "Laptop" )
 			$this->laptop = $laptop;
@@ -123,7 +127,7 @@ class Student
 		if ( $this->laptop )
 		{
 			addHistoryItem($this->laptop, $this, HISTORYEVENT_ASSIGNMENT);
-			return mysql_query("UPDATE students SET `laptop` = ".$this->laptop->getID()." WHERE `id` = ".$this->getID());
+			return mysql_query("UPDATE students SET `laptop` = ".$this->laptop->getID()." WHERE `sid` = '".$this->getID()."'");
 		}
 		return false;
 	}

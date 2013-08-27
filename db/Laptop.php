@@ -181,10 +181,10 @@ class Laptop
 	
 	public function getOwner()
 	{
-		$result = mysql_query("SELECT `id` FROM `students` WHERE `laptop` = ".$this->getID());
+		$result = mysql_query("SELECT `sid` FROM `students` WHERE `laptop` = ".$this->getID());
 		if ( !$result || mysql_num_rows($result) == 0 )
 			return false;
-		return new Student(mysql_result($result, 0, "id"));
+		return new Student(mysql_result($result, 0, "sid"));
 	}
 	
 	public function getHistory($sortBy = SORT_DESC)
