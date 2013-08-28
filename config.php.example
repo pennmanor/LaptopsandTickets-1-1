@@ -3,12 +3,10 @@
 
 date_default_timezone_set("America/New_York");
 
-$buildingList = array("High School");
+$buildingList = array(22=>"High School");
 $issueTypes = array("General Support", "OS", "Screen", "Keyboard", "HDD", "Battery", "Other (see notes)");
 
-$helpers = array(127297, 123456, 654321);
-
-$apiKey = "qegethgewfgwrthyawrhtea5yt34345t"; // Key for deployment tools
+$helpers = array("127297");
 
 $databaseInfo = array(
 	"host" => "127.0.0.1",
@@ -17,7 +15,7 @@ $databaseInfo = array(
 	"database" => "OnetoOne"
 );
 
-$itemsPerPage = 10;
+$itemsPerPage = 50;
 
 // OpenID 
 $openIDproviderURL = "http://google.com/accounts/o8/site-xrds?hd=lobos.me";
