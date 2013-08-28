@@ -31,18 +31,18 @@ Remember to save the updated file as **config.php**
 * openIDlogoutURL is the URL to redirect users to when the logout button is pressed. For Google, use https://www.google.com/accounts/Logout
 * If you are using Google apps, you'll need to add a file in your web server's root at your apps domain. Here is a template for this file:
 
-<pre>
-	<?xml version="1.0" encoding="UTF-8"?>
-	<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">
-		<XRD>
-			<Service priority="0">
-				<Type>http://specs.openid.net/auth/2.0/signon</Type>
-				<URI>https://www.google.com/a/YOUR.APPSDOMAIN.HERE/o8/ud?be=o8</URI>
-			</Service>
-			<Service priority="0">
-				<Type>http://specs.openid.net/auth/2.0/server</Type>
-				<URI>https://www.google.com/a/YOUR.APPSDOMAIN.HERE/o8/ud?be=o8</URI>
-			</Service>
-		</XRD>
-	</xrds:XRDS>
-</pre>
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">
+	<XRD>
+		<Service priority="0">
+			<Type>http://specs.openid.net/auth/2.0/signon</Type>
+			<URI>https://www.google.com/a/YOUR.APPSDOMAIN.HERE/o8/ud?be=o8</URI>
+		</Service>
+		<Service priority="0">
+			<Type>http://specs.openid.net/auth/2.0/server</Type>
+			<URI>https://www.google.com/a/YOUR.APPSDOMAIN.HERE/o8/ud?be=o8</URI>
+		</Service>
+	</XRD>
+</xrds:XRDS>
+```
