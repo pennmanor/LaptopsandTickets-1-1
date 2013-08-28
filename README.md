@@ -31,6 +31,7 @@ Remember to save the updated file as **config.php**
 * openIDlogoutURL is the URL to redirect users to when the logout button is pressed. For Google, use https://www.google.com/accounts/Logout
 * If you are using Google apps, you'll need to add a file in your web server's root at your apps domain. Here is a template for this file:
 
+<pre>
 	<?xml version="1.0" encoding="UTF-8"?>
 	<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">
 		<XRD>
@@ -44,4 +45,4 @@ Remember to save the updated file as **config.php**
 			</Service>
 		</XRD>
 	</xrds:XRDS>
-
+</pre>
