@@ -139,7 +139,7 @@ class Student
 		if ( !($laptop = $this->getLaptop()) )
 			return false;
 		
-		addHistoryItem($laptop, $this, HISTORYEVENT_ASSIGNMENT);
+		addHistoryItem($laptop, $this, HISTORYEVENT_UNASSIGN);
 		return mysql_query("UPDATE students SET `laptop` = 0 WHERE `sid` = '".$this->getID()."'");
 	}
 	
