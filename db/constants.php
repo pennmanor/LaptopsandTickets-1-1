@@ -7,6 +7,7 @@ define("ACTION_UNASSIGN", 3);
 define("PROPERTY_ID", "id");
 define("PROPERTY_SID", "sid");
 define("PROPERTY_TIMESTAMP", "timestamp");
+define("PROPERTY_BUILDING", "building"); // Laptops and Students
 
 // Laptop properties
 define("PROPERTY_HOSTNAME", "hostname");
@@ -14,11 +15,12 @@ define("PROPERTY_SERIAL", "serial");
 define("PROPERTY_ASSETTAG", "assetTag");
 define("PROPERTY_WMAC", "wirelessMAC");
 define("PROPERTY_EMAC", "ethernetMAC");
-define("PROPERTY_BUILDING", "building");
+
 define("PROPERTY_NOTES", "notes");
 
 // Student properties
 define("PROPERTY_NAME", "name");
+define("PROPERTY_GRADE", "grade");
 
 // Ticket properties
 define("PROPERTY_TITLE", "title");
@@ -27,6 +29,7 @@ define("PROPERTY_STUDENT", "student");
 define("PROPERTY_HELPER", "helper");
 define("PROPERTY_STATE", "state");
 
+// Error Types
 define("RESULT_NONE", 0);
 define("RESULT_FAIL", 1);
 define("RESULT_SUCCESS", 2);

@@ -42,14 +42,18 @@ else if ( array_key_exists("fullListCSV", $_GET) )
 {
 	$laptops = Laptop::getAll();
 	setFilename("laptops.csv");
-	echo "Hostname,AssetTag,Serial,EthernetMAC,WirelessMAC,Owner\n";
+	echo "Hostname,AssetTag,Serial,EthernetMAC,WirelessMAC,Owner,OwnerGrade,Building\n";
 	foreach ( $laptops as $laptop )
 	{
 		$owner = $laptop->getOwner();	
+		$ownerGrade = "";
 		if ( $owner )	
+		{
+			$ownerGrade = $owner->getProperty(PROPERTY_GRADE);	
 			$owner = $owner->getID();
+		}
 		$data = $laptop->getProperties();
-		echo $data['hostname'].",".$data['assetTag'].",".$data['serial'].",".$data['ethernetMAC'].",".$data['wirelessMAC'].",".$owner."\n";
+		echo $data['hostname'].",".$data['assetTag'].",".$data['serial'].",".$data['ethernetMAC'].",".$data['wirelessMAC'].",".$owner.",".$ownerGrade.",".$data['building']."\n";
 	}
 	die();
 }

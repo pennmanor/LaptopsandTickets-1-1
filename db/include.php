@@ -1,5 +1,7 @@
 <?php
-mysql_connect($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
+$conn = mysql_connect($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
+if ( !$conn )
+	die("Database connection failed.\n");
 mysql_select_db($databaseInfo['database']);
 
 require_once(dirname(__FILE__)."/constants.php");

@@ -153,7 +153,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 						<td><?php echo $properties[PROPERTY_EMAC]; ?></td>
 						<td><?php echo $properties[PROPERTY_WMAC]; ?></td>
-						<td><?php echo $properties[PROPERTY_BUILDING]; ?></td>
+						<td><?php echo $buildingList[$properties[PROPERTY_BUILDING]]; ?></td>
 						<td><button class="btn btn-inverse" onClick="handleDetailsClick(<?php echo $properties[PROPERTY_ID]; ?>)">Details</button></td>
 					</tr>
 					<?php
@@ -212,9 +212,9 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 						<td>
 							<select name="building">
 								<?php
-								foreach ( $buildingList as $building )
+								foreach ( $buildingList as $buildingKey => $building )
 								{
-									echo "<option value=\"".$building."\">".$building."</option>\n";
+									echo "<option value=\"".$buildingKey."\">".$building."</option>\n";
 								}
 								?>
 							</select>

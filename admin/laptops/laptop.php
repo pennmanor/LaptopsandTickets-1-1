@@ -214,7 +214,7 @@ if ( array_key_exists("id", $_GET) )
 					
 					<tr>
 						<td><strong>Building</strong></td>
-						<td><?php echo $properties[PROPERTY_BUILDING]; ?></td>
+						<td><?php echo $buildingList[$properties[PROPERTY_BUILDING]]; ?></td>
 					</tr>
 				</table>
 				<?php
