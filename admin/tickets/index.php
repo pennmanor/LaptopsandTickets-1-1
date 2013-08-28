@@ -5,11 +5,17 @@ $showBox = RESULT_NONE;
 if ( array_key_exists("create", $_POST) )
 {
 	htmlspecialcharsArray($_POST);
-	$ticket = Ticket::create($_POST['student'], $_POST['title'], "Ticket automatically created");
-	if ( $ticket )
-		$ticket->assignHelper($session->getID());
-	else
+	$student = Student::getByProperty(PROPERTY_SID, $_POST['student']);
+	if ( !$student )
 		$showBox = RESULT_FAIL;
+	else
+	{
+		$ticket = Ticket::create($_POST['student'], $_POST['title'], "Ticket automatically created");
+		if ( $ticket )
+			$ticket->assignHelper($session->getID());
+		else
+			$showBox = RESULT_FAIL;
+	}
 }
 
 $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
