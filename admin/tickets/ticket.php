@@ -77,7 +77,7 @@ else if ( array_key_exists("reply", $_GET) )
 			?>
 			
 			<?php
-			if ( $properties[PROPERTY_HELPER] == "0" )
+			if ( !$properties[PROPERTY_HELPER] )
 			{
 			?>
 				<button class="btn btn-info pull-right buttonSpacer" onClick="window.location = 'ticket.php?id=<?php echo $_GET['id']; ?>&transfer=<?php echo $session->getID(); ?>'">Assign to Me</button>
