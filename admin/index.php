@@ -35,6 +35,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<li class="active"><a href="./index.php">Overview</a></li>
 						<li><a href="./tickets">Tickets</a></li>
 						<li><a href="./laptops">Laptops</a></li>
+						<li><a href="./students">Students</a></li>
 					</ul>
 
 					<ul class="nav pull-right">
