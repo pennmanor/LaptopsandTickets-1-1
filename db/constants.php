@@ -21,6 +21,7 @@ define("PROPERTY_NOTES", "notes");
 // Student properties
 define("PROPERTY_NAME", "name");
 define("PROPERTY_GRADE", "grade");
+define("PROPERTY_LAPTOP", "laptop");
 
 // Ticket properties
 define("PROPERTY_TITLE", "title");

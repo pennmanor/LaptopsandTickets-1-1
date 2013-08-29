@@ -82,6 +82,19 @@ class Student
 		return $output;
 	}
 	
+	public static function getAllWithLaptop()
+	{
+		$output = array();
+		
+		$result = mysql_query("SELECT `sid` FROM `students` WHERE `laptop` <> 0");
+		while ( $d = mysql_fetch_array($result) )
+		{
+			if ( !empty($d) )
+				$output[] = new Student($d['sid']);
+		}
+		return $output;
+	}
+	
 	public static function getByProperty($property, $value)
 	{
 		if ( $property == PROPERTY_ID )
@@ -169,7 +182,7 @@ class Student
 	{
 		$property = mysql_real_escape_string($property);
 		
-		$result = mysql_query("SELECT `".$property."` FROM `students` WHERE `sid` = ".$this->getID());
+		$result = mysql_query("SELECT `".$property."` FROM `students` WHERE `sid` = '".$this->getID()."'");
 		if ( !$result || mysql_num_rows($result) == 0 )
 			return false;
 		return mysql_result($result, 0, $property);
@@ -177,7 +190,7 @@ class Student
 	
 	public function getProperties()
 	{
-		$result = mysql_query("SELECT * FROM `students` WHERE `sid` = ".$this->getID());
+		$result = mysql_query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
 		if ( !$result || mysql_num_rows($result) == 0 )
 			return false;
 		return mysql_fetch_array($result);
