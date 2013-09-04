@@ -5,20 +5,14 @@
 
 if ( array_key_exists("REMOTE_ADDR", $_SERVER) )
 	die("This script can not be run from the web.\n");
-if ( !array_key_exists("1", $argv) )
-	die("Usage: import.php CSV_PATH\n");
-
-$path = $argv[1];
 
 require_once("config.php");
 require_once("db/include.php");
 
-$data = file_get_contents($path);
+$data = "";
 
-if ( !$data )
-	die("Failed to open ".$path."\n");
-
-echo "Importing ".$path."\n";
+while ( $d = fgets(STDIN) )
+	$data .= $d;
 
 // Get user objects
 $DBStudents = Student::getAll();
