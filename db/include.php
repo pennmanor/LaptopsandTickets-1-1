@@ -29,6 +29,8 @@ function htmlspecialcharsArray(&$arr)
 function array_subset($input, $start, $end)
 {
 	$inputMaxIndex = count($input);
+	if ( $inputMaxIndex == 0 )
+		return $input;
 	
 	if ( $start == $inputMaxIndex )
 		return array($input[$inputMaxIndex]);
