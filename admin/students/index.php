@@ -40,6 +40,13 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	<title>1:1 Inventory</title>
 	<link href="../../css/bootstrap.css" rel="stylesheet">
 	<link href="../../css/style.css" rel="stylesheet">
+	
+	<script type="text/javascript">
+	function csvDL()
+	{
+		window.location = "../laptops/reportGen.php?fullListCSV=true";
+	}
+	</script>
 </head>
 
 
@@ -69,6 +76,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		<?php } ?>
 		
 		<span class="sectionHeader">All Students with Laptops Assigned</span>
+		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
 		<hr>
 		<table class="table table-bordered">
 			<thead>
