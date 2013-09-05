@@ -4,7 +4,8 @@ require_once("include.php");
 if ( array_key_exists("logout", $_GET) )
 {
 	$session->logout();
-	die("You are now logged out. <a href=\"index.php\">Login</a>");
+	header("Location: ".$openIDlogoutURL);
+	die();
 }
 
 $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
