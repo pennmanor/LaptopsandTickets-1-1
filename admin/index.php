@@ -52,7 +52,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Laptops</span></td>
+							<td><span class="overviewHeader">Laptop Inventory</span></td>
 						</tr>
 						<tr>
 							<td><strong>Total</strong> <span class="badge badge-info pull-right"><?php echo $nLaptops; ?></span></td>
@@ -73,7 +73,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Laptop Service</span></td>
+							<td><span class="overviewHeader">Laptop Service Statistics</span></td>
 						</tr>
 						
 						<?php
@@ -126,7 +126,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Tickets</span></td>
+							<td><span class="overviewHeader">Tickets Statistics</span></td>
 						</tr>
 						
 						<tr>
