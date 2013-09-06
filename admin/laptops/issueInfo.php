@@ -2,12 +2,8 @@
 $requiresAdmin = true;
 require_once("../../include.php");
 
-$laptops = Laptop::search(trim($_GET['query']));
-if ( count($laptops) == 1 )
-{
-	header("Location: laptop.php?id=".$laptops[0]->getID());
-	die();
-}
+$laptops = getLaptopsByIssueType($_GET['issueType']);
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,23 +11,6 @@ if ( count($laptops) == 1 )
 	<title>1:1 Inventory</title>
 	<link href="../../css/bootstrap.css" rel="stylesheet">
 	<link href="../../css/style.css" rel="stylesheet">
-	<script type="text/javascript">
-	
-	function csvDL()
-	{
-		window.location = "reportGen.php?searchListCSV=<?php echo $_GET['query']; ?>";
-	}
-	
-	function dhcpDL()
-	{
-		window.location = "reportGen.php?searchListDHCP=<?php echo $_GET['query']; ?>";
-	}
-	
-	function handleDetailsClick(id)
-	{
-		window.location ="laptop.php?id="+id;
-	}
-	</script>
 </head>
 
 	<body>
@@ -62,9 +41,9 @@ if ( count($laptops) == 1 )
 			else
 			{
 			?>
-			<span class="sectionHeader">Search</span>
-			<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button><button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()">Download as DHCP config</button>
+			<span class="sectionHeader">View by issue: <?php echo $issueTypes[$_GET['issueType']]; ?></span>
 			<hr>
+			
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -85,12 +64,12 @@ if ( count($laptops) == 1 )
 					?>
 					<tr>
 						<td><?php echo $laptop->getProperty(PROPERTY_HOSTNAME); ?></td>
-						<td><?php echo $laptop->getProperty(PROPERTY_ASSETTAG); ?></td>
 						<td><?php echo $laptop->getProperty(PROPERTY_SERIAL); ?></td>
+						<td><?php echo $laptop->getProperty(PROPERTY_ASSETTAG); ?></td>
 						<td><?php echo $laptop->getProperty(PROPERTY_EMAC); ?></td>
 						<td><?php echo $laptop->getProperty(PROPERTY_WMAC); ?></td>
 						<td><?php echo $buildingList[$laptop->getProperty(PROPERTY_BUILDING)]; ?></td>
-						<td><button class="btn btn-inverse" onClick="handleDetailsClick(<?php echo $laptop->getProperty(PROPERTY_ID); ?>)">Details</button></td>
+						<td><a class="btn btn-inverse" href="laptop.php?id=<?php echo $laptop->getProperty(PROPERTY_ID); ?>">Details</a></td>
 					</tr>
 					<?php
 					}

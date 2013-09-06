@@ -113,7 +113,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 								$color="badge-warning";
 						?>
 						<tr>
-							<td><strong><?php echo $issue; ?></strong> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
+							<td><a href="laptops/issueInfo.php?issueType=<?php echo $k; ?>"><strong><?php echo $issue; ?></strong></a> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
 						</tr>
 						<?php
 						}

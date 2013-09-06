@@ -1,4 +1,32 @@
 <?php
+
+function getLaptopsByIssueType($issueType)
+{
+	$output = array();
+	$result = mysql_query("SELECT * FROM `history` WHERE `action` = 4");
+	
+	while ( $d = mysql_fetch_array($result) )
+	{
+		$data = unserialize($d['data']);
+		if ( $data['type'] == $issueType )
+		{
+			// Prevent duplicates (ex: one laptop with two keyboard issues logged)
+			$duplicate = false;
+			foreach ( $output as $laptop )
+			{
+				if ( $d['laptop'] == $laptop->getID() )
+					$duplicate = true;
+			}
+			
+			if ( !$duplicate )
+				$output[] = new Laptop($d['laptop']);
+		}
+			
+	}
+	
+	return $output;
+}
+
 function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 0)
 {
 	if ( @get_class($student) == "Student" )

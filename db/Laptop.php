@@ -25,7 +25,6 @@ class Laptop
 		echo mysql_error();
 		return $laptop;
 	}
-	
 
 	public static function getHTMLForHistory($history, $laptops = false)
 	{
