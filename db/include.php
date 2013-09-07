@@ -10,6 +10,7 @@ require_once(dirname(__FILE__)."/History.php");
 require_once(dirname(__FILE__)."/Laptop.php");
 require_once(dirname(__FILE__)."/Ticket.php");
 require_once(dirname(__FILE__)."/Student.php");
+require_once(dirname(__FILE__)."/Helper.php");
 
 function nl_fix($string)
 {
