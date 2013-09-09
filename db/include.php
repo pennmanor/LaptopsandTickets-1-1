@@ -1,8 +1,8 @@
 <?php
-$conn = mysql_connect($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
-if ( !$conn )
+$mysql = new mysqli($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
+if ( !$mysql )
 	die("Database connection failed.\n");
-mysql_select_db($databaseInfo['database']);
+$mysql->select_db($databaseInfo['database']);
 
 require_once(dirname(__FILE__)."/constants.php");
 require_once(dirname(__FILE__)."/UserSession.php");
@@ -44,4 +44,19 @@ function array_subset($input, $start, $end)
 		$output[] = $input[$i];
 	return $output;
 }
+
+
+function mysqli_result($result, $row, $field)
+{
+	$result->data_seek($row);
+	$a = $result->fetch_array();
+	return $a[$field];
+}
+
+function real_escape_string($str)
+{
+	global $mysql;
+	return mysqli_real_escape_string($mysql, $str);
+}
+
 ?>

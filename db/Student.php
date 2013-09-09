@@ -5,14 +5,15 @@ class Student
 {	
 	public static function create($sid, $name, $grade)
 	{
+		global $mysql;
 		if ( Student::getByProperty(PROPERTY_SID, $sid) )
 			return false;
-		$sid = mysql_real_escape_string($sid);
-		$name = mysql_real_escape_string($name);
+		$sid = real_escape_string($sid);
+		$name = real_escape_string($name);
 		if ( ($grade = intval($grade)) == 0 )
 			return false;
-		$result = mysql_query("INSERT INTO students (sid, name, grade) VALUES('".$sid."', '".$name."', ".$grade.")");
-		echo mysql_error();
+		$result = $mysql->query("INSERT INTO students (sid, name, grade) VALUES('".$sid."', '".$name."', ".$grade.")");
+		echo mysqli_error();
 		if ( !$result )
 			return false;
 		return new Student($sid);
@@ -20,31 +21,34 @@ class Student
 	
 	public static function remove($sid)
 	{
-		$sid = mysql_real_escape_string($sid);
-		return mysql_query("DELETE FROM `students` WHERE `sid` = '".$sid."'");
+		global $mysql;
+		$sid = real_escape_string($sid);
+		return $mysql->query("DELETE FROM `students` WHERE `sid` = '".$sid."'");
 	}
 	
 	public static function nuke($sid)
 	{
-		$sid = mysql_real_escape_string($sid);
+		global $mysql;
+		$sid = real_escape_string($sid);
 		
-		$studentTicketRemoval = mysql_query("DELETE FROM `tickets` WHERE `student` = '".$sid."'");
-		$helperTicketRemoval = mysql_query("DELETE FROM `tickets` WHERE `helper` = '".$sid."'");
-		$historyRemoval = mysql_query("DELETE FROM `history` WHERE `student` = '".$sid."'");
-		$studentRemoval = mysql_query("DELETE FROM `students` WHERE `sid` = '".$sid."'");
+		$studentTicketRemoval = $mysql->query("DELETE FROM `tickets` WHERE `student` = '".$sid."'");
+		$helperTicketRemoval = $mysql->query("DELETE FROM `tickets` WHERE `helper` = '".$sid."'");
+		$historyRemoval = $mysql->query("DELETE FROM `history` WHERE `student` = '".$sid."'");
+		$studentRemoval = $mysql->query("DELETE FROM `students` WHERE `sid` = '".$sid."'");
 		
 		return $studentTicketRemoval && $helperTicketRemoval && $historyRemoval && $studentRemoval;
 	}
 	
 	public static function searchField($property, $query, $dupCheck = array())
 	{
-		$query = mysql_real_escape_string($query);
-		$result = mysql_query("SELECT * FROM students WHERE ".$property." LIKE '%".$query."%'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$query = real_escape_string($query);
+		$result = $mysql->query("SELECT * FROM students WHERE ".$property." LIKE '%".$query."%'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return array();
 		$output = array();
 		
-		while ( $d = mysql_fetch_array($result) )
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 			{
@@ -71,10 +75,11 @@ class Student
 	
 	public static function getAll()
 	{
+		global $mysql;
 		$output = array();
 		
-		$result = mysql_query("SELECT `sid` FROM `students`");
-		while ( $d = mysql_fetch_array($result) )
+		$result = $mysql->query("SELECT `sid` FROM `students`");
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 				$output[] = new Student($d['sid']);
@@ -84,10 +89,11 @@ class Student
 	
 	public static function getAllWithLaptop()
 	{
+		global $mysql;
 		$output = array();
 		
-		$result = mysql_query("SELECT `sid` FROM `students` WHERE `laptop` <> 0");
-		while ( $d = mysql_fetch_array($result) )
+		$result = $mysql->query("SELECT `sid` FROM `students` WHERE `laptop` <> 0");
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 				$output[] = new Student($d['sid']);
@@ -97,20 +103,21 @@ class Student
 	
 	public static function getByProperty($property, $value)
 	{
+		global $mysql;
 		if ( $property == PROPERTY_ID )
 			$property = PROPERTY_SID;
 		
-		$value = mysql_real_escape_string($value);
-		$result = mysql_query("SELECT sid FROM students WHERE `".$property."` = '".$value."'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		$value = real_escape_string($value);
+		$result = $mysql->query("SELECT sid FROM students WHERE `".$property."` = '".$value."'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return new Student(mysql_result($result, 0, "sid"));
+		return new Student(mysqli_result($result, 0, "sid"));
 	}
 
 
 	public function __construct($id)
 	{
-		$this->id = mysql_real_escape_string($id);
+		$this->id = real_escape_string($id);
 	}
 	
 	public function getID()
@@ -120,26 +127,29 @@ class Student
 	
 	public function getName()
 	{
-		$result =  mysql_query("SELECT name FROM `students` WHERE `sid` = '".$this->getID()."'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$result =  $mysql->query("SELECT name FROM `students` WHERE `sid` = '".$this->getID()."'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return mysql_result($result, 0, "name");
+		return mysqli_result($result, 0, "name");
 	}
 	
 	public function setName($name)
 	{
+		global $mysql;
 		$this->name = $name;
-		$name = mysql_real_escape_string($name);
-		return mysql_query("UPDATE students SET `name` = '".$name."' WHERE `sid` = '".$this->getID()."'");
+		$name = real_escape_string($name);
+		return $mysql->query("UPDATE students SET `name` = '".$name."' WHERE `sid` = '".$this->getID()."'");
 	}
 	
 	public function getLaptop()
 	{
-		$laptop = mysql_query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
-		if ( !$laptop || mysql_num_rows($laptop) == 0 )
+		global $mysql;
+		$laptop = $mysql->query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
+		if ( !$laptop || mysqli_num_rows($laptop) == 0 )
 			return false;
 		
-		$laptop = mysql_result($laptop, 0, "laptop");
+		$laptop = mysqli_result($laptop, 0, "laptop");
 		if ( $laptop == 0 )
 			return false;
 		
@@ -148,16 +158,18 @@ class Student
 	
 	public function clearLaptop()
 	{
+		global $mysql;
 		$laptop = false;
 		if ( !($laptop = $this->getLaptop()) )
 			return false;
 		
 		addHistoryItem($laptop, $this, HISTORYEVENT_UNASSIGN);
-		return mysql_query("UPDATE students SET `laptop` = 0 WHERE `sid` = '".$this->getID()."'");
+		return $mysql->query("UPDATE students SET `laptop` = 0 WHERE `sid` = '".$this->getID()."'");
 	}
 	
 	public function setLaptop($laptop)
 	{
+		global $mysql;
 		if ( $this->getLaptop() )
 			return false;
 		
@@ -173,27 +185,29 @@ class Student
 		if ( $this->laptop )
 		{
 			addHistoryItem($this->laptop, $this, HISTORYEVENT_ASSIGNMENT);
-			return mysql_query("UPDATE students SET `laptop` = ".$this->laptop->getID()." WHERE `sid` = '".$this->getID()."'");
+			return $mysql->query("UPDATE students SET `laptop` = ".$this->laptop->getID()." WHERE `sid` = '".$this->getID()."'");
 		}
 		return false;
 	}
 	
 	public function getProperty($property)
 	{
-		$property = mysql_real_escape_string($property);
+		global $mysql;
+		$property = real_escape_string($property);
 		
-		$result = mysql_query("SELECT `".$property."` FROM `students` WHERE `sid` = '".$this->getID()."'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		$result = $mysql->query("SELECT `".$property."` FROM `students` WHERE `sid` = '".$this->getID()."'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return mysql_result($result, 0, $property);
+		return mysqli_result($result, 0, $property);
 	}
 	
 	public function getProperties()
 	{
-		$result = mysql_query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$result = $mysql->query("SELECT * FROM `students` WHERE `sid` = '".$this->getID()."'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return mysql_fetch_array($result);
+		return mysqli_fetch_array($result);
 	}
 	
 	public function isHelper()
