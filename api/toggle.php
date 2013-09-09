@@ -10,21 +10,19 @@ try{
 	$request = new Api($key);
 	$decodedData = json_decode($data, true);
 	if(!Helper::exists($decodedData[API_DATA_ID]))
-		throw new Exception("Student does not exist in database");
-	$student = new Student($decodedData[API_DATA_ID]);
-	switch($student->getStatus()){
-		case LOGGED_IN:
-		$output[API_INFO] = "Logging ".$student->getStudentId()." out.";
-		$student->signout();
-		$logger = new Log($request->getId(), $request->getName());
-		$logger->signout($student->getStudentId());
+		throw new Exception("Helper does not exist in system");
+	$helper = new Helper($decodedData[API_DATA_ID]);
+	switch($helper->getStatus()){
+		case HELPER_SIGNIN:
+		$output[API_INFO] = "Logging ".$helper->getStudentId()." out.";
+		$helper->signout();
 		break;
-		case LOGGED_OUT:
-		$output[API_INFO] = "Logging ".$student->getStudentId()." in.";
-		$student->signin();
-		$logger = new Log($request->getId(), $request->getName());
-		$logger->signin($student->getStudentId());
+		case HELPER_SIGNOUT:
+		$output[API_INFO] = "Logging ".$helper->getStudentId()." in.";
+		$helper->signin();
 		break;
+		default:
+		throw new Exception("Helper status error.");
 	}
 }
 catch(Exception $e){
