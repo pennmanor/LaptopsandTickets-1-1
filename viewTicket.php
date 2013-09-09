@@ -39,8 +39,8 @@ else if ( array_key_exists("reply", $_GET) )
 					<a class="brand" href="./index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="./index.php">Home</a></li>
+						<li><a href="./allTickets.php">All Tickets</a></li>
 						<li><a href="./newTicket.php">New Ticket</a></li>
-						<li class="active"><a href="#">View Ticket</a></li>
 						
 					</ul>
 					<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>

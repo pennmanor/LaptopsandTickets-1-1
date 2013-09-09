@@ -12,7 +12,7 @@ foreach($helpers as $helper){
     $i++;
 }
 $query = "SELECT `student`, `timestamp` FROM `history` WHERE `action` = \"".HISTORYEVENT_SIGNIN."\" AND `timestamp` BETWEEN ".($from/1000)." AND ".($to/1000);
-$result = $mysqli->query($query);
+$result = $mysql->query($query);
 $first = true;
 ?>
 {
