@@ -130,7 +130,7 @@ if(!String.prototype.format) {
         title_year: '{0}',
         title_month: '{1} {0}',
         title_week: ' {1} week {0}',
-        title_day: '{0}, {1} {2}, {3}',
+        title_day: '{0}, {2} {1}, {3}',
 
         week:'Week',
 
