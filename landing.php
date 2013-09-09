@@ -28,8 +28,10 @@ include_once("mysqli-fix.php");
 			$signedIn = Array();
 			foreach($helpers as $h){
 				$helper = new Helper($h);
-				if($helper->getStatus())
+				if($helper->getStatus() == HELPER_SIGNIN){
 					$signedIn[] = $helper->getStudentId();
+				}
+
 			}
 			if(count($signedIn) > 0){
 				echo "<p class=\"lead\">Current helpers at the Student Help Desk:</p>";

@@ -14,15 +14,22 @@ class Helper{
 			throw new Exception($studentId."Helper Object Failed to construct because no \$mymsqli");
 		$this->mysqli = $mysqli;
 		$this->studentId = $studentId;
-		$query = "SELECT `data` FROM `History` WHERE `student` = \"".$studentId."\" AND `action` = \"".HISTORYEVENT_SIGNIN."\" ORDER BY `timestamp` ASC LIMIT 1";
+		$query = "SELECT `action` FROM `History` WHERE `student` = \"".$studentId."\" AND `action` = \"".HISTORYEVENT_SIGNIN."\" OR `student` = \"".$studentId."\" AND `action` = \"".HISTORYEVENT_SIGNOUT."\" ORDER BY `timestamp` DESC LIMIT 1";
 		$result = $this->mysqli->query($query);
 		if(!$result){
 			throw new Exception($studentId." failed to construct because mysql query failed: ".$this->mysqli->error);
 			return false;
 		}
 		$row = mysqli_fetch_assoc($result);
-		$data = unserialize($row["data"]);
-		$this->status = $data["status"];
+		switch($row["action"]){
+			case HISTORYEVENT_SIGNIN:
+			$this->status = HELPER_SIGNIN;
+			break;
+			default:
+			case HISTORYEVENT_SIGNOUT:
+			$this->status = HELPER_SIGNOUT;
+			break;
+		}
 		$this->studentId = $studentId;
 	}
 
@@ -35,16 +42,16 @@ class Helper{
 	}
 
 	public function signin(){
-		addHistoryItem(-1, HELPER_SIGNIN, HISTORYEVENT_SIGNIN);
+		addHistoryItem(-1, $this->studentId, HISTORYEVENT_SIGNIN);
 	}
 
 	public function signout(){
-		addHistoryItem(-1, HELPER_SIGNOUT, HISTORYEVENT_SIGNIN);
+		addHistoryItem(-1, $this->studentId, HISTORYEVENT_SIGNOUT);
 	}
 
 	public static function exists($studentId){
 		global $helpers;
-		return array_key_exists($studentId, $helpers);
+		return in_array(strval($studentId), $helpers);
 	}
 }
 ?>
