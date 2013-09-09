@@ -48,6 +48,10 @@ define("HISTORYEVENT_SIGNIN", 10);
 
 define("HELPER_SIGNOUT", 0);
 define("HELPER_SIGNIN", 1);
+
 define("TICKETSTATE_CLOSED", 0);
 define("TICKETSTATE_OPEN", 1);
+
+define("API_STATUS", "status");
+define("API_INFO", "status");
 ?>

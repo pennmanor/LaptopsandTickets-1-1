@@ -46,18 +46,5 @@ class Helper{
 		global $helpers;
 		return array_key_exists($studentId, $helpers);
 	}
-
-	public static function getLoggedIn(){
-		global $mysqli;
-		$output = Array();
-		$query = "SELECT `ticket`, `student` FROM `History` WHERE `action` = \"".HISTORYEVENT_SIGNIN."\" `ticket` = \"".HELPER_SIGNIN."\" GROUP BY `student` ORDER BY `timestamp`";
-		$result = $mysqli->query($query);
-		while($row = mysqli_fetch_array($result)){
-			$data = unserialize($row["action"]);
-			if($data == HELPER_SIGNIN){
-				$output[] = $row["student"];
-			}
-		}
-	}
 }
 ?>
