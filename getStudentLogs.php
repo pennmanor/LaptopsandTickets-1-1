@@ -1,6 +1,5 @@
 <?php
 include_once("include.php");
-include_once("mysqli-fix.php");
 $from = $_GET["from"];
 $to = $_GET["to"];
 $eventClasses = Array(0 => "event-success", 1 => "event-warning", 2 => "event-info", 3 => "event-inverse", 4 => "event-special");

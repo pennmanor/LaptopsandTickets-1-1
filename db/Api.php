@@ -5,14 +5,14 @@ class Api{
 	private $name;
 	
 	function __construct($key){
-		global $mysqli;
-		if(!is_a($mysqli, "mysqli")){
-			throw new Exception($studentId."API Object Failed to construct because no \$mymsqli");
+		global $mysql;
+		if(!is_a($mysql, "mysqli")){
+			throw new Exception($studentId."API Object Failed to construct because no \$mymsql");
 		}
 		$query = "SELECT `id`, `key`, `name` FROM `apikeys` WHERE `key` = \"".$key."\"";
-		$result = $mysqli->query($query);
+		$result = $mysql->query($query);
 		if(!$result){
-			throw new Exception($studentId."Invalid key");
+			throw new Exception($studentId." Invalid key");
 		}
 		$row = mysqli_fetch_assoc($result);
 		$this->id = $row["id"];

@@ -12,16 +12,15 @@ try{
 	if(!Helper::exists($decodedData[API_DATA_ID]))
 		throw new Exception("Helper does not exist in system");
 	$helper = new Helper($decodedData[API_DATA_ID]);
-	switch($helper->getStatus()){
-		case HELPER_SIGNOUT:
-		$output[API_INFO] = $helper->getStudentId()." is already logged out.";
+	switch($helper->IsSignedIn()){
+		default:
+		case HISTORYEVENT_SIGNOUT:
+		$output[API_INFO] = $helper->getID()." is already logged out.";
 		break;
-		case HELPER_SIGNIN:
-		$output[API_INFO] = "Logging ".$helper->getStudentId()." out.";
+		case HISTORYEVENT_SIGNIN:
+		$output[API_INFO] = "Logging ".$helper->getID()." out.";
 		$helper->signout();
 		break;
-		default:
-		throw new Exception("Helper status error.");
 	}
 }
 catch(Exception $e){

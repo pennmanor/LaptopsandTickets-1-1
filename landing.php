@@ -1,6 +1,5 @@
 <?php
 include_once("include.php");
-include_once("mysqli-fix.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -28,10 +27,9 @@ include_once("mysqli-fix.php");
 			$signedIn = Array();
 			foreach($helpers as $h){
 				$helper = new Helper($h);
-				if($helper->getStatus() == HELPER_SIGNIN){
-					$signedIn[] = $helper->getStudentId();
+				if($helper->IsSignedIn() == HISTORYEVENT_SIGNIN){
+					$signedIn[] = $helper->getID();
 				}
-
 			}
 			if(count($signedIn) > 0){
 				echo "<p class=\"lead\">Current helpers at the Student Help Desk:</p>";

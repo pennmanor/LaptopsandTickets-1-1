@@ -1,6 +1,5 @@
 <?php
 require_once("constants.php");
-
 class Student
 {	
 	public static function create($sid, $name, $grade)
