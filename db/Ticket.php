@@ -15,7 +15,7 @@ class Ticket
 		$q = $mysql->query("INSERT INTO `tickets` (student, title, body, state, timestamp) VALUES('".$creator."', '".$title."', '".$body."', ".TICKETSTATE_OPEN.", ".time().")");
 		if ( !$q )
 			return false;
-		$ticket = new Ticket(mysqli_insert_id($q));
+		$ticket = new Ticket($mysql->insert_id);
 		addTicketHistoryItem(-1, $ticket, $creator, HISTORYEVENT_TICKET_STATECHANGE, array("verb" => "created"), 1);
 		$ticket->addReply($creator, $body);
 		return $ticket;

@@ -20,7 +20,7 @@ class Laptop
 			return false;
 		
 		$result = $mysql->query("INSERT INTO laptops (hostname, serial, assetTag, wirelessMAC, ethernetMAC, building) VALUES('".$hostname."', '".$serial."', ".$assetTag.", '".$wirelessMAC."', '".$ethernetMAC."', '".$building."')");
-		$laptop = new Laptop(mysqli_insert_id($result)); 
+		$laptop = new Laptop($mysql->insert_id); 
 		if ( $result )
 			addHistoryItem($laptop, -1, HISTORYEVENT_CREATION, array());
 		echo mysqli_error();
