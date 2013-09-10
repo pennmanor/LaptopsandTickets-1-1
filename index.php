@@ -67,7 +67,7 @@ if ( array_key_exists("logout", $_GET) )
 				echo "</ul>";
 			}
 			else{
-				echo "<p> No one is currently at the Student Help Desk. Why don't you try <a href=\"#\">submitting a ticket</a>?</p>";
+				echo "<p> No one is currently at the Student Help Desk. Why don't you try <a href=\"newTicket.php\">submitting a ticket</a>?</p>";
 			}
 			?>
 			<a href="newTicket.php" class="btn btn-large btn-primary">Submit a Ticket</a>
