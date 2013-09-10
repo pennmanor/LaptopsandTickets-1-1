@@ -17,7 +17,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 					<a class="brand" href="./index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="./index.php">Home</a></li>
-						<li class="active"><a href="./allTickets.php">All Tickets</a></li>
+						<li class="active"><a href="./allTickets.php">My Tickets</a></li>
 						<li><a href="./newTicket.php">New Ticket</a></li>
 						
 					</ul>
