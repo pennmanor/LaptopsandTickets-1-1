@@ -73,7 +73,7 @@ if ( array_key_exists("logout", $_GET) )
 			<a href="newTicket.php" class="btn btn-large btn-primary">Submit a Ticket</a>
 			<a href="http://blogs.pennmanor.net/1to1/" class="btn btn-large btn-primary">Read the Blog</a>
 		</div>
-		<hr>
+		<!-- <hr>
 		<div class="row-fluid">
 			<div class="offset2 span8">
 				<div class="row-fluid">
@@ -87,7 +87,7 @@ if ( array_key_exists("logout", $_GET) )
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </body>	
 </html>
