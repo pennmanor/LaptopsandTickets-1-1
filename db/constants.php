@@ -44,7 +44,15 @@ define("HISTORYEVENT_SERVICE", 4);
 define("HISTORYEVENT_TICKET_INFO", 6);
 define("HISTORYEVENT_TICKET_REPLY", 7);
 define("HISTORYEVENT_TICKET_STATECHANGE", 9);
+define("HISTORYEVENT_SIGNIN", 10);
+define("HISTORYEVENT_SIGNOUT", 11);
 
 define("TICKETSTATE_CLOSED", 0);
 define("TICKETSTATE_OPEN", 1);
+
+define("API_STATUS", "status");
+define("API_INFO", "status");
+
+define("API_DATA_ID", "id");
+define("API_DATA_NAME", "name");
 ?>

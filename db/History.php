@@ -2,15 +2,16 @@
 
 function getLaptopsByIssueType($issueType)
 {
+	global $mysql;
 	$output = array();
-	$result = mysql_query("SELECT * FROM `history` WHERE `action` = 4");
+	$result = $mysql->query("SELECT * FROM `history` WHERE `action` = 4");
 	
-	while ( $d = mysql_fetch_array($result) )
+	while ( $d = mysqli_fetch_array($result) )
 	{
 		$data = unserialize($d['data']);
 		if ( $data['type'] == $issueType )
 		{
-			// Prevent duplicates (ex: one laptop with two keyboard issues logged)
+			// Prevent duplicates (ex: one laptop with two keyboard issues logged )
 			$duplicate = false;
 			foreach ( $output as $laptop )
 			{
@@ -21,7 +22,6 @@ function getLaptopsByIssueType($issueType)
 			if ( !$duplicate )
 				$output[] = new Laptop($d['laptop']);
 		}
-			
 	}
 	
 	return $output;
@@ -29,21 +29,23 @@ function getLaptopsByIssueType($issueType)
 
 function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 0)
 {
+	global $mysql;
 	if ( @get_class($student) == "Student" )
 		$student = $student->getID();
 	if ( @get_class($laptop) == "Laptop" )
 		$laptop = $laptop->getID();
 	if ( ($laptop = intval($laptop)) == 0 )
 		return false;
-	$student = mysql_real_escape_string($student);
+	$student = real_escape_string($student);
 	if ( ($action = intval($action)) == 0 )
 		return false;
-	$data = mysql_real_escape_string(serialize($data));
-	return mysql_query("INSERT INTO history (laptop, student,action,data,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).", 0)");
+	$data = real_escape_string(serialize($data));
+	return $mysql->query("INSERT INTO history (laptop, student,action,data,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).", 0)");
 }
 
 function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array(), $tOffset = 0)
 {
+	global $mysql;
 	if ( @get_class($student) == "Student" )
 		$student = $student->getID();
 	if ( @get_class($laptop) == "Laptop" )
@@ -54,12 +56,12 @@ function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array
 		return false;
 	if ( ($ticket = intval($ticket)) == 0 )
 		return false;
-	$student = mysql_real_escape_string($student);
+	$student = real_escape_string($student);
 	if ( ($action = intval($action)) == 0 )
 		return false;
 
-	$data = mysql_real_escape_string(serialize($data));
-	return mysql_query("INSERT INTO history (laptop, ticket, student,action,data,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).")");
+	$data = real_escape_string(serialize($data));
+	return $mysql->query("INSERT INTO history (laptop, ticket, student,action,data,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).")");
 }
 
 

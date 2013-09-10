@@ -34,6 +34,7 @@ if ( array_key_exists("create", $_POST) )
 					<a class="brand" href="./index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="./index.php">Home</a></li>
+						<li><a href="./allTickets.php">All Tickets</a></li>
 						<li class="active"><a href="./newTicket.php">New Ticket</a></li>
 						
 					</ul>
