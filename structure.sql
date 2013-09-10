@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4004
+# Version 4096
 #
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
-# Database: OnetoOne
-# Generation Time: 2013-08-28 03:02:32 +0000
+# Database: OneToOne
+# Generation Time: 2013-09-10 03:07:41 +0000
 # ************************************************************
 
 
@@ -20,10 +20,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table history
+# Dump of table apikeys
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `history`;
+CREATE TABLE `apikeys` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `key` text,
+  `name` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table history
+# ------------------------------------------------------------
 
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -40,8 +50,6 @@ CREATE TABLE `history` (
 
 # Dump of table laptops
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `laptops`;
 
 CREATE TABLE `laptops` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -60,8 +68,6 @@ CREATE TABLE `laptops` (
 # Dump of table students
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `students`;
-
 CREATE TABLE `students` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sid` text NOT NULL,
@@ -75,8 +81,6 @@ CREATE TABLE `students` (
 
 # Dump of table tickets
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `tickets`;
 
 CREATE TABLE `tickets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
