@@ -44,7 +44,7 @@ function existsInDB($findStudent)
 	global $DBStudents;
 	foreach ($DBStudents as $student)
 	{
-		if ( $findStudent == $student->getID() )
+		if ( $findStudent == $student->id )
 			return true;
 	}
 	return false;
@@ -54,16 +54,16 @@ function existsInDB($findStudent)
 // Remove users that are in the database, but not in the file.
 foreach ($DBStudents as $student)
 {
-	if ( !existsInFile($student->getID()) )
+	if ( !existsInFile($student->id) )
 	{
 		if ( $student->getLaptop() )
 		{
-			echo $student->getID()." should be removed, but still has a laptop assigned!\n";
+			echo $student->id." should be removed, but still has a laptop assigned!\n";
 		}
 		else
 		{
-			echo "Removing student ".$student->getID()."\n";
-			if ( !Student::nuke($student->getID()) )
+			echo "Removing student ".$student->id."\n";
+			if ( !Student::nuke($student->id) )
 				echo "Student removal failed!\n";
 		}
 	}

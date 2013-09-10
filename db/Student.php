@@ -115,12 +115,12 @@ class Student
 
 	public function __construct($id)
 	{
-		$this->id = real_escape_string($id);
+		$this->id = $id;
 	}
 	
 	public function getID()
 	{
-		return $this->id;
+		return real_escape_string($this->id);
 	}
 	
 	public function getName()
