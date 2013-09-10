@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
 # Database: OneToOne
-# Generation Time: 2013-09-10 03:07:41 +0000
+# Generation Time: 2013-09-10 03:12:06 +0000
 # ************************************************************
 
 
@@ -23,6 +23,8 @@
 # Dump of table apikeys
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `apikeys`;
+
 CREATE TABLE `apikeys` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `key` text,
@@ -34,6 +36,8 @@ CREATE TABLE `apikeys` (
 
 # Dump of table history
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `history`;
 
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -50,6 +54,8 @@ CREATE TABLE `history` (
 
 # Dump of table laptops
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `laptops`;
 
 CREATE TABLE `laptops` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -68,6 +74,8 @@ CREATE TABLE `laptops` (
 # Dump of table students
 # ------------------------------------------------------------
 
+DROP TABLE IF EXISTS `students`;
+
 CREATE TABLE `students` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sid` text NOT NULL,
@@ -81,6 +89,8 @@ CREATE TABLE `students` (
 
 # Dump of table tickets
 # ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tickets`;
 
 CREATE TABLE `tickets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
