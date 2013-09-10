@@ -12,7 +12,6 @@ class Student
 		if ( ($grade = intval($grade)) == 0 )
 			return false;
 		$result = $mysql->query("INSERT INTO students (sid, name, grade) VALUES('".$sid."', '".$name."', ".$grade.")");
-		echo mysqli_error();
 		if ( !$result )
 			return false;
 		return new Student($sid);
