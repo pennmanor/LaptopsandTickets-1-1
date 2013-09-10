@@ -152,7 +152,7 @@ if ( array_key_exists("id", $_GET) )
 						<li><a href="../tickets">Tickets</a></li>
 						<li class="active"><a href="./index.php">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
-						<li><a href="../../calendar">Calendar</a></li>
+						<li><a href="../calendar">Calendar</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
