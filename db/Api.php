@@ -11,7 +11,7 @@ class Api{
 		}
 		$query = "SELECT `id`, `key`, `name` FROM `apikeys` WHERE `key` = \"".$mysql->real_escape_string($key)."\"";
 		$result = $mysql->query($query);
-		if($result->num_rows == 0) {
+		if( !$result || $result->num_rows == 0) {
 			throw new Exception("Invalid key");
 		}
 		$row = mysqli_fetch_assoc($result);
