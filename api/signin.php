@@ -16,7 +16,7 @@ try{
 		default:
 		case HISTORYEVENT_SIGNOUT:
 		$output[API_INFO] = "Logging ".$helper->getID()." in.";
-		$helper->signin();
+		$helper->signin($request->getID(), $request->getName());
 		break;
 		case HISTORYEVENT_SIGNIN:
 		$output[API_INFO] = $helper->getID()." is already logged in.";

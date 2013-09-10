@@ -12,12 +12,12 @@ class Helper extends Student{
 		return $row["action"];
 	}
 
-	public function signin(){
-		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNIN);
+	public function signin($id, $name){
+		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNIN, array("id" => $id, "name" => $name));
 	}
 
-	public function signout(){
-		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNOUT);
+	public function signout($id, $name){
+		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNOUT, array("id" => $id, "name" => $name));
 	}
 
 	public static function exists($studentId){

@@ -13,14 +13,14 @@ try{
 		throw new Exception("Helper does not exist in system");
 	$helper = new Helper($decodedData[API_DATA_ID]);
 	switch($helper->IsSignedIn()){
-		default:
 		case HISTORYEVENT_SIGNIN:
 		$output[API_INFO] = "Logging ".$helper->getID()." out.";
-		$helper->signout();
+		$helper->signout($request->getID(), $request->getName());
 		break;
+		default:
 		case HISTORYEVENT_SIGNOUT:
 		$output[API_INFO] = "Logging ".$helper->getID()." in.";
-		$helper->signin();
+		$helper->signin($request->getID(), $request->getName());
 		break;
 	}
 }

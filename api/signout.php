@@ -19,7 +19,7 @@ try{
 		break;
 		case HISTORYEVENT_SIGNIN:
 		$output[API_INFO] = "Logging ".$helper->getID()." out.";
-		$helper->signout();
+		$helper->signout($request->getID(), $request->getName());
 		break;
 	}
 }
