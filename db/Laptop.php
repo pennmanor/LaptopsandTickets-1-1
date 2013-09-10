@@ -23,7 +23,6 @@ class Laptop
 		$laptop = new Laptop($mysql->insert_id); 
 		if ( $result )
 			addHistoryItem($laptop, -1, HISTORYEVENT_CREATION, array());
-		echo mysqli_error();
 		return $laptop;
 	}
 
