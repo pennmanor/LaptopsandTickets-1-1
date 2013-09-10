@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
 # Database: OnetoOne
-# Generation Time: 2013-06-25 16:07:08 +0000
+# Generation Time: 2013-08-28 03:02:32 +0000
 # ************************************************************
 
 
@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS `history`;
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `laptop` int(11) NOT NULL DEFAULT '0',
-  `student` int(11) NOT NULL DEFAULT '0',
+  `student` text NOT NULL,
   `ticket` int(11) NOT NULL DEFAULT '0',
   `action` int(11) NOT NULL,
   `data` text NOT NULL,
@@ -64,7 +64,9 @@ DROP TABLE IF EXISTS `students`;
 
 CREATE TABLE `students` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `sid` text NOT NULL,
   `name` text NOT NULL,
+  `grade` int(11) NOT NULL,
   `laptop` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -80,8 +82,8 @@ CREATE TABLE `tickets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `body` text NOT NULL,
-  `helper` int(11) NOT NULL,
-  `student` int(11) NOT NULL,
+  `helper` text NOT NULL,
+  `student` text NOT NULL,
   `state` int(11) NOT NULL,
   `timestamp` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)

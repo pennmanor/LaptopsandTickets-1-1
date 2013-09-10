@@ -27,11 +27,24 @@ if ( array_key_exists("notesBox", $_GET) )
 
 if ( array_key_exists("assign", $_GET) )
 {
-	$student = Student::getByProperty(PROPERTY_ID, $_GET['to']);
+	$student = Student::getByProperty(PROPERTY_SID, $_GET['to']);
 	if ( $student )
-		$student->setLaptop($_GET['assign']);
-	header("Location: laptop.php?id=".$_GET['assign']);
-	die();
+	{
+		if ( ($l = $student->getLaptop()) )
+		{
+			header("Location: laptop.php?id=".$_GET['assign']."&studentAlreadyAssignedTo=".$l->getProperty(PROPERTY_ID));
+			die();
+		}
+		else
+			$student->setLaptop($_GET['assign']);
+		header("Location: laptop.php?id=".$_GET['assign']);
+		die();
+	}
+	else 
+	{
+		header("Location: laptop.php?id=".$_GET['assign']."&studentDoesNotExist=".$_GET['to']);
+		die();
+	}
 }
 
 if ( array_key_exists("unassign", $_GET) )
@@ -90,7 +103,6 @@ if ( array_key_exists("id", $_GET) )
 			newOwner = prompt("Please enter a valid student ID for the new owner.");
 			if ( !newOwner )
 				return;
-			newOwner = parseInt(newOwner);
 		}
 		window.location = "laptop.php?assign="+thisLaptopID+"&to="+newOwner;
 	}
@@ -139,6 +151,7 @@ if ( array_key_exists("id", $_GET) )
 						<li><a href="../index.php">Overview</a></li>
 						<li><a href="../tickets">Tickets</a></li>
 						<li class="active"><a href="./index.php">Laptops</a></li>
+						<li><a href="../students">Students</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
@@ -150,6 +163,19 @@ if ( array_key_exists("id", $_GET) )
 		<br>
 		<div class="container">
 			<?php
+			if ( array_key_exists("studentAlreadyAssignedTo", $_GET) ) 
+			{
+			?>
+				<div class="alert alert-error">This student already has a <a href="laptop.php?id=<?php echo $_GET['studentAlreadyAssignedTo']; ?>">laptop</a> assigned</div>
+			<?php
+			}
+			else if ( array_key_exists("studentDoesNotExist", $_GET) ) 
+			{
+			?>
+				<div class="alert alert-error">Student ID <?php echo $_GET['studentDoesNotExist']; ?> does not exist in the database.</div>
+			<?php
+			}
+
 			if ( $laptop )
 			{
 				$properties = $laptop->getProperties();
@@ -189,7 +215,7 @@ if ( array_key_exists("id", $_GET) )
 					
 					<tr>
 						<td><strong>Building</strong></td>
-						<td><?php echo $properties[PROPERTY_BUILDING]; ?></td>
+						<td><?php echo $buildingList[$properties[PROPERTY_BUILDING]]; ?></td>
 					</tr>
 				</table>
 				<?php

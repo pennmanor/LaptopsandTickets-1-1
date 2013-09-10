@@ -1,5 +1,7 @@
 <?php
-mysql_connect($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
+$conn = mysql_connect($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
+if ( !$conn )
+	die("Database connection failed.\n");
 mysql_select_db($databaseInfo['database']);
 
 require_once(dirname(__FILE__)."/constants.php");
@@ -26,7 +28,9 @@ function htmlspecialcharsArray(&$arr)
 
 function array_subset($input, $start, $end)
 {
-	$inputMaxIndex = count($input)-1;
+	$inputMaxIndex = count($input);
+	if ( $inputMaxIndex == 0 )
+		return $input;
 	
 	if ( $start == $inputMaxIndex )
 		return array($input[$inputMaxIndex]);

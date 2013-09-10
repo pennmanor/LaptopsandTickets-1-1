@@ -50,6 +50,7 @@ else if ( array_key_exists("reply", $_GET) )
 						<li><a href="../index.php">Overview</a></li>
 						<li><a href="../tickets">Tickets</a></li>
 						<li><a href="../laptops">Laptops</a></li>
+						<li><a href="../students">Students</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
@@ -77,7 +78,7 @@ else if ( array_key_exists("reply", $_GET) )
 			?>
 			
 			<?php
-			if ( $properties[PROPERTY_HELPER] == 0 )
+			if ( !$properties[PROPERTY_HELPER] )
 			{
 			?>
 				<button class="btn btn-info pull-right buttonSpacer" onClick="window.location = 'ticket.php?id=<?php echo $_GET['id']; ?>&transfer=<?php echo $session->getID(); ?>'">Assign to Me</button>

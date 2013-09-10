@@ -8,11 +8,10 @@ class Ticket
 	{
 		if ( @get_class($creator) == "Student" )
 			$creator = $creator->getID();
-		if ( ($creator = intval($creator)) == 0 )
-			return false;
+		$creator = mysql_real_escape_string($creator);
 		$title = mysql_real_escape_string($title);
 		$body = mysql_real_escape_string($body);
-		if ( !mysql_query("INSERT INTO `tickets` (student, title, body, state, timestamp) VALUES(".$creator.", '".$title."', '".$body."', ".TICKETSTATE_OPEN.", ".time().")") )
+		if ( !mysql_query("INSERT INTO `tickets` (student, title, body, state, timestamp) VALUES('".$creator."', '".$title."', '".$body."', ".TICKETSTATE_OPEN.", ".time().")") )
 			return false;
 		$ticket = new Ticket(mysql_insert_id());
 		addTicketHistoryItem(-1, $ticket, $creator, HISTORYEVENT_TICKET_STATECHANGE, array("verb" => "created"), 1);
@@ -159,8 +158,9 @@ class Ticket
 		else
 			$obj = new Student($person);
 		
-		if ( ($person = intval($person)) == 0 )
+		if ( !Student::getByProperty(PROPERTY_SID, $person) )
 			return false;
+		
 		$result = $this->setProperty("helper", $person);
 		if ( $result )
 			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_INFO, array("body" => "Ticket assigned to ".$obj->getName()));
@@ -206,8 +206,6 @@ class Ticket
 	{
 		if ( @get_class($author) == "Student" )
 			$author = $author->getID();
-		if ( ($author = intval($author)) == 0 )
-			return false;
 		
 		return addTicketHistoryItem(-1, $this, $author, HISTORYEVENT_TICKET_REPLY, array("body"=>$body));
 	}

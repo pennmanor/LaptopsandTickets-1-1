@@ -4,10 +4,11 @@ require_once("../../include.php");
 $showBox = RESULT_NONE;
 if ( array_key_exists("file", $_FILES) )
 {
-	$data = @file_get_contents($_FILES['file']['tmp_name']);
+	$data = file_get_contents($_FILES['file']['tmp_name']);
 	if ( $data )
 	{
 		$data = trim($data);
+		$data = str_replace("\r", "\n", $data);
 		$lines = explode("\n", $data);
 		foreach ($lines as $line)
 		{
@@ -85,7 +86,8 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
 						<li><a href="../tickets">Tickets</a></li>
-						<li class="active"><a href="#">Laptops</a></li>
+						<li class="active"><a href="../laptops">Laptops</a></li>
+						<li><a href="../students">Students</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
@@ -148,11 +150,11 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					?>
 					<tr>
 						<td><?php echo $properties[PROPERTY_HOSTNAME]; ?></td>
-						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 						<td><?php echo $properties[PROPERTY_ASSETTAG]; ?></td>
+						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 						<td><?php echo $properties[PROPERTY_EMAC]; ?></td>
 						<td><?php echo $properties[PROPERTY_WMAC]; ?></td>
-						<td><?php echo $properties[PROPERTY_BUILDING]; ?></td>
+						<td><?php echo $buildingList[$properties[PROPERTY_BUILDING]]; ?></td>
 						<td><button class="btn btn-inverse" onClick="handleDetailsClick(<?php echo $properties[PROPERTY_ID]; ?>)">Details</button></td>
 					</tr>
 					<?php
@@ -211,9 +213,9 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 						<td>
 							<select name="building">
 								<?php
-								foreach ( $buildingList as $building )
+								foreach ( $buildingList as $buildingKey => $building )
 								{
-									echo "<option value=\"".$building."\">".$building."</option>\n";
+									echo "<option value=\"".$buildingKey."\">".$building."</option>\n";
 								}
 								?>
 							</select>

@@ -35,6 +35,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<li class="active"><a href="./index.php">Overview</a></li>
 						<li><a href="./tickets">Tickets</a></li>
 						<li><a href="./laptops">Laptops</a></li>
+						<li><a href="./students">Students</a></li>
 					</ul>
 
 					<ul class="nav pull-right">
@@ -51,7 +52,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Laptops</span></td>
+							<td><span class="overviewHeader">Laptop Inventory</span></td>
 						</tr>
 						<tr>
 							<td><strong>Total</strong> <span class="badge badge-info pull-right"><?php echo $nLaptops; ?></span></td>
@@ -72,7 +73,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Laptop Service</span></td>
+							<td><span class="overviewHeader">Laptop Service Statistics</span></td>
 						</tr>
 						
 						<?php
@@ -112,7 +113,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 								$color="badge-warning";
 						?>
 						<tr>
-							<td><strong><?php echo $issue; ?></strong> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
+							<td><a href="laptops/issueInfo.php?issueType=<?php echo $k; ?>"><strong><?php echo $issue; ?></strong></a> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
 						</tr>
 						<?php
 						}
@@ -125,7 +126,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 				<div class="span4">
 					<table class="table table-bordered">
 						<tr>
-							<td><span class="overviewHeader">Tickets</span></td>
+							<td><span class="overviewHeader">Tickets Statistics</span></td>
 						</tr>
 						
 						<tr>
