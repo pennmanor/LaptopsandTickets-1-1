@@ -24,9 +24,6 @@ include_once("../../include.php");
 					<li><a href="../students">Students</a></li>
 					<li class="active"><a href="#">Calendar</a></li>
 				</ul>
-				<ul class="nav pull-right">
-					<li class="pull-right"><a href="../../index.php">Exit</a></li>
-				</ul>
 			</div>
 		</div>
 	</div>
