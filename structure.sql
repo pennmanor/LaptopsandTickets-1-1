@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4004
+# Version 4096
 #
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
-# Database: OnetoOne
-# Generation Time: 2013-08-28 03:02:32 +0000
+# Database: OneToOne
+# Generation Time: 2013-09-10 03:12:06 +0000
 # ************************************************************
 
 
@@ -18,6 +18,20 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# Dump of table apikeys
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `apikeys`;
+
+CREATE TABLE `apikeys` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `key` text,
+  `name` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 
 
 # Dump of table history

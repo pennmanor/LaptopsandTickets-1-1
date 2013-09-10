@@ -6,14 +6,16 @@ class Ticket
 {
 	public static function create($creator, $title, $body)
 	{
+		global $mysql;
 		if ( @get_class($creator) == "Student" )
 			$creator = $creator->getID();
-		$creator = mysql_real_escape_string($creator);
-		$title = mysql_real_escape_string($title);
-		$body = mysql_real_escape_string($body);
-		if ( !mysql_query("INSERT INTO `tickets` (student, title, body, state, timestamp) VALUES('".$creator."', '".$title."', '".$body."', ".TICKETSTATE_OPEN.", ".time().")") )
+		$creator = real_escape_string($creator);
+		$title = real_escape_string($title);
+		$body = real_escape_string($body);
+		$q = $mysql->query("INSERT INTO `tickets` (student, title, body, state, timestamp) VALUES('".$creator."', '".$title."', '".$body."', ".TICKETSTATE_OPEN.", ".time().")");
+		if ( !$q )
 			return false;
-		$ticket = new Ticket(mysql_insert_id());
+		$ticket = new Ticket($mysql->insert_id);
 		addTicketHistoryItem(-1, $ticket, $creator, HISTORYEVENT_TICKET_STATECHANGE, array("verb" => "created"), 1);
 		$ticket->addReply($creator, $body);
 		return $ticket;
@@ -22,20 +24,22 @@ class Ticket
 	
 	public static function getByProperty($property, $value)
 	{
-		$value = mysql_real_escape_string($value);
-		$result = mysql_query("SELECT id FROM tickets WHERE `".$property."` = '".$value."'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$value = real_escape_string($value);
+		$result = $mysql->query("SELECT id FROM tickets WHERE `".$property."` = '".$value."'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return new Ticket(mysql_result($result, 0, "id"));
+		return new Ticket(mysqli_result($result, 0, "id"));
 	}
 	
 	public static function getAllByProperty($property, $value)
 	{
-		$value = mysql_real_escape_string($value);
-		$result = mysql_query("SELECT id FROM tickets WHERE `".$property."` = '".$value."'");
+		global $mysql;
+		$value = real_escape_string($value);
+		$result = $mysql->query("SELECT id FROM tickets WHERE `".$property."` = '".$value."'");
 		
 		$output = array();
-		while ( $d = mysql_fetch_array($result) )
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 				$output[] = new Ticket($d['id']);
@@ -46,10 +50,11 @@ class Ticket
 	
 	public static function getAll($sortBy = SORT_DESC)
 	{
-		$result = mysql_query("SELECT id FROM tickets");
+		global $mysql;
+		$result = $mysql->query("SELECT id FROM tickets");
 		$out = array();
 		$pivot = array();
-		while ( $d = mysql_fetch_array($result) )
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 			{
@@ -97,13 +102,14 @@ class Ticket
 	
 	public static function searchField($property, $query, $dupCheck = array())
 	{
-		$query = mysql_real_escape_string($query);
-		$result = mysql_query("SELECT * FROM tickets WHERE ".$property." LIKE '%".$query."%'");
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$query = real_escape_string($query);
+		$result = $mysql->query("SELECT * FROM tickets WHERE ".$property." LIKE '%".$query."%'");
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return array();
 		$output = array();
 		
-		while ( $d = mysql_fetch_array($result) )
+		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
 			{
@@ -185,10 +191,11 @@ class Ticket
 	
 	public function getHistory($sortBy = SORT_DESC)
 	{
-		$result = mysql_query("SELECT * FROM history WHERE `ticket` = ".$this->getID());
+		global $mysql;
+		$result = $mysql->query("SELECT * FROM history WHERE `ticket` = ".$this->getID());
 		$output = array();
 		$sortPivot = array();
-		while ( $d = mysql_fetch_array($result, MYSQL_ASSOC) )
+		while ( $d = mysqli_fetch_array($result, MYSQL_ASSOC) )
 		{
 			if ( !empty($d) )
 			{
@@ -228,27 +235,30 @@ class Ticket
 	
 	public function getProperty($property)
 	{
-		$property = mysql_real_escape_string($property);
+		global $mysql;
+		$property = real_escape_string($property);
 		
-		$result = mysql_query("SELECT `".$property."` FROM `tickets` WHERE `id` = ".$this->getID());
-		if ( !$result || mysql_num_rows($result) == 0 )
+		$result = $mysql->query("SELECT `".$property."` FROM `tickets` WHERE `id` = ".$this->getID());
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return mysql_result($result, 0, $property);
+		return mysqli_result($result, 0, $property);
 	}
 	
 	public function getProperties()
 	{
-		$result = mysql_query("SELECT * FROM `tickets` WHERE `id` = ".$this->getID());
-		if ( !$result || mysql_num_rows($result) == 0 )
+		global $mysql;
+		$result = $mysql->query("SELECT * FROM `tickets` WHERE `id` = ".$this->getID());
+		if ( !$result || mysqli_num_rows($result) == 0 )
 			return false;
-		return mysql_fetch_array($result);
+		return mysqli_fetch_array($result);
 	}
 	
 	public function setProperty($property, $value)
 	{
-		$property = mysql_real_escape_string($property);
-		$value = mysql_real_escape_string($value);
-		return mysql_query("UPDATE tickets SET `".$property."` = '".$value."' WHERE `id` = ".$this->getID());
+		global $mysql;
+		$property = real_escape_string($property);
+		$value = real_escape_string($value);
+		return $mysql->query("UPDATE tickets SET `".$property."` = '".$value."' WHERE `id` = ".$this->getID());
 	}
 	
 	public function getStateLabel()

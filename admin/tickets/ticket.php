@@ -48,9 +48,10 @@ else if ( array_key_exists("reply", $_GET) )
 					<a class="brand" href="../index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
-						<li class="active"><a href="../tickets">Tickets</a></li>
+						<li><a href="../tickets">Tickets</a></li>
 						<li><a href="../laptops">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
+						<li><a href="../calendar">Calendar</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
@@ -94,40 +95,36 @@ else if ( array_key_exists("reply", $_GET) )
 			}
 			?>
 			<hr>
-
-			<?php echo Ticket::getHTMLForHistory($ticket->getHistory(SORT_ASC)); ?>
-
-			<hr>
 			
 			<form action="" method="get">
-				<textarea class="notesBox" rows="5" name="reply" placeholder="Reply"></textarea><br>
-				<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-				
-				<div class="btn-group dropup">
-				  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-				    Transfer
-				    <span class="caret"></span>
-				  </a>
-				  <ul class="dropdown-menu">
-					  <?php
-					  foreach ($helpers as $helper)
-					  {
-						  if ( $helper != $properties[PROPERTY_HELPER] )
-						  {
-						  	$student = new Student($helper);
-					  ?>
-				    	  	<li><a href="ticket.php?id=<?php echo $_GET['id']; ?>&transfer=<?php echo $student->getID(); ?>"><?php echo $student->getName(); ?></a></li>
-					  <?php
-				  		  }
-				  	  }
-					  ?>
-				  </ul>
-				</div>
-				
-				
-				<input type="submit" class="btn btn-primary pull-right">
+				<fieldset>
+					<textarea class="notesBox" rows="5" name="reply" placeholder="Reply"></textarea><br>
+					<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+					<div class="btn-group dropup">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							Transfer
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<?php
+							foreach ($helpers as $helper)
+							{
+								if ( $helper != $properties[PROPERTY_HELPER] )
+								{
+									$student = new Student($helper);
+							?>
+							<li><a href="ticket.php?id=<?php echo $_GET['id']; ?>&transfer=<?php echo $student->getID(); ?>"><?php echo $student->getName(); ?></a></li>
+							<?php
+								}
+							}
+							?>
+						</ul>
+					</div>
+					<input type="submit" class="btn btn-primary pull-right">
+				</fieldset>
 			</form>
-			<br><br>
+			<hr>
+			<?php echo Ticket::getHTMLForHistory($ticket->getHistory(SORT_DESC)); ?>
 		</div>
 		
 		<script src="http://code.jquery.com/jquery.js"></script>

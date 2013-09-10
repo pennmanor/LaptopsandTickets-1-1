@@ -39,6 +39,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 						<li class="active"><a href="../tickets">Tickets</a></li>
 						<li><a href="../laptops">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
+						<li><a href="../calendar">Calendar</a></li>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">

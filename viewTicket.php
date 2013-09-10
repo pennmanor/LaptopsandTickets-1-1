@@ -39,9 +39,8 @@ else if ( array_key_exists("reply", $_GET) )
 					<a class="brand" href="./index.php">1:1</a>
 					<ul class="nav">
 						<li><a href="./index.php">Home</a></li>
+						<li><a href="./allTickets.php">My Tickets</a></li>
 						<li><a href="./newTicket.php">New Ticket</a></li>
-						<li class="active"><a href="#">View Ticket</a></li>
-						
 					</ul>
 					<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>
 					<?php
@@ -54,7 +53,6 @@ else if ( array_key_exists("reply", $_GET) )
 					<?php
 					}
 					?>
-
 				</div>
 			</div>
 
@@ -78,22 +76,22 @@ else if ( array_key_exists("reply", $_GET) )
 			}
 			?>
 			<hr>
-			
-			<?php echo Ticket::getHTMLForHistory($ticket->getHistory(SORT_ASC)); ?>
-
 			<?php 
 			if ( $properties[PROPERTY_STATE] == TICKETSTATE_OPEN )
 			{
 			?>
 			<form action="" method="get">
-				<textarea class="notesBox" rows="5" name="reply" placeholder="Reply"></textarea><br>
-				<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
-				<input type="submit" class="btn btn-primary pull-right">
+				<fieldset>
+					<textarea class="notesBox" rows="5" name="reply" placeholder="Reply"></textarea><br>
+					<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+					<input type="submit" class="btn btn-primary pull-right">
+				</fieldset>
 			</form>
-			<br><br>
+			<hr>
 			<?php
 			}
 			?>
+			<?php echo Ticket::getHTMLForHistory($ticket->getHistory(SORT_DESC)); ?>
 		</div>
 	</body>
 </html>

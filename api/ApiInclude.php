@@ -1,16 +1,17 @@
 <?php
+include_once("../config.php");
+
 $mysql = new mysqli($databaseInfo['host'], $databaseInfo['username'], $databaseInfo['password']);
 if ( !$mysql )
 	die("Database connection failed.\n");
 $mysql->select_db($databaseInfo['database']);
 
-require_once(dirname(__FILE__)."/constants.php");
-require_once(dirname(__FILE__)."/UserSession.php");
-require_once(dirname(__FILE__)."/History.php");
-require_once(dirname(__FILE__)."/Laptop.php");
-require_once(dirname(__FILE__)."/Ticket.php");
-require_once(dirname(__FILE__)."/Student.php");
-require_once(dirname(__FILE__)."/Helper.php");
+
+include_once("../db/constants.php");
+include_once("../db/Api.php");
+include_once("../db/History.php");
+include_once("../db/Student.php");
+include_once("../db/Helper.php");
 
 function nl_fix($string)
 {
@@ -58,5 +59,4 @@ function real_escape_string($str)
 	global $mysql;
 	return mysqli_real_escape_string($mysql, $str);
 }
-
 ?>
