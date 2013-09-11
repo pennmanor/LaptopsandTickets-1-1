@@ -4,7 +4,7 @@ var studentEvents = [];
     "use strict";
 
 	var options = {
-		events_url: '../../getStudentlogs.php',
+		events_url: '../../getStudentLogs.php',
 		view: 'month',
 		tmpl_path: 'tmpls/',
 		holidays: {
