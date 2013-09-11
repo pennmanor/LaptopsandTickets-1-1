@@ -3,7 +3,7 @@ class Helper extends Student{
 	
 	public function isSignedIn(){
 		global $mysql;
-		$query = "SELECT `action` FROM `History` WHERE `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNIN."\" OR `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNOUT."\" ORDER BY `timestamp` DESC LIMIT 1";
+		$query = "SELECT `action` FROM `history` WHERE `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNIN."\" OR `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNOUT."\" ORDER BY `timestamp` DESC LIMIT 1";
 		$result = $mysql->query($query);
 		if(!$result)
 			return false;
