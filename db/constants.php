@@ -51,7 +51,7 @@ define("TICKETSTATE_CLOSED", 0);
 define("TICKETSTATE_OPEN", 1);
 
 define("API_STATUS", "status");
-define("API_INFO", "status");
+define("API_INFO", "info");
 
 define("API_DATA_ID", "id");
 define("API_DATA_NAME", "name");
