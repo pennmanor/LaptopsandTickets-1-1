@@ -50,6 +50,7 @@ define("HISTORYEVENT_SIGNOUT", 11);
 define("TICKETSTATE_CLOSED", 0);
 define("TICKETSTATE_OPEN", 1);
 
+define("API_SUCCESS", "success");
 define("API_STATUS", "status");
 define("API_INFO", "info");
 

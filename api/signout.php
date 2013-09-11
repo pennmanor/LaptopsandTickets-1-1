@@ -3,7 +3,7 @@ include_once("ApiInclude.php");
 $key = $_POST["key"];
 $data = $_POST["data"];
 
-$output = Array(API_STATUS => "true", API_INFO => "Functioning normally.");
+$output = Array(API_SUCCESS => 1, API_STATUS => -1, API_INFO => "Functioning normally.");
 try{
 	if(!$key || !$data)
 		throw new Exception("No key and/or data provided.");
@@ -18,13 +18,14 @@ try{
 		$output[API_INFO] = $helper->getID()." is already logged out.";
 		break;
 		case HISTORYEVENT_SIGNIN:
+		$output[API_STATUS] = HISTORYEVENT_SIGNOUT;
 		$output[API_INFO] = "Logging ".$helper->getID()." out.";
 		$helper->signout($request->getID(), $request->getName());
 		break;
 	}
 }
 catch(Exception $e){
-	$output[API_STATUS] = false;
+	$output[API_SUCCESS] = 0;
 	$output[API_INFO] = $e->getMessage();
 }
 echo json_encode($output);

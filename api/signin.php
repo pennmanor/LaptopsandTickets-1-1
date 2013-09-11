@@ -3,7 +3,7 @@ include_once("ApiInclude.php");
 $key = $_POST["key"];
 $data = $_POST["data"];
 
-$output = Array(API_STATUS => "true", API_INFO => "Functioning normally.");
+$output = Array(API_SUCCESS => 1, API_STATUS => -1, API_INFO => "Functioning normally.");
 try{
 	if(!$key || !$data)
 		throw new Exception("No key and/or data provided.");
@@ -15,6 +15,7 @@ try{
 	switch($helper->IsSignedIn()){
 		default:
 		case HISTORYEVENT_SIGNOUT:
+		$output[API_STATUS] = HISTORYEVENT_SIGNIN;
 		$output[API_INFO] = "Logging ".$helper->getID()." in.";
 		$helper->signin($request->getID(), $request->getName());
 		break;
@@ -24,7 +25,7 @@ try{
 	}
 }
 catch(Exception $e){
-	$output[API_STATUS] = false;
+	$output[API_SUCCESS] = 0;
 	$output[API_INFO] = $e->getMessage();
 }
 echo json_encode($output);
