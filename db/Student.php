@@ -198,6 +198,15 @@ class Student
 			return false;
 		return mysqli_result($result, 0, $property);
 	}
+
+	public function setProperty($property, $value)
+	{
+		global $mysql;
+		$property = real_escape_string($property);
+		$value = real_escape_string($value);
+		
+		return $mysql->query("UPDATE students SET `".$property."` = '".$value."' WHERE `sid` = ".$this->getID());
+	}
 	
 	public function getProperties()
 	{

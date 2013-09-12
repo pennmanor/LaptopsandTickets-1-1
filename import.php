@@ -9,6 +9,14 @@ if ( array_key_exists("REMOTE_ADDR", $_SERVER) )
 require_once("config.php");
 require_once("db/include.php");
 
+function setStudentArrayKeys($a)
+{
+	$a[PROPERTY_SID] = $a[0];
+	$a[PROPERTY_NAME] = $a[1]." ".$a[2];
+	$a[PROPERTY_GRADE] = $a[3];
+	return $a;
+}
+
 $data = "";
 
 while ( $d = fgets(STDIN) )
@@ -25,7 +33,7 @@ foreach ($lines as $line )
 {
 	$row = explode(",", trim($line));
 	if ( count($row) == 4 )
-		$FileStudents[] = $row;
+		$FileStudents[] = setStudentArrayKeys($row);
 }
 
 function existsInFile($findStudent)
@@ -44,7 +52,7 @@ function existsInDB($findStudent)
 	global $DBStudents;
 	foreach ($DBStudents as $student)
 	{
-		if ( $findStudent == $student->id )
+		if ( $findStudent == $student->getID() )
 			return true;
 	}
 	return false;
@@ -54,16 +62,16 @@ function existsInDB($findStudent)
 // Remove users that are in the database, but not in the file.
 foreach ($DBStudents as $student)
 {
-	if ( !existsInFile($student->id) )
+	if ( !existsInFile($student->getID()) )
 	{
 		if ( $student->getLaptop() )
 		{
-			echo $student->id." should be removed, but still has a laptop assigned!\n";
+			echo $student->getID()." should be removed, but still has a laptop assigned!\n";
 		}
 		else
 		{
-			echo "Removing student ".$student->id."\n";
-			if ( !Student::nuke($student->id) )
+			echo "Removing student ".$student->getID()."\n";
+			if ( !Student::nuke($student->getID()) )
 				echo "Student removal failed!\n";
 		}
 	}
@@ -77,6 +85,22 @@ foreach ($FileStudents as $student)
 		echo "Adding student ".$student[0]." ".$student[1]." ".$student[2]." in grade ".$student[3]."\n";
 		if ( !Student::create($student[0], $student[1]." ".$student[2], $student[3]) )
 			echo "Student create failed!\n";
+	}
+	else
+	{
+		$thisStudent = new Student($student[0]);
+		foreach ( $student as $key => $fileValue )
+		{
+			if ( !is_numeric($key) )
+			{
+				$dbValue = $thisStudent->getProperty($key);
+				if ( $fileValue != $dbValue )
+				{
+					echo "Updating ".$key." on ".$student[0]." to ".$fileValue."\n";
+					$thisStudent->setProperty($key, $fileValue);
+				}
+			}
+		}
 	}
 }
 
