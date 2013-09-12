@@ -30,6 +30,7 @@ if ( array_key_exists("logout", $_GET) )
 					<?php if ( $session->isAuthenticated() ) { ?>
 						<li><a href="./allTickets.php">My Tickets</a></li>
 						<li><a href="./newTicket.php">New Ticket</a></li>
+						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedbackForm.php">Feedback</a></li><?php } ?>
 					<?php } ?>
 				</ul>
 				<?php

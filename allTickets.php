@@ -19,6 +19,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 						<li><a href="./index.php">Home</a></li>
 						<li class="active"><a href="./allTickets.php">My Tickets</a></li>
 						<li><a href="./newTicket.php">New Ticket</a></li>
+						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedbackForm.php">Feedback</a></li><?php } ?>
 						
 					</ul>
 					
