@@ -104,7 +104,9 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		</div>
 		<script src="js/jquery.js" type="text/javascript"></script>
 		<script src="js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="js/object.js" type="text/javascript"></script>
 		<script src="js/Progress.js" type="text/javascript"></script>
+		<script src="js/Table.js" type="text/javascript"></script>
 		<script>
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2);
 		function init(){
