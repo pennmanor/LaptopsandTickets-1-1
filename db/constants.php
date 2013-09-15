@@ -53,7 +53,15 @@ define("TICKETSTATE_OPEN", 1);
 define("API_SUCCESS", "success");
 define("API_STATUS", "status");
 define("API_INFO", "info");
+define("API_RESULT", "result");
 
 define("API_DATA_ID", "id");
 define("API_DATA_NAME", "name");
+define("API_DATA_STUDENT", "student");
+define("API_DATA_ACTION", "action");
+define("API_DATA_BY", "by");
+define("API_DATA_FOR", "for");
+
+define("API_ACTION_SEARCH", "search");
+define("API_ACTION_GET", "get");
 ?>
