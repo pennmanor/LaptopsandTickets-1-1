@@ -69,31 +69,6 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 						</div>
 					</div>
 					<div id="ticketBar-content">
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Title</th>
-									<th>Date</th>
-									<th></th>
-								</tr>
-							</thead>
-			
-							<tbody>
-								<?php
-								foreach ($tickets as $ticket)
-								{
-									$properties = $ticket->getProperties();
-								?>
-									<tr>
-										<td><?php echo $properties[PROPERTY_TITLE]."&nbsp;&nbsp;".$ticket->getStateLabel(); ?> </td>
-										<td><?php echo date("M d, Y", $properties[PROPERTY_TIMESTAMP])." at ".date("g:i A", $properties[PROPERTY_TIMESTAMP]); ?></td>
-										<td><button class="btn btn-inverse pull-right" onClick="window.location = 'viewTicket.php?id=<?php echo $properties[PROPERTY_ID]; ?>'">View</button></td>
-									</tr>
-								<?php
-								}
-								?>
-							</tbody>
-						</table>
 					</div>
 				</section>
 			</div>
@@ -109,6 +84,13 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		<script src="js/Table.js" type="text/javascript"></script>
 		<script>
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2);
+		var ticketTable = new Table(["title", "timestamp"], ["Title", "Date"]);
+		ticketTable.setProperties("table", {"class" : "table"})
+		ticketTable.addColumnProcessor("timestamp", function(data){
+			var date = new Date(parseInt(data)*1000);
+			return date.toDateString();
+		});
+		var data = "{\"action\": \"get\",\"by\" : \"student\",\"for\" : \"201864\"}";
 		function init(){
 			ticketBar.init();
 			ticketBar.step(2);
@@ -118,7 +100,23 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 					ticketBar.step(2);
 				} , 1000);
 			});
-			
+			getTickets();
+		}
+		function getTickets(){
+			$.ajax({
+				url : "./api/ticket.php",
+				type : "POST",
+				data : "key=1B7D5575BAD62F6BA3C6D1163A786&data=" + data,
+				success : proccessTickets
+			});
+		}
+		function proccessTickets(d){
+			var data = JSON.parse(d);
+			if(data.success = 1){
+				window.console&&console.log(ticketTable.buildTable(data.result));
+				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
+			}
+			window.console&&console.log(data);
 		}
 		window.onload = init;
 		</script>

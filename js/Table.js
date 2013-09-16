@@ -2,7 +2,7 @@ function Table(col, header){
 	this.columns = cloneArray(col);
 	this.names = cloneArray(col);
 	this.tableProperties = {"table":{}, "head-row":{}, "head-data":{},"body-row":{}, "body-data":{}};
-
+	this.columnProcesses = [];
 	if(header != undefined){
 		for(var i = 0; header.length > i; i++){
 			this.names[i] = header[i];
@@ -24,6 +24,10 @@ function Table(col, header){
 		setObject(this.tableProperties[type], prop);
 	}
 
+	this.addColumnProcessor = function(col, proc){
+		this.columnProcesses[col] = proc; 
+	}
+
 	this.buildTable = function(rows){
 		var table = createElement("table", this.tableProperties["table"]);
 		var head = createElement("thead");
@@ -39,6 +43,9 @@ function Table(col, header){
 			for(col in this.columns){
 				var data = workingRow[this.columns[col]];
 				var cell = createElement("td", this.tableProperties["body-data"]);
+				if(this.columns[col] in this.columnProcesses){
+					data = this.columnProcesses[this.columns[col]](data);
+				}
 				cell.innerHTML = data;
 				insertElementAt(cell, bodyRow);
 			}
