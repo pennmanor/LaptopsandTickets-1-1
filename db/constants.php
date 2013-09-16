@@ -30,6 +30,10 @@ define("PROPERTY_STUDENT", "student");
 define("PROPERTY_HELPER", "helper");
 define("PROPERTY_STATE", "state");
 
+// Feedback properties
+define("PROPERTY_LIKE", "like");
+define("PROPERTY_DISLIKE", "dislike");
+
 // Error Types
 define("RESULT_NONE", 0);
 define("RESULT_FAIL", 1);

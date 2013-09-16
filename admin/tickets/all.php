@@ -34,6 +34,7 @@ $tickets = array_subset($tickets, $itemStart, $itemEnd);
 						<li><a href="../laptops">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
 						<li><a href="../calendar">Calendar</a></li>
+						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
