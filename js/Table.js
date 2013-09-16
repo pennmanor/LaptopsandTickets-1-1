@@ -3,6 +3,7 @@ function Table(col, header){
 	this.names = cloneArray(col);
 	this.tableProperties = {"table":{}, "head-row":{}, "head-data":{},"body-row":{}, "body-data":{}};
 	this.columnProcesses = [];
+	this.advancedColumnProcesses = [];
 	if(header != undefined){
 		for(var i = 0; header.length > i; i++){
 			this.names[i] = header[i];
@@ -28,12 +29,16 @@ function Table(col, header){
 		this.columnProcesses[col] = proc; 
 	}
 
+	this.addAdvancedColumnProcessor = function(col, proc){
+		this.advancedColumnProcesses[col] = proc;
+	}
+
 	this.buildTable = function(rows){
 		var table = createElement("table", this.tableProperties["table"]);
 		var head = createElement("thead");
 		var headRow = createElement("tr", this.tableProperties["head-row"]);
 		var body = createElement("tbody");
-		
+
 		for(row in this.names){
 			insertElementAt(createElement("td", this.tableProperties["head-data"], this.names[row]), headRow);
 		}
@@ -46,7 +51,13 @@ function Table(col, header){
 				if(this.columns[col] in this.columnProcesses){
 					data = this.columnProcesses[this.columns[col]](data);
 				}
-				cell.innerHTML = data;
+				if(this.columns[col] in this.advancedColumnProcesses){
+					data = this.advancedColumnProcesses[this.columns[col]](workingRow);
+				}
+				if(typeof data == "object")
+					insertElementAt(data, cell)
+				else	
+					cell.innerHTML = data;
 				insertElementAt(cell, bodyRow);
 			}
 			insertElementAt(bodyRow, body);

@@ -58,7 +58,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 				<div class="navbar navbar-static-top">
 					<div class="navbar-inner">
 						<div class="pull-right">
-							<a id="ticket-refresh" class="btn" href="#"><i class="icon-refresh"></i>  Refresh Table</a>
+							<button class="btn" id="ticket-refresh" autocomplete="off" data-loading-text="Refreshing..."><i class="icon-refresh"></i>  Refresh Table</button>
 						</div>
 					</div>
 				</div>
@@ -83,24 +83,35 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		<script src="js/Progress.js" type="text/javascript"></script>
 		<script src="js/Table.js" type="text/javascript"></script>
 		<script>
-		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2);
-		var ticketTable = new Table(["title", "timestamp"], ["Title", "Date"]);
+		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
+			$("#ticket-refresh").button("reset");
+		});
+		var ticketTable = new Table(["title", "timestamp", "id"], ["Title", "Date", ""]);
 		ticketTable.setProperties("table", {"class" : "table"})
+		ticketTable.addAdvancedColumnProcessor("title", function(data){
+			window.console&&console.log(data);
+			return data["title"] + " status: " + data["state"];
+		});
 		ticketTable.addColumnProcessor("timestamp", function(data){
 			var date = new Date(parseInt(data)*1000);
 			return date.toDateString();
 		});
+		ticketTable.addColumnProcessor("id", function(data){
+			window.console&&console.log(createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = " + data}, "View"));
+			return createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
+		});
 		var data = "{\"action\": \"get\",\"by\" : \"student\",\"for\" : \"201864\"}";
 		function init(){
 			ticketBar.init();
-			ticketBar.step(2);
+			ticketBar.step(1);
+			$("#ticket-refresh").button();
 			$("#ticket-refresh").click(function(){
+				$("#ticket-refresh").button("loading");
 				ticketBar.reset();
-				setTimeout(function(){
-					ticketBar.step(2);
-				} , 1000);
+				getTickets();
 			});
 			getTickets();
+			
 		}
 		function getTickets(){
 			$.ajax({
@@ -116,7 +127,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 				window.console&&console.log(ticketTable.buildTable(data.result));
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
 			}
-			window.console&&console.log(data);
+			ticketBar.step(2);
 		}
 		window.onload = init;
 		</script>

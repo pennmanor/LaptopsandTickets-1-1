@@ -1,4 +1,4 @@
-function Progress(eleBar, eleProgress, eleContent, steps){
+function Progress(eleBar, eleProgress, eleContent, steps, callback){
 	this.eleBar = eleBar;
 	this.eleProgress = eleProgress;
 	this.eleContent = eleContent;
@@ -6,6 +6,7 @@ function Progress(eleBar, eleProgress, eleContent, steps){
 	
 	this.progress = 0;
 	this.current = 0;
+	this.callBack = callback;
 	
 	this.init = function(){
 		$(this.eleContent).hide();
@@ -25,6 +26,8 @@ function Progress(eleBar, eleProgress, eleContent, steps){
 			$(this.eleProgress).slideUp();
 			$(this.eleContent).slideDown();
 			setTimeout($.proxy(this.barPercent, this, 0), 600);
+			if(typeof this.callBack == "function")
+				setTimeout($.proxy(this.callBack, this), 600);
 		}
 	}
 	this.barPercent = function(percent){
@@ -57,5 +60,8 @@ function Progress(eleBar, eleProgress, eleContent, steps){
 		if(this.current >= 100){
 			setTimeout($.proxy(this.check, this), 600);
 		}
+	}
+	this.setCallBack = function(callback){
+		this.callBack = callback;
 	}
 }
