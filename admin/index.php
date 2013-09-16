@@ -1,6 +1,7 @@
 <?php
 $requiresAdmin = true;
 require_once("../include.php");
+
 $laptops = Laptop::getAll();
 $nLaptopsAssigned = 0;
 
@@ -37,6 +38,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<li><a href="./laptops">Laptops</a></li>
 						<li><a href="./students">Students</a></li>
 						<li><a href="./calendar">Calendar</a></li>
+						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedback">Feedback</a></li><?php } ?>
 					</ul>
 
 					<ul class="nav pull-right">

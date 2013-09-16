@@ -17,7 +17,7 @@ require_once(dirname(__FILE__)."/Api.php");
 function nl_fix($string)
 {
 	$string = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $string);
-	$string = str_replace(array("\r\\n", "\r", "\n"), "<br />", $string);
+	$string = str_replace(array("\r\n", "\r", "\n"), "<br />", $string);
 	return $string;
 }
 

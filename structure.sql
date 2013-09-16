@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4096
+# Version 4004
 #
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
-# Database: OneToOne
-# Generation Time: 2013-09-10 03:12:06 +0000
+# Database: OnetoOne
+# Generation Time: 2013-09-13 12:55:11 +0000
 # ************************************************************
 
 
@@ -29,6 +29,21 @@ CREATE TABLE `apikeys` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `key` text,
   `name` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table feedback
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `feedback`;
+
+CREATE TABLE `feedback` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `sid` text NOT NULL,
+  `like` text NOT NULL,
+  `dislike` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
@@ -104,15 +119,7 @@ CREATE TABLE `tickets` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `feedback`;
 
-CREATE TABLE `feedback` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `sid` int(11) NOT NULL,
-  `like` text NOT NULL,
-  `dislike` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

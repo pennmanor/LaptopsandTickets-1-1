@@ -23,6 +23,7 @@ include_once("../../include.php");
 					<li><a href="../laptops">Laptops</a></li>
 					<li><a href="../students">Students</a></li>
 					<li class="active"><a href="#">Calendar</a></li>
+					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
 			</div>
 		</div>

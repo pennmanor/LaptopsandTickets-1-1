@@ -24,6 +24,7 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 						<li class="active"><a href="./index.php">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
 						<li><a href="../calendar">Calendar</a></li>
+						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
