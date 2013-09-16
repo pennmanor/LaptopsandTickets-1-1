@@ -1,4 +1,6 @@
 <?php
+$skipAuth = !array_key_exists("login", $_GET) ;
+
 include_once("include.php");
 
 if ( array_key_exists("logout", $_GET) )
@@ -25,11 +27,17 @@ if ( array_key_exists("logout", $_GET) )
 				<a class="brand" href="./index.php">1:1</a>
 				<ul class="nav">
 					<li class="active"><a href="./index.php">Home</a></li>
-					<li><a href="./allTickets.php">My Tickets</a></li>
-					<li><a href="./newTicket.php">New Ticket</a></li>
+					<?php if ( $session->isAuthenticated() ) { ?>
+						<li><a href="./allTickets.php">My Tickets</a></li>
+						<li><a href="./newTicket.php">New Ticket</a></li>
+					<?php } ?>
 				</ul>
-				<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>
 				<?php
+				if ( $session->isAuthenticated() )
+					echo "<button class=\"btn pull-right\" onClick=\"window.location = 'index.php?logout=true'\">Logout</button>";
+				else
+					echo "<button class=\"btn pull-right\" onClick=\"window.location = 'index.php?login=true'\">Login</button>";
+
 				if ( $session->isHelper() )
 				{
 				?>
