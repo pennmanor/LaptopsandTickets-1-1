@@ -23,8 +23,6 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedbackForm.php">Feedback</a></li><?php } ?>
 						
 					</ul>
-					
-					
 					<button class="btn pull-right" onClick="window.location = 'index.php?logout=true'">Logout</button>
 					<?php
 					if ( $session->isHelper() )
@@ -88,17 +86,17 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			$("#ticket-refresh").button("reset");
 		});
 		var ticketTable = new Table(["title", "timestamp", "id"], ["Title", "Date", ""]);
-		ticketTable.setProperties("table", {"class" : "table"})
+		ticketTable.setProperties("table", {"class" : "table"});
+		ticketTable.setProperties("head-data", {"class" : "bold"});
 		ticketTable.addAdvancedColumnProcessor("title", function(data){
-			window.console&&console.log(data);
-			return data["title"] + " status: " + data["state"];
+			var label = createElement("span", {"class" : "label " + (data["state"] == 1 ? "label-success" : "label-inverse")}, (data["state"] == 1 ? "Open" : "Closed"));
+			return createElement("span", null, data["title"] + " ", label);
 		});
 		ticketTable.addColumnProcessor("timestamp", function(data){
 			var date = new Date(parseInt(data)*1000);
 			return date.toDateString();
 		});
 		ticketTable.addColumnProcessor("id", function(data){
-			window.console&&console.log(createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = " + data}, "View"));
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
 		});
 		var data = "{\"action\": \"get\",\"by\" : \"student\",\"for\" : \"201864\"}";
@@ -125,7 +123,6 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		function proccessTickets(d){
 			var data = JSON.parse(d);
 			if(data.success = 1){
-				window.console&&console.log(ticketTable.buildTable(data.result));
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
 			}
 			ticketBar.step(2);

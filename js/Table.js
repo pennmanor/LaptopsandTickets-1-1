@@ -40,7 +40,7 @@ function Table(col, header){
 		var body = createElement("tbody");
 
 		for(row in this.names){
-			insertElementAt(createElement("td", this.tableProperties["head-data"], this.names[row]), headRow);
+			insertElementAt(createElement("th", this.tableProperties["head-data"], this.names[row]), headRow);
 		}
 		for(row in rows){
 			var bodyRow = createElement("tr", this.tableProperties["body-row"]);
