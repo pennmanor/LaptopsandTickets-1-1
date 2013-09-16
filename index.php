@@ -80,6 +80,7 @@ if ( array_key_exists("logout", $_GET) )
 			}
 			?>
 			<a href="newTicket.php" class="btn btn-large btn-primary">Submit a Ticket</a>
+			<?php if ( $showFeedbackForm ) { ?><a href="feedbackForm.php" class="btn btn-large btn-primary">Send Feedback</a><?php } ?>
 			<a href="http://blogs.pennmanor.net/1to1/" class="btn btn-large btn-primary">Read the Blog</a>
 		</div>
 		<!-- <hr>
