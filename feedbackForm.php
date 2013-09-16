@@ -3,7 +3,6 @@ require_once("include.php");
 $showBox = RESULT_NONE;
 if ( array_key_exists("create", $_POST) )
 {
-	htmlspecialcharsArray($_POST);
 	if ( empty($_POST['like']) || empty($_POST['dislike']) )
 		$showBox = RESULT_FAIL;
 	else
