@@ -11,12 +11,13 @@ require_once(dirname(__FILE__)."/Laptop.php");
 require_once(dirname(__FILE__)."/Ticket.php");
 require_once(dirname(__FILE__)."/Student.php");
 require_once(dirname(__FILE__)."/Helper.php");
+require_once(dirname(__FILE__)."/Feedback.php");
 require_once(dirname(__FILE__)."/Api.php");
 
 function nl_fix($string)
 {
 	$string = str_replace(array("\\r\\n", "\\r", "\\n"), "<br />", $string);
-	$string = str_replace(array("\r\\n", "\r", "\n"), "<br />", $string);
+	$string = str_replace(array("\r\n", "\r", "\n"), "<br />", $string);
 	return $string;
 }
 

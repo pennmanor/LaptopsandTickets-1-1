@@ -130,6 +130,26 @@ else if ( array_key_exists("searchListDHCP", $_GET) )
 	}
 	die();
 }
+else if ( array_key_exists("feedback", $_GET) )
+{
+	$feedback = Feedback::getAll();
+	setFilename("feedback.csv");
+	echo "Student ID,Liked,Dislike\n";
+	foreach ($feedback as $entry)
+	{
+		$data = $entry->getProperties();
+		$data[PROPERTY_LIKE] = str_replace("\n", "", $data[PROPERTY_LIKE]);
+		$data[PROPERTY_LIKE] = str_replace("\r", "", $data[PROPERTY_LIKE]);
+		$data[PROPERTY_LIKE] = str_replace('"', '""', $data[PROPERTY_LIKE]);
+		
+		$data[PROPERTY_DISLIKE] = str_replace("\n", "", $data[PROPERTY_DISLIKE]);
+		$data[PROPERTY_DISLIKE] = str_replace("\r", "", $data[PROPERTY_DISLIKE]);
+		$data[PROPERTY_DISLIKE] = str_replace('"', '""', $data[PROPERTY_DISLIKE]);
+		
+		echo $data[PROPERTY_SID].",\"".$data[PROPERTY_LIKE]."\",\"".$data[PROPERTY_DISLIKE]."\"\n";
+	}
+	die();
+}
 
 
 echo "Invalid report URL";
