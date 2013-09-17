@@ -21,6 +21,9 @@ try{
 		case API_ACTION_ALL:
 		$tickets = Ticket::getAll();
 		break;
+		case API_ACTION_ALLMY:
+		$tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
+		break;
 		case API_ACTION_GET:
 		if(!$by || !$for)
 			throw new Exception("Cannot get tickets, No \"by\" and/or \"for\" data provided.");
@@ -31,8 +34,20 @@ try{
 			throw new Exception("Cannot search tickets, No \"by\" and/or \"for\" data provided.");
 		$tickets = Ticket::searchField($by, $for);
 		break;
+		case API_ACTION_SEARCHMY:
+		if(!$by)
+			throw new Exception("Cannot search tickets, No \"by\" and/or \"for\" data provided.");
+		$allTickets = Ticket::searchField($by, $for);
+		$tickets = Array();
+		foreach($allTickets as $ticket){
+			if($ticket->getProperty("student") == $session->getID())
+				$tickets[] = $ticket;
+			
+		}
+		break;
 		default:
 		throw new Exception("Invalid action.");
+		
 	}
 	foreach($tickets as $ticket){
 		if($session->isHelper() || $request)
