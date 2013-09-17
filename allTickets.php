@@ -6,6 +6,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 <html>
 <head>
 	<title>1:1</title>
+	<meta charset="UTF-8">
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/manager.css" rel="stylesheet">
@@ -57,7 +58,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 				<div class="navbar navbar-static-top">
 					<div class="navbar-inner">
 						<div class="pull-right">
-							<button class="btn" id="ticket-refresh" autocomplete="off" data-loading-text="Refreshing..."><i class="icon-refresh"></i>  Refresh Table</button>
+							<button class="btn" id="ticket-refresh" data-loading-text="Refreshing..."><i class="icon-refresh"></i>  Refresh Table</button>
 						</div>
 					</div>
 				</div>
@@ -103,7 +104,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		function init(){
 			ticketBar.init();
 			ticketBar.step(1);
-			$("#ticket-refresh").button();
+			$("#ticket-refresh").button("reset");
 			$("#ticket-refresh").click(function(){
 				$("#ticket-refresh").button("loading");
 				ticketBar.reset();
@@ -116,14 +117,19 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			$.ajax({
 				url : "./api/ticket.php",
 				type : "POST",
-				data : "key=1B7D5575BAD62F6BA3C6D1163A786&data=" + data,
+				data : "data=" + data,
 				success : proccessTickets
 			});
 		}
 		function proccessTickets(d){
+			window.console&&console.log(d);
 			var data = JSON.parse(d);
-			if(data.success = 1){
+			window.console&&console.log(data);
+			if(data.success == 1){
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
+			}
+			else{
+				$("#ticketBar-content").html(createElement("p", {"class":"text-center lead"},"Error. There was a problem with the request"));
 			}
 			ticketBar.step(2);
 		}

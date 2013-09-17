@@ -1,14 +1,19 @@
 <?php
 include_once("ApiInclude.php");
+$session = new UserSession();
 $key = $_POST["key"];
 $data = $_POST["data"];
 $properties = Array();
 
 $output = Array(API_SUCCESS => 1, API_STATUS => -1, API_INFO => "Functioning normally.", API_RESULT => "");
 try{
-	if(!$key || !$data)
-		throw new Exception("No key and/or data provided.");
-	$request = new Api($key);
+	if($key)
+		$request = new Api($key);
+	else if(!$session->isAuthenticated())
+		throw new Exception("No key provided.");
+	if(!$data)
+		throw new Exception("No data provided.");
+	
 	$decodedData = json_decode($data, true);
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_GET:
