@@ -10,6 +10,8 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 	<link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/manager.css" rel="stylesheet">
+	<link href="css/order-form.css" rel="stylesheet">
+	
 </head>
 
 	<body>
@@ -57,8 +59,11 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			<div class="manager large" data-manager="orders">
 				<div class="navbar navbar-static-top">
 					<div class="navbar-inner">
+						<div class="pull-left">
+							<button class="btn btn-primary" id="ticket-search"><i class="icon-search icon-white"></i>	Search</button>
+						</div>
 						<div class="pull-right">
-							<button class="btn" id="ticket-refresh" data-loading-text="Refreshing..."><i class="icon-refresh"></i>  Refresh Table</button>
+							<button class="btn" id="ticket-refresh" data-loading-text="Refreshing..."><i class="icon-refresh"></i>	Refresh Table</button>
 						</div>
 					</div>
 				</div>
@@ -77,12 +82,39 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			}
 			?>
 		</div>
+			<div id="search-modal" class="modal hide fade">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Search</h3>
+				</div>
+				<form id="search-form">
+					<div class="modal-body">
+						<fieldset>
+							<div class="form-item">
+								<label>Search by:</label>
+								<select id="search-field-by" name="by">
+									<option value="title">Title</option>
+								</select>
+							</div>
+							<div class="form-item">
+								<label>Search for:</label>
+								<input id="search-field-for" type="text" name="for" />
+							</div>
+						</fieldset>
+					</div>
+				</form>
+				<div class="modal-footer">
+					<button class="btn" id="search-cancel" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-primary" data-dismiss="modal" id="search-submit">Search</button>
+				</div>
+			</div>
 		<script src="js/jquery.js" type="text/javascript"></script>
 		<script src="js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="js/object.js" type="text/javascript"></script>
 		<script src="js/Progress.js" type="text/javascript"></script>
 		<script src="js/Table.js" type="text/javascript"></script>
 		<script>
+		var searching = false;
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
 			$("#ticket-refresh").button("reset");
 		});
@@ -100,24 +132,55 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		ticketTable.addColumnProcessor("id", function(data){
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
 		});
-		var data = "{\"action\": \"get\",\"by\" : \"student\",\"for\" : \"201864\"}";
 		function init(){
+			var data = {"action":"all"};
+			getTickets(JSON.stringify(data));
 			ticketBar.init();
 			ticketBar.step(1);
 			$("#ticket-refresh").button("reset");
-			$("#ticket-refresh").click(function(){
-				$("#ticket-refresh").button("loading");
-				ticketBar.reset();
-				getTickets();
+			$("#search-submit").click(function(){
+				search();
 			});
-			getTickets();
-			
+			$("#search-form").submit(function(){
+				$("#search-modal").modal("hide");
+				search();
+				return false;
+			})
+			$("#ticket-search").click(function(){
+				$("#search-modal").modal("show");
+			});
+			$("#ticket-refresh").click(function(){
+				refresh();
+			});
 		}
-		function getTickets(){
+		
+		function search(){
+			searching = true;
+			var byData = $("#search-field-by").val();
+			var forData = $("#search-field-for").val();
+			var data = {"action":"search", "by":byData, "for":forData};
+			ticketBar.reset();
+			getTickets(JSON.stringify(data));
+		}
+		
+		function refresh(){
+			if(searching){
+				var byData = $("#search-field-by").val();
+				var forData = $("#search-field-for").val();
+				var data = {"action":"search", "by":byData, "for":forData};
+			}
+			else
+				var data = {"action":"all"};
+			$("#ticket-refresh").button("loading");
+			ticketBar.reset();
+			getTickets(JSON.stringify(data));
+		}
+		
+		function getTickets(d){
 			$.ajax({
 				url : "./api/ticket.php",
 				type : "POST",
-				data : "data=" + data,
+				data : "data=" + d,
 				success : proccessTickets
 			});
 		}

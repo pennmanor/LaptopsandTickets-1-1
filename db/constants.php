@@ -66,6 +66,7 @@ define("API_DATA_ACTION", "action");
 define("API_DATA_BY", "by");
 define("API_DATA_FOR", "for");
 
+define("API_ACTION_ALL", "all");
 define("API_ACTION_SEARCH", "search");
 define("API_ACTION_GET", "get");
 ?>

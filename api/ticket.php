@@ -15,17 +15,31 @@ try{
 		throw new Exception("No data provided.");
 	
 	$decodedData = json_decode($data, true);
+	$by = $decodedData[API_DATA_BY];
+	$for = $decodedData[API_DATA_FOR];
 	switch($decodedData[API_DATA_ACTION]){
+		case API_ACTION_ALL:
+		$tickets = Ticket::getAll();
+		break;
 		case API_ACTION_GET:
-		if(!$decodedData[API_DATA_BY] || !$decodedData[API_DATA_FOR])
+		if(!$by || !$for)
 			throw new Exception("Cannot get tickets, No \"by\" and/or \"for\" data provided.");
-		$tickets = Ticket::getAllByProperty($decodedData[API_DATA_BY], $decodedData[API_DATA_FOR]);
+		$tickets = Ticket::getAllByProperty($by, $for);
+		break;
+		case API_ACTION_SEARCH:
+		if(!$by || !$for)
+			throw new Exception("Cannot search tickets, No \"by\" and/or \"for\" data provided.");
+		$tickets = Ticket::searchField($by, $for);
 		break;
 		default:
 		throw new Exception("Invalid action.");
 	}
 	foreach($tickets as $ticket){
-		$properties[] = $ticket->getProperties();
+		if($session->isHelper() || $request)
+			$properties[] = $ticket->getProperties();
+		else
+			if($ticket->getProperty("student") == $session->getID())
+				$properties[] = $ticket->getProperties();
 	}
 	$output[API_RESULT] = $properties;
 }

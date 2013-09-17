@@ -1,0 +1,46 @@
+.form-item{
+	display:inline-block;
+	padding:5px;
+	vertical-align:top;
+	zoom: 1; *display: inline;
+}
+
+.form-item textarea {
+   resize: none;
+}
+
+.br{
+	margin-bottom:10px;
+}
+
+#preview-content{
+	height:1005px;
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+	#preview-content{
+		height:1065px;
+	}
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) {
+	#preview-content{
+		height:775px;
+	}
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	#preview-content{
+		height:933px;
+	}
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) {
+	#preview-content{
+		height:567px;
+	}
+}
