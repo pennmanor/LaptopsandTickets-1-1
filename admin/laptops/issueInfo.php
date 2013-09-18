@@ -54,6 +54,7 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 						<th>Serial #</th>
 						<th>Ethernet MAC</th>
 						<th>Wireless MAC</th>
+						<th># Issues</th>
 						<th>Building</th>
 						<th></th>
 					</tr>
@@ -63,6 +64,13 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 					<?php
 					foreach ( $laptops as $laptop )
 					{
+						$history = $laptop->getHistory();
+						$numIssues = 0;
+						foreach ( $history as $event )
+						{
+							if ( $event['action'] == HISTORYEVENT_SERVICE )
+								$numIssues++;
+						}
 					?>
 					<tr>
 						<td><?php echo $laptop->getProperty(PROPERTY_HOSTNAME); ?></td>
@@ -70,6 +78,7 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 						<td><?php echo $laptop->getProperty(PROPERTY_ASSETTAG); ?></td>
 						<td><?php echo $laptop->getProperty(PROPERTY_EMAC); ?></td>
 						<td><?php echo $laptop->getProperty(PROPERTY_WMAC); ?></td>
+						<td><?php echo $numIssues; ?></td>
 						<td><?php echo $buildingList[$laptop->getProperty(PROPERTY_BUILDING)]; ?></td>
 						<td><a class="btn btn-inverse" href="laptop.php?id=<?php echo $laptop->getProperty(PROPERTY_ID); ?>">Details</a></td>
 					</tr>
