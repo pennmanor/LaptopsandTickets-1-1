@@ -64,10 +64,10 @@ if ( array_key_exists("create", $_POST) )
 			?>
 				<div class="alert alert-success">Thank you. Your feedback will help improve the 1:1 program.</div>
 			<?php } else { ?>
-			We are constantly working on trying to improve the 1:1 program. Your feedback is important. Tell us what you think:<br><br>
+			We are constantly working to improve the 1:1 program. Your feedback is important. Please tell us what you think:<br><br>
 			<form action="" method="post">
 				<textarea class="notesBox" name="like" rows="5" placeholder="What do you like about the 1:1 laptop?"><?php echo $_POST['like']; ?></textarea><br>
-				<textarea class="notesBox" name="dislike" rows="5" placeholder="What do you dislike about the 1:1 laptop, or what do you think can be improved?"><?php echo $_POST['dislike']; ?></textarea><br>
+				<textarea class="notesBox" name="dislike" rows="5" placeholder="What do you dislike about the 1:1 laptop? What would you like to see improved?"><?php echo $_POST['dislike']; ?></textarea><br>
 				<input type="submit" name="create" value="Submit" class="btn btn-success pull-right">
 			</form>
 			<?php } ?>
