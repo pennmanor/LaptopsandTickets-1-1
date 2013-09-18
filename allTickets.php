@@ -120,7 +120,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
 			$("#ticket-refresh").button("reset");
 		});
-		var ticketTable = new Table(["title", "timestamp", "id"], ["Title", "Date", ""]);
+		var ticketTable = new Table(["title", "timestamp", "helper", "id"], ["Title", "Date", "Helper", ""]);
 		ticketTable.setProperties("table", {"class" : "table"});
 		ticketTable.setProperties("head-data", {"class" : "bold"});
 		ticketTable.addAdvancedColumnProcessor("title", function(data){
@@ -215,6 +215,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			ticketBar.step(2);
 		}
 		function removeSearch(){
+			$("#search-form")[0].reset();
 			searching = false;
 			removeElement($("#searchItem")[0]);
 			refresh();
