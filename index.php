@@ -16,6 +16,7 @@ if ( array_key_exists("logout", $_GET) )
 	<title>Student Help Desk</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -24,7 +25,7 @@ if ( array_key_exists("logout", $_GET) )
 	<div class="navbar navbar-static-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="./index.php">1:1</a>
+				<a class="brandimg" href="./index.php"><img src="./img/pmsd.png"></a>
 				<ul class="nav">
 					<li class="active"><a href="./index.php">Home</a></li>
 					<?php if ( $session->isAuthenticated() ) { ?>

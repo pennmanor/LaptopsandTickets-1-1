@@ -14,7 +14,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		<div class="navbar navbar-static-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="brand" href="./index.php">1:1</a>
+					<a class="brandimg" href="./index.php"><img src="./img/pmsd.png"></a>
 					<ul class="nav">
 						<li><a href="./index.php">Home</a></li>
 						<li class="active"><a href="./allTickets.php">My Tickets</a></li>
