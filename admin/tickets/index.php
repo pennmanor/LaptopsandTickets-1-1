@@ -121,7 +121,17 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 						</div>
 						<div class="form-item">
 							<label class="checkbox">
-								<input name="limit" type="checkbox">Seach my Tickets
+								<input name="limit-open" type="checkbox">Open Tickets
+							</label>
+						</div>
+						<div class="form-item">
+							<label class="checkbox">
+								<input name="limit-closed" type="checkbox">Closed Tickets
+							</label>
+						</div>
+						<div class="form-item">
+							<label class="checkbox">
+								<input name="limit-helper" type="checkbox">Assigned to Me
 							</label>
 						</div>
 					</fieldset>
@@ -139,7 +149,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 		<script src="../../js/Table.js" type="text/javascript"></script>
 		<script>
 		var searching = false;
-		var limit = false;
+		var limits = [];
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
 			$("#ticket-refresh").button("reset");
 		});
@@ -155,20 +165,20 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			return date.toDateString();
 		});
 		ticketTable.addColumnProcessor("id", function(data){
-			return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
+			return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"ticket.php?id=" + data + "\""}, "View");
 		});
 		function init(){
 			//addSearchLimit();
-			var data = {"action":"all"+ (limit ? " my" : "")};
+			var data = {"action":"all"};
 			getTickets(JSON.stringify(data));
 			ticketBar.init();
 			ticketBar.step(1);
 			$("#search-submit").click(function(){
 				search();
 			});
-			$("#search-form").submit(function(){
+			$("#search-form").submit(function(e){
+				e.preventDefault();
 				search();
-				return false;
 			})
 			$("#ticket-search").click(function(){
 				$("#search-modal").modal("show");
@@ -193,17 +203,26 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			if(!valid)
 				return false;
 			searching = true;
-			if ($("#search-form [name=limit]").is(":checked"))
-				addSearchLimit();
+			limits = [];
+			$(".limit").remove();
+			if($("#search-form [name=limit-open]").is(":checked"))
+				addSearchLimit("open", "Open Tickets");
 			else
-				removeSearchLimit();
-			$("#searchItem").remove();
+				removeSearchLimit("open");
+			if($("#search-form [name=limit-closed]").is(":checked"))
+				addSearchLimit("closed", "Closed Tickets");
+			else
+				removeSearchLimit("closed");
+			if($("#search-form [name=limit-helper]").is(":checked"))
+				addSearchLimit("helper", "Assigned to me");
+			else
+				removeSearchLimit("helper");
 			$("#search-modal").modal("hide");
 			var byData = $("#search-field-by").val();
 			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
 			
 			if($.trim(forData).length != 0 ){
-				var data = {"action":"search" + (limit ? " my" : ""), "by":byData, "for":forData};
+				var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
 				var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
 				var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
 				var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
@@ -213,7 +232,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 				$("#searchQuery").append(group);
 			}
 			else
-				var data = {"action":"all" + (limit ? " my" : ""), "by":byData, "for":forData};
+				var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
 			ticketBar.reset();
 			getTickets(JSON.stringify(data));
 		}
@@ -221,10 +240,10 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			if(searching){
 				var byData = $("#search-field-by").val();
 				var forData = $("#search-field-for").val();
-				var data = {"action":"search" + (limit ? " my" : ""), "by":byData, "for":forData};
+				var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
 			}
 			else
-				var data = {"action":"all" + (limit ? " my" : "")};
+				var data = {"action":"all", "limit":limits};
 			
 			ticketBar.reset();
 			getTickets(JSON.stringify(data));
@@ -239,8 +258,9 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			});
 		}
 		function proccessTickets(d){
+			window.console&&console.log(d);
 			var data = JSON.parse(d);
-			window.console&&console.log(data);
+			//window.console&&console.log(data);
 			if(data.success == 1){
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
 			}
@@ -256,22 +276,23 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			$("#searchItem").remove();
 			refresh();
 		}
-		function addSearchLimit(){
-			limit = true;
-			$("#search-form [name=limit]").prop("checked", true);
-			$("#searchLimit").remove();
-			var group = createElement("div", {"class":"btn-group", "id":"searchLimit"});
-			var text = createElement("button", {"class":"btn"},"My Tickets");
-			var close = createElement("button", {"class":"btn", "onclick":"removeSearchLimit()"});
+		function addSearchLimit(limit, name){
+			$("#search-form #check-" + limit).prop("checked", true);
+			var group = createElement("div", {"class":"btn-group limit", "id":"limit-" + limit});
+			var text = createElement("button", {"class":"btn"}, name);
+			var close = createElement("button", {"class":"btn", "onclick":"removeSearchLimit(\"" + limit + "\")"});
 			close.innerHTML = "&times;";
 			insertElementAt(text, group);
 			insertElementAt(close, group);
 			$("#searchQuery").prepend(group);
+			limits.push(limit);
 		}
-		function removeSearchLimit(){
-			limit = false;
+		function removeSearchLimit(limit){
 			$("#search-form [name=limit]").prop("checked", false);
-			$("#searchLimit").remove();
+			$("#limit-" + limit).remove();
+			var index = limits.indexOf(limit);
+			if(index > -1)
+				limits.splice(index, 1);
 			refresh();
 		}
 		window.onload = init;

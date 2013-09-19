@@ -135,7 +135,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
 		});
 		function init(){
-			var data = {"action":"all my"};
+			var data = {"action":"all", "limit":["my"]};
 			getTickets(JSON.stringify(data));
 			ticketBar.init();
 			ticketBar.step(1);
@@ -172,7 +172,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			searching = true;
 			var byData = $("#search-field-by").val();
 			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
-			var data = {"action":"search my", "by":byData, "for":forData};
+			var data = {"action":"search", "by":byData, "for":forData, "limit":["my"]};
 			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
 			var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
 			var close = createElement("button", {"class":"btn", "onclick":"removeSearch()"});
@@ -187,10 +187,10 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			if(searching){
 				var byData = $("#search-field-by").val();
 				var forData = $("#search-field-for").val();
-				var data = {"action":"search my", "by":byData, "for":forData};
+				var data = {"action":"search", "by":byData, "for":forData, "limit":["my"]};
 			}
 			else
-				var data = {"action":"all my"};
+				var data = {"action":"all", "limit":["my"]};
 			
 			ticketBar.reset();
 			getTickets(JSON.stringify(data));
@@ -205,6 +205,7 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			});
 		}
 		function proccessTickets(d){
+			window.console&&console.log(d);
 			var data = JSON.parse(d);
 			if(data.success == 1){
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));

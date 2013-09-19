@@ -4,6 +4,7 @@ $session = new UserSession();
 $key = $_POST["key"];
 $data = $_POST["data"];
 $properties = Array();
+$limited = Array();
 
 $output = Array(API_SUCCESS => 1, API_STATUS => -1, API_INFO => "Functioning normally.", API_RESULT => "");
 try{
@@ -14,8 +15,15 @@ try{
 	if(!$data)
 		throw new Exception("No data provided.");
 	$decodedData = json_decode($data, true);
+	$limits = $decodedData[API_LIMIT] ? $decodedData[API_LIMIT]:Array();
+	if(!$session->isHelper()){
+		if(!in_array(API_LIMIT_MY, $limits))
+			$limits = array_merge(array(API_LIMIT_MY),$limits);
+	}
+		
 	$by = $decodedData[API_DATA_BY];
 	$for = $decodedData[API_DATA_FOR];
+	
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
 		$tickets = Ticket::getAll();
@@ -37,29 +45,43 @@ try{
 		$tickets = Ticket::searchField($by, $for);
 		$output[API_INFO] = API_ACTION_SEARCH;
 		break;
-		case API_ACTION_SEARCHMY:
-		if(!$by)
-			throw new Exception("Cannot search tickets, No \"by\" data provided.");
-		$allTickets = Ticket::searchField($by, $for);
-		$tickets = Array();
-		foreach($allTickets as $ticket){
-			if($ticket->getProperty("student") == $session->getID())
-				$tickets[] = $ticket;
-		}
-		$output[API_INFO] = API_ACTION_SEARCHMY;
-		break;
 		default:
 		throw new Exception("Invalid action \"".$decodedData[API_DATA_ACTION]."\".");
-		
 	}
-	foreach($tickets as $ticket){
-		if($session->isHelper() || $request)
+	if(is_array($limits)){
+		$output[API_INFO] = $output[API_INFO]." Limits: ";
+		foreach($limits as $limit){
+			$output[API_INFO] = $output[API_INFO].$limit.", ";
+			foreach($tickets as $ticket){
+				switch($limit){
+					case API_LIMIT_MY:
+					if($ticket->getProperty(PROPERTY_STUDENT) == $session->getID())
+						$limited[] = $ticket;
+					break;
+					case API_LIMIT_OPEN:
+					if($ticket->getProperty(PROPERTY_STATE) == TICKETSTATE_OPEN)
+						$limited[] = $ticket;
+					break;
+					case API_LIMIT_CLOSED:
+					if($ticket->getProperty(PROPERTY_STATE) == TICKETSTATE_CLOSED)
+						$limited[] = $ticket;
+					break;
+					case API_LIMIT_HELPER:
+					if($ticket->getProperty(PROPERTY_HELPER) == $session->getID())
+						$limited[] = $ticket;
+					break;
+				}
+			}
+			$tickets = $limited;
+			$limited = Array();
+		}
+	}
+	if(is_array($tickets)){
+		foreach($tickets as $ticket){
 			$properties[] = $ticket->getProperties();
-		else
-			if($ticket->getProperty("student") == $session->getID())
-				$properties[] = $ticket->getProperties();
+		}
+		$output[API_RESULT] = $properties;
 	}
-	$output[API_RESULT] = $properties;
 }
 catch(Exception $e){
 	$output[API_SUCCESS] = 0;

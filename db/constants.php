@@ -66,9 +66,15 @@ define("API_DATA_ACTION", "action");
 define("API_DATA_BY", "by");
 define("API_DATA_FOR", "for");
 
+define("API_LIMIT", "limit");
+define("API_LIMIT_MY", "my");
+define("API_LIMIT_OPEN", "open");
+define("API_LIMIT_CLOSED", "closed");
+define("API_LIMIT_HELPER", "helper");
+define("API_LIMIT_ASSIGNED", "assigned");
+define("API_LIMIT_UNASSIGNED", "unassigned");
+
 define("API_ACTION_ALL", "all");
-define("API_ACTION_ALLMY", "all my");
 define("API_ACTION_SEARCH", "search");
-define("API_ACTION_SEARCHMY", "search my");
 define("API_ACTION_GET", "get");
 ?>
