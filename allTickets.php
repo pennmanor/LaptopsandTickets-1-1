@@ -131,6 +131,9 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 			var date = new Date(parseInt(data)*1000);
 			return date.toDateString();
 		});
+		ticketTable.addColumnProcessor("helper", function(data){
+			return $.trim(data).length != 0 ? data:"Unassigned";
+		});
 		ticketTable.addColumnProcessor("id", function(data){
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onClick" : "window.location = \"viewTicket.php?id=" + data + "\""}, "View");
 		});

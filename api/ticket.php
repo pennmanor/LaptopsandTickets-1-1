@@ -29,10 +29,6 @@ try{
 		$tickets = Ticket::getAll();
 		$output[API_INFO] = API_ACTION_ALL;
 		break;
-		case API_ACTION_ALLMY:
-		$tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
-		$output[API_INFO] = API_ACTION_ALLMY;
-		break;
 		case API_ACTION_GET:
 		if(!$by || !$for)
 			throw new Exception("Cannot get tickets, No \"by\" and/or \"for\" data provided.");
@@ -66,10 +62,20 @@ try{
 					if($ticket->getProperty(PROPERTY_STATE) == TICKETSTATE_CLOSED)
 						$limited[] = $ticket;
 					break;
+					case API_LIMIT_ASSIGNED:
+					if($ticket->getProperty(PROPERTY_HELPER) != NULL)
+						$limited[] = $ticket;
+					break;
+					case API_LIMIT_UNASSIGNED:
+					if($ticket->getProperty(PROPERTY_HELPER) == NULL)
+						$limited[] = $ticket;
+					break;
 					case API_LIMIT_HELPER:
 					if($ticket->getProperty(PROPERTY_HELPER) == $session->getID())
 						$limited[] = $ticket;
 					break;
+					default:
+					throw new Exception("Invalid limit \"".$limit."\".");
 				}
 			}
 			$tickets = $limited;

@@ -126,7 +126,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 						</div>
 						<div class="form-item">
 							<label class="checkbox">
-								<input name="limit-closed" type="checkbox">Closed Tickets
+								<input name="limit-unassigned" type="checkbox">Unassigned
 							</label>
 						</div>
 						<div class="form-item">
@@ -163,6 +163,9 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 		ticketTable.addColumnProcessor("timestamp", function(data){
 			var date = new Date(parseInt(data)*1000);
 			return date.toDateString();
+		});
+		ticketTable.addColumnProcessor("helper", function(data){
+			return $.trim(data).length != 0 ? data:"Unassigned";
 		});
 		ticketTable.addColumnProcessor("id", function(data){
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"ticket.php?id=" + data + "\""}, "View");
@@ -204,15 +207,16 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 				return false;
 			searching = true;
 			limits = [];
+			$("#searchItem").remove();
 			$(".limit").remove();
 			if($("#search-form [name=limit-open]").is(":checked"))
 				addSearchLimit("open", "Open Tickets");
 			else
 				removeSearchLimit("open");
-			if($("#search-form [name=limit-closed]").is(":checked"))
-				addSearchLimit("closed", "Closed Tickets");
+			if($("#search-form [name=limit-unassigned]").is(":checked"))
+				addSearchLimit("unassigned", "Unassigned Tickets");
 			else
-				removeSearchLimit("closed");
+				removeSearchLimit("unassigned");
 			if($("#search-form [name=limit-helper]").is(":checked"))
 				addSearchLimit("helper", "Assigned to me");
 			else
@@ -220,7 +224,6 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			$("#search-modal").modal("hide");
 			var byData = $("#search-field-by").val();
 			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
-			
 			if($.trim(forData).length != 0 ){
 				var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
 				var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
@@ -284,11 +287,11 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			close.innerHTML = "&times;";
 			insertElementAt(text, group);
 			insertElementAt(close, group);
-			$("#searchQuery").prepend(group);
+			$("#searchQuery").append(group);
 			limits.push(limit);
 		}
 		function removeSearchLimit(limit){
-			$("#search-form [name=limit]").prop("checked", false);
+			$("#search-form [name=limit-" + limit + "]").prop("checked", false);
 			$("#limit-" + limit).remove();
 			var index = limits.indexOf(limit);
 			if(index > -1)
