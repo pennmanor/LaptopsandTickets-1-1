@@ -2,26 +2,8 @@
 $requiresAdmin = true;
 require_once("../../include.php");
 $showBox = RESULT_NONE;
-if ( array_key_exists("query", $_GET) )
-{
-	$student = Student::getByProperty(PROPERTY_SID, $_GET['query']);
-	if ( !$student )
-		$showBox = "The student ".$_GET['query']." does not exist in the database.";
-	else
-	{
-		$laptop = $student->getLaptop();
-		if ( $laptop )
-		{
-			header("Location: ../laptops/laptop.php?id=".$laptop->getID());
-			die();
-		}
-		else
-			$showBox = $student->getID()." does not have a laptop assigned.";
-	}
-}
 
-
-$students = Student::getAllWithLaptop();
+$students = Student::search($_GET['query']);
 $nPages = ceil(count($students)/$itemsPerPage);
 
 $pageNumber = intval($_GET['page']);
@@ -40,13 +22,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	<title>1:1 Inventory</title>
 	<link href="../../css/bootstrap.css" rel="stylesheet">
 	<link href="../../css/style.css" rel="stylesheet">
-	
-	<script type="text/javascript">
-	function csvDL()
-	{
-		window.location = "../laptops/reportGen.php?fullListCSV=true";
-	}
-	</script>
+
 </head>
 
 
@@ -77,8 +53,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			<div class="alert"><?php echo $showBox; ?></div>
 		<?php } ?>
 		
-		<span class="sectionHeader">All Students with Laptops Assigned</span>
-		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
+		<span class="sectionHeader">Search</span>
 		<hr>
 		<table class="table table-bordered">
 			<thead>
@@ -86,7 +61,6 @@ $students = array_subset($students, $itemStart, $itemEnd);
 					<th>Student ID</th>
 					<th>Name</th>
 					<th>Grade</th>
-					<th>Building</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -102,8 +76,14 @@ $students = array_subset($students, $itemStart, $itemEnd);
 						<td><?php echo $student->getID(); ?></td>
 						<td><?php echo $properties[PROPERTY_NAME]; ?></td>
 						<td><?php echo $properties[PROPERTY_GRADE]; ?></td>
-						<td><?php echo $buildingList[$laptop->getProperty(PROPERTY_BUILDING)]; ?></td>
-						<td><a href="../laptops/laptop.php?id=<?php echo $laptop->getID(); ?>" class="btn btn-inverse">Laptop</a> <a href="student.php?sid=<?php echo $student->getID(); ?>" class="btn btn-inverse">History</a></td>
+						<td>
+							<?php if ($laptop) { ?>
+								<a href="../laptops/laptop.php?id=<?php echo $laptop->getID(); ?>" class="btn btn-inverse">Laptop</a>
+							<?php } else { ?>
+								<a href="#" class="btn btn-inverse disabled">Laptop</a>
+							<?php } ?>
+							<a href="student.php?sid=<?php echo $student->getID(); ?>" class="btn btn-inverse">History</a>
+						</td>
 					</tr>
 				<?php
 				}

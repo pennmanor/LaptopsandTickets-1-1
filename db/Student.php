@@ -53,11 +53,11 @@ class Student
 				$dup = false;
 				foreach ( $dupCheck as $row )
 				{
-					if ( $row['assetTag'] == $d['assetTag'] )
+					if ( $row['sid'] == $d['sid'] )
 						$dup = true;
 				}
 				if ( !$dup )
-					$output[] = $d;
+					$output[] = new Student($d['sid']);
 			}
 		}
 		return $output;
@@ -66,8 +66,8 @@ class Student
 	public static function search($query)
 	{
 		$output = array();
-		$output = array_merge(Laptop::searchField(PROPERTY_ID, $query, $output), $output);
-		$output = array_merge(Laptop::searchField(PROPERTY_NAME, $query, $output), $output);
+		$output = array_merge(Student::searchField(PROPERTY_ID, $query, $output), $output);
+		$output = array_merge(Student::searchField(PROPERTY_NAME, $query, $output), $output);
 		return $output;
 	}
 	
@@ -226,6 +226,58 @@ class Student
 				return true;
 		}
 		return false;
+	}
+	
+	public function getHistory($sortBy = SORT_DESC)
+	{
+		global $mysql;
+		$result = $mysql->query("SELECT * FROM history WHERE `student` = '".$this->getID()."'");
+		$output = array();
+		$sortPivot = array();
+		while ( $d = mysqli_fetch_array($result, MYSQL_ASSOC) )
+		{
+			if ( !empty($d) )
+			{
+				$d['data'] = unserialize($d['data']);
+				$output[] = $d;
+				$sortPivot[] = $d['timestamp'];
+			}
+		}
+		array_multisort($output, $sortBy, $sortPivot);
+		return $output;
+	}
+
+
+	public static function getHTMLForHistory($history)
+	{
+		global $issueTypes;
+		$output = "";
+		foreach ($history as $row)
+		{
+			$laptop = new Laptop($row['laptop']);
+			if ( $row['action'] == ACTION_UNASSIGN )
+			{
+				$output .= "<div class=\"alert\"><strong>Returned</strong><br>";
+				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was returned.<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+			else if ( $row['action'] == ACTION_ASSIGN )
+			{
+				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
+				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was assigned to ".$row['student']."<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+			else if ( $row['action'] == HISTORYEVENT_TICKET_STATECHANGE )
+			{
+				$output .= "<div class=\"alert alert-info\"><strong>Ticket Change</strong><br>";
+				$output .= $row['student']." ".$row['data']['verb']." a <a href=\"../tickets/ticket.php?id=".$ticket['id']."\">ticket</a>.<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "</div>";
+			}
+		}
+		return $output;
 	}
 }
 ?>
