@@ -16,6 +16,7 @@ if ( array_key_exists("logout", $_GET) )
 	<title>Student Help Desk</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -24,7 +25,7 @@ if ( array_key_exists("logout", $_GET) )
 	<div class="navbar navbar-static-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="./index.php">1:1</a>
+				<a class="brandimg" href="./index.php"><img src="./img/pmsd.png"></a>
 				<ul class="nav">
 					<li class="active"><a href="./index.php">Home</a></li>
 					<?php if ( $session->isAuthenticated() ) { ?>
@@ -76,12 +77,14 @@ if ( array_key_exists("logout", $_GET) )
 				echo "</ul>";
 			}
 			else{
-				echo "<p> No one is currently at the Student Help Desk. Why don't you try <a href=\"newTicket.php\">submitting a ticket</a>?</p>";
+				echo "<p> No one is currently at the Student Help Desk. You are welcome to <a href=\"newTicket.php\">submit a ticket</a>.</p>";
 			}
 			?>
 			<a href="newTicket.php" class="btn btn-large btn-primary">Submit a Ticket</a>
 			<?php if ( $showFeedbackForm ) { ?><a href="feedbackForm.php" class="btn btn-large btn-primary">Send Feedback</a><?php } ?>
 			<a href="http://blogs.pennmanor.net/1to1/" class="btn btn-large btn-primary">Read the Blog</a>
+			<br><br>
+			<p>Remember to login with your Penn Manor Google Docs user name and password</p>
 		</div>
 		<!-- <hr>
 		<div class="row-fluid">
