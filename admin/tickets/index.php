@@ -67,7 +67,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			}
 			?>
 			<h2>Tickets</h2>
-			<div class="manager large" data-manager="orders">
+			<div class="manager large">
 				<div class="navbar navbar-static-top">
 					<div class="navbar-inner">
 						<div class="pull-left">
@@ -171,7 +171,6 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"ticket.php?id=" + data + "\""}, "View");
 		});
 		function init(){
-			//addSearchLimit();
 			var data = {"action":"all"};
 			getTickets(JSON.stringify(data));
 			ticketBar.init();

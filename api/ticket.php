@@ -15,14 +15,13 @@ try{
 	if(!$data)
 		throw new Exception("No data provided.");
 	$decodedData = json_decode($data, true);
+	$by = $decodedData[API_DATA_BY];
+	$for = $decodedData[API_DATA_FOR];
 	$limits = $decodedData[API_LIMIT] ? $decodedData[API_LIMIT]:Array();
 	if(!$session->isHelper()){
 		if(!in_array(API_LIMIT_MY, $limits))
 			$limits = array_merge(array(API_LIMIT_MY),$limits);
 	}
-		
-	$by = $decodedData[API_DATA_BY];
-	$for = $decodedData[API_DATA_FOR];
 	
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
