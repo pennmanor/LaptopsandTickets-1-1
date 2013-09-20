@@ -272,7 +272,7 @@ class Student
 			else if ( $row['action'] == HISTORYEVENT_TICKET_STATECHANGE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Ticket Change</strong><br>";
-				$output .= $row['student']." ".$row['data']['verb']." a <a href=\"../tickets/ticket.php?id=".$ticket['id']."\">ticket</a>.<br>";
+				$output .= $row['student']." ".$row['data']['verb']." a <a href=\"../tickets/ticket.php?id=".$row['ticket']."\">ticket</a>.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}

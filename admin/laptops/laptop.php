@@ -224,12 +224,12 @@ if ( array_key_exists("id", $_GET) )
 				if ( $assignedTo )
 				{
 				?>
-				<span class="sectionHeader">Current</span>
+				<span class="sectionHeader">Current Owner</span>
 				<hr>
 				<table class="table table-bordered">
 					<tr>
 						<td><strong>Owner ID</strong></td>
-						<td><?php echo $assignedTo->getID(); ?></td>
+						<td><a href="../students/student.php?sid=<?php echo $assignedTo->getID(); ?>"><?php echo $assignedTo->getID(); ?></a></td>
 					</tr>
 					<tr>
 						<td><strong>Owner Name</strong></td>

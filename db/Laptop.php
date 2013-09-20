@@ -49,7 +49,7 @@ class Laptop
 			else if ( $row['action'] == ACTION_ASSIGN )
 			{
 				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
-				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to ".$row['student']."<br>";
+				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to <a href=\"../students/student.php?sid=".$row['student']."\">".$row['student']."</a><br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
