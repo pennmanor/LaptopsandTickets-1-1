@@ -82,7 +82,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		<div class="navbar navbar-static-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="brand" href="../index.php">1:1</a>
+					<a class="brandimg" href="../index.php"><img src="../../img/pmsd.png"></a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
 						<li><a href="../tickets">Tickets</a></li>
