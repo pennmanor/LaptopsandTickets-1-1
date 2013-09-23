@@ -16,7 +16,7 @@ class UserSession
 
 	/**
 	 * Returns $_SESSION[$name] if it exists. If it does not exist, it is initalized to false, then returned
-	 * @returns $_SESSION[$name]
+	 * @return $_SESSION[$name]
 	 */
 	public function initSessionVariable($name)
 	{
@@ -31,7 +31,7 @@ class UserSession
 	
 	/**
 	 * Get the student ID of the currently logged in user
-	 * @returns The user's student ID
+	 * @return The user's student ID
 	 */
 	public function getID()
 	{
@@ -40,7 +40,7 @@ class UserSession
 	
 	/**
 	 * Get the student name of the currently logged in user
-	 * @returns The user's name
+	 * @return The user's name
 	 */
 	public function getName()
 	{
@@ -49,7 +49,7 @@ class UserSession
 	
 	/**
 	 * Check if this session is logged in
-	 * @returns True if logged in, false otherwise
+	 * @return True if logged in, false otherwise
 	 */
 	public function isAuthenticated()
 	{
@@ -58,7 +58,7 @@ class UserSession
 	
 	/**
 	 * Check if this session is a helper
-	 * @returns True if this user is a helper, false otherwise
+	 * @return True if this user is a helper, false otherwise
 	 */
 	public function isHelper()
 	{
@@ -111,7 +111,7 @@ class UserSession
 	
 	/**
 	 * Get the Student object for the current user
-	 * @returns Student object for the current user, false if no user is logged in
+	 * @return Student object for the current user, false if no user is logged in
 	 */
 	public function getAsStudent()
 	{

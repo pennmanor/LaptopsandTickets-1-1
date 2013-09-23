@@ -10,7 +10,7 @@ class Ticket
 	 * @param $creator The student ID or student object of the ticket creator
 	 * @param $title The title of the ticket
 	 * @param $body The body of the ticket, also the first message in the ticket history
-	 * @returns A new Ticket object with the provided information. False if an error occurs.
+	 * @return A new Ticket object with the provided information. False if an error occurs.
 	 */
 	public static function create($creator, $title, $body)
 	{
@@ -34,7 +34,7 @@ class Ticket
 	 * Find the ticket object that has it's $property value equal $value
 	 * @param $property The property to look at
 	 * @param $value The value to look for
-	 * @returns A Ticket object that has $property's value equal $value. If multiple objects are matched, the first one will be returned. If not found, false is returned.
+	 * @return A Ticket object that has $property's value equal $value. If multiple objects are matched, the first one will be returned. If not found, false is returned.
 	*/
 	public static function getByProperty($property, $value)
 	{
@@ -50,7 +50,7 @@ class Ticket
 	 * Find the ticket objects that have their $property value equal $value
 	 * @param $property The property to look at
 	 * @param $value The value to look for
-	 * @returns An array containing the Ticket objects where the value of $property equals $value. An empty array is returned if none match.
+	 * @return An array containing the Ticket objects where the value of $property equals $value. An empty array is returned if none match.
 	*/
 	public static function getAllByProperty($property, $value)
 	{
@@ -71,7 +71,7 @@ class Ticket
 	/**
 	 * Find all tickets in the database
 	 * @param $sortyBy Sort the list ascending or decending by timestamp (SORT_DESC/SORT_ASC) SORT_DESC is default.
-	 * @returns The array of all Ticket objects in the database
+	 * @return The array of all Ticket objects in the database
 	 */
 	public static function getAll($sortBy = SORT_DESC)
 	{
@@ -94,7 +94,7 @@ class Ticket
 	/**
 	 * Utility function for converting the history array returned by Ticket's getHistory() to viewable HTML
 	 * @param $history The history array returned by Ticket's getHistory()
-	 * @returns A string containing the HTML representation of $history
+	 * @return A string containing the HTML representation of $history
 	 */
 	public static function getHTMLForHistory($history)
 	{
@@ -133,8 +133,8 @@ class Ticket
 	 * @param $property The property to search in
 	 * @param $query The query string to look for in $property
 	 * @param $dupCheck Do not return any matching items already in this array. Useful when searching multiple properties. Defaults to an empty array.
-	 * @returns The matched Ticket objects that do not already exist in the $dupCheck array
-	*/
+	 * @return The matched Ticket objects that do not already exist in the $dupCheck array
+	 */
 	public static function searchField($property, $query, $dupCheck = array())
 	{
 		global $mysql;
@@ -164,7 +164,7 @@ class Ticket
 	/**
 	 * Wraper for searchField() that searches by creator, assigned helper, title, and body.
 	 * @param $query The query to search for
-	 * @returns An array of the Ticket objects that match $query
+	 * @return An array of the Ticket objects that match $query
 	 */
 	public static function search($query)
 	{
@@ -196,7 +196,7 @@ class Ticket
 	
 	/**
 	 * Get the ID of the row in the Tickets database that this object references
-	 * @returns The ID used by this object
+	 * @return The ID used by this object
 	 */
 	public function getID()
 	{
@@ -206,7 +206,7 @@ class Ticket
 	/**
 	 * Assign a helper to the ticket
 	 * In addition to setting the helper, this function creates a history event for the action.
-	 * @returns true on success, false on failure
+	 * @return true on success, false on failure
 	 */
 	public function assignHelper($person)
 	{
@@ -230,7 +230,7 @@ class Ticket
 	
 	/**
 	 * Get the Student object of the helper
-	 * @returns The Student object of the helper assigned to this ticket. false if there is no helper assigned
+	 * @return The Student object of the helper assigned to this ticket. false if there is no helper assigned
 	 */
 	public function getHelper()
 	{
@@ -242,7 +242,7 @@ class Ticket
 	
 	/**
 	 * Get the student who created this ticket.
-	 * @returns The Student object of the student who created this ticket. false on failure
+	 * @return The Student object of the student who created this ticket. false on failure
 	 */
 	public function getStudent()	
 	{
@@ -255,7 +255,7 @@ class Ticket
 	/**
 	 * Get the history associated with this ticket
 	 * @param $sortBy The order, by timestamp, to sort the array. SORT_DESC or SORT_ASC. SORT_DESC is default.
-	 * @returns An array containing an array of the history events associated with this ticket.
+	 * @return An array containing an array of the history events associated with this ticket.
 	 */
 	public function getHistory($sortBy = SORT_DESC)
 	{
@@ -280,7 +280,7 @@ class Ticket
 	 * Add a reply to this ticket
 	 * @param $author The author of the reply. Can be a Student object or an ID
 	 * @param $body The body of the reply
-	 * @returns true on success, false on failure
+	 * @return true on success, false on failure
 	 */
 	public function addReply($author, $body)
 	{
@@ -293,7 +293,7 @@ class Ticket
 	/**
 	 * Close the ticket
 	 * This function also creates a history event for the change
-	 * @returns true on success, false on failure
+	 * @return true on success, false on failure
 	 */
 	public function close()
 	{
@@ -306,7 +306,7 @@ class Ticket
 	/**
 	 * Reopens the ticket
 	 * This function also creates a history event for the change
-	 * @returns true on success, false on failure
+	 * @return true on success, false on failure
 	 */
 	public function reopen()
 	{
@@ -319,7 +319,7 @@ class Ticket
 	/**
 	 * Get the value of $property for this ticket
 	 * @property $property The property to return the value of. This should be a constant from constants.php, but can also be a string with the column name.
-	 * @returns The value of $property, false on failure
+	 * @return The value of $property, false on failure
 	 */
 	public function getProperty($property)
 	{
@@ -334,7 +334,7 @@ class Ticket
 	
 	/**
 	 * Get all properties for this ticket as an array. The key of each value is the column name, which matches a constant in constants.php
-	 * @returns An array of all properties for this Ticket
+	 * @return An array of all properties for this Ticket
 	 */
 	public function getProperties()
 	{
@@ -349,7 +349,7 @@ class Ticket
 	 * Set a property for this ticket
 	 * @property $property The property to set
 	 * @property $value The value to set property to
-	 * @returns mysqli_result object on success, false on failure
+	 * @return mysqli_result object on success, false on failure
 	 */
 	public function setProperty($property, $value)
 	{
@@ -362,7 +362,7 @@ class Ticket
 	/**
 	 * Get the state label for this ticket. (New ticket, helper replied, closed, etc)
 	 * TODO: Move the HTML generation out of this function
-	 * @returns The label as HTML for this ticket
+	 * @return The label as HTML for this ticket
 	 */
 	public function getStateLabel()
 	{

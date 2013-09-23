@@ -1,6 +1,13 @@
 <?php
 class Feedback
 {
+	/**
+	 * Create a Feedback entry
+	 * @param $sid The student ID that authored this entry
+	 * @param $liked A string containing what the student liked
+	 * @param $dislike A string containing what the student disliked
+	 * @return A new Feedback object on success, false on failure
+	 */
 	public static function create($sid, $liked, $dislike)
 	{
 		global $mysql;
@@ -12,12 +19,20 @@ class Feedback
 		return new Feedback($mysql->insert_id);
 	}
 	
+	/**
+	 * Remove all feedback entries
+	 * @return true on success, false on failure
+	 */
 	public static function reset()
 	{
 		global $mysql;
 		return $mysql->query("DELETE FROM `feedback`");
 	}
 	
+	/**
+	 * Get all Feedback objects in the database
+	 * @return An array containing all Feedback entries in the database
+	 */
 	public static function getAll()
 	{
 		global $mysql;
@@ -28,16 +43,28 @@ class Feedback
 		return $output;
 	}
 	
+	/**
+	 * Create a new Feedback object to represent an entry in the database
+	 * @param $id The id of the entry that this object will represent
+	 */
 	public function __construct($id)
 	{
 		$this->id = $id;
 	}
 	
+	/**
+	 * Get the ID of the entry that this object represents
+	 * @return The ID that this entry represents
+	 */
 	public function getID()
 	{
 		return $this->id;
 	}
 	
+	/** 
+	 * Get all of the properties associated with this object
+	 * @return An array containing all the entries associated with this object
+	 */
 	public function getProperties()
 	{
 		global $mysql;
@@ -47,6 +74,11 @@ class Feedback
 		return mysqli_fetch_array($result);
 	}
 	
+	/**
+	 * Get the value of a property
+	 * @param $property The property to get the value of
+	 * @return The value of the requested property
+	 */
 	public function getProperty($property)
 	{
 		global $mysql;
@@ -58,7 +90,12 @@ class Feedback
 		return mysqli_result($result, 0, $property);
 	}
 
-	
+	/**
+	 * Set the value of a property
+	 * @param $key The key to set the value of
+	 * @param $value The new value for the property/key
+	 * @return true on success, false on failure
+	 */
 	public function setProperty($key, $value)
 	{
 		global $mysql;
