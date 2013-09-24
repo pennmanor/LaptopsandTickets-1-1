@@ -2,6 +2,10 @@
 require_once("History.php");
 require_once("constants.php");
 
+/**
+ * Class for accessing Ticket data
+ * @author Andrew
+ */
 class Ticket
 {
 	/**

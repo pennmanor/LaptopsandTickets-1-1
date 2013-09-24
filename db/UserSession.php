@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Class for accessing a user's session data
+ * @author Andrew
+ */
 class UserSession
 {
 	/**

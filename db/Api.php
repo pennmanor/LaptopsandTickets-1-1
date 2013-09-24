@@ -4,6 +4,11 @@ class Api{
 	private $key;
 	private $name;
 	
+	/**
+	 * Creates a new Api object.
+	 * Information about this Api key is accessed and cached in the constructor
+	 * @param $key The API key
+	 */
 	function __construct($key){
 		global $mysql;
 		if(!is_a($mysql, "mysqli")){
@@ -21,14 +26,26 @@ class Api{
 		
 	}
 
+	/**
+	 * Get the database ID of the row this object describes
+	 * @return This object's DB ID
+	 */
 	public function getID(){
 		return $this->id;
 	}
 
+	/**
+	 * Get the API key that this object describes
+	 * @return This object's API key
+	 */
 	public function getKey(){
 		return $this->key;
 	}
 
+	/**
+	 * Get the friendly name of the API key that this object describes
+	 * @return This object's friendly name
+	 */
 	public function getName(){
 		return $this->name;
 	}

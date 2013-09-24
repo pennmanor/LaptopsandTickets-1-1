@@ -1,4 +1,8 @@
 <?php
+/**
+ * Class for accessing Feedback data
+ * @author Andrew
+ */
 class Feedback
 {
 	/**

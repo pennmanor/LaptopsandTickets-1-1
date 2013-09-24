@@ -1,5 +1,10 @@
 <?php
 require_once("constants.php");
+
+/**
+ * Class for accessing Student data
+ * @author Andrew
+ */
 class Student
 {	
 	/**
