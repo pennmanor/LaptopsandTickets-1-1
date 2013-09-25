@@ -1,7 +1,19 @@
 <?php
 require_once("constants.php");
+
+/**
+ * Class for accessing Student data
+ * @author Andrew
+ */
 class Student
 {	
+	/**
+	 * Creates a Student
+	 * @param $sid The student's ID
+	 * @param $name The student's name
+	 * @param $grade The student's grade
+	 * @return A new student object on success, false otherwise
+	 */
 	public static function create($sid, $name, $grade)
 	{
 		global $mysql;
@@ -17,6 +29,11 @@ class Student
 		return new Student($sid);
 	}
 	
+	/**
+	 * Removes a student, preserving tickets and history
+	 * @param $sid The student's ID
+	 * @return true on success, false on failure
+	 */
 	public static function remove($sid)
 	{
 		global $mysql;
@@ -24,6 +41,11 @@ class Student
 		return $mysql->query("DELETE FROM `students` WHERE `sid` = '".$sid."'");
 	}
 	
+	/**
+	 * Removes a student and all associated data (history and tickets)
+	 * @param $sid The student's ID
+	 * @return true on success, false on failure
+	 */
 	public static function nuke($sid)
 	{
 		global $mysql;
@@ -37,6 +59,13 @@ class Student
 		return $studentTicketRemoval && $helperTicketRemoval && $historyRemoval && $studentRemoval;
 	}
 	
+	/**
+	 * Search for Student objects where $query is in the value of $property. It does not look for an exact match.
+	 * @param $property The property to search in
+	 * @param $query The query string to look for in $property
+	 * @param $dupCheck Do not return any matching items already in this array. Useful when searching multiple properties. Defaults to an empty array.
+	 * @return The matched Student objects that do not already exist in the $dupCheck array
+	 */
 	public static function searchField($property, $query, $dupCheck = array())
 	{
 		global $mysql;
@@ -63,6 +92,11 @@ class Student
 		return $output;
 	}
 	
+	/**
+	 * Wraper for searchField() that searches by id and name.
+	 * @param $query The query to search for
+	 * @return An array of the Student objects that match $query
+	 */
 	public static function search($query)
 	{
 		$output = array();
@@ -71,6 +105,10 @@ class Student
 		return $output;
 	}
 	
+	/**
+	 * Find all Students in the database
+	 * @return An array of all Student objects in the database
+	 */
 	public static function getAll()
 	{
 		global $mysql;
@@ -85,6 +123,10 @@ class Student
 		return $output;
 	}
 	
+	/**
+	 * Find all Students in the database with a laptop assigned
+	 * @return An array of all Student objects in the database with a laptop assigned
+	 */
 	public static function getAllWithLaptop()
 	{
 		global $mysql;
@@ -99,6 +141,12 @@ class Student
 		return $output;
 	}
 	
+	/**
+	 * Find all Student objects in the database where the value of $property matches $value
+	 * @param $property The property to look at
+	 * @param $value The value to look for
+	 * @return A Student object for the found object, false otherwise. If multiple Students match, the first one will be returned.
+	 */
 	public static function getByProperty($property, $value)
 	{
 		global $mysql;
@@ -112,17 +160,28 @@ class Student
 		return new Student(mysqli_result($result, 0, "sid"));
 	}
 
-
+	/**
+	 * Create a new Student object
+	 * @param $id The Student ID of the Student that this object represents
+	 */
 	public function __construct($id)
 	{
 		$this->id = $id;
 	}
 	
+	/**
+	 * Get the ID for the Student that this object represents
+	 * @return The Student's ID
+	 */
 	public function getID()
 	{
 		return real_escape_string($this->id);
 	}
 	
+	/**
+	 * Get the name of the Student
+	 * @return The name of the student, false on failure
+	 */
 	public function getName()
 	{
 		global $mysql;
@@ -132,6 +191,10 @@ class Student
 		return mysqli_result($result, 0, "name");
 	}
 	
+	/**
+	 * Set the name of the Student
+	 * @return true on success, false otherwise
+	 */
 	public function setName($name)
 	{
 		global $mysql;
@@ -140,6 +203,10 @@ class Student
 		return $mysql->query("UPDATE students SET `name` = '".$name."' WHERE `sid` = '".$this->getID()."'");
 	}
 	
+	/**
+	 * Get the Laptop object that this Student owns
+	 * @return The Laptop object that this Student owns. If the student is not assigned a laptop, false is returned
+	 */
 	public function getLaptop()
 	{
 		global $mysql;
@@ -154,6 +221,10 @@ class Student
 		return new Laptop($laptop);
 	}
 	
+	/** 
+	 * Unassign the Student's Laptop
+	 * @return true on success, false on failure or if the Student has no laptop assigned
+	 */
 	public function clearLaptop()
 	{
 		global $mysql;
@@ -165,6 +236,11 @@ class Student
 		return $mysql->query("UPDATE students SET `laptop` = 0 WHERE `sid` = '".$this->getID()."'");
 	}
 	
+	/**
+	 * Set the Student's Laptop
+	 * @param $laptop The Laptop to assign to this Student. May be an ID or a Laptop object
+	 * @return true on success, false on failure or if a laptop is already assigned
+	 */
 	public function setLaptop($laptop)
 	{
 		global $mysql;
@@ -188,6 +264,11 @@ class Student
 		return false;
 	}
 	
+	/**
+	 * Get the value of a property
+	 * @param The property to get the value of
+	 * @return true on success, false on failure
+	 */
 	public function getProperty($property)
 	{
 		global $mysql;
@@ -199,6 +280,12 @@ class Student
 		return mysqli_result($result, 0, $property);
 	}
 
+	/**
+	 * Set the value of a property
+	 * @param The property to get the value of
+	 * @param The new value for the property
+	 * @return true on success, false on failure
+	 */
 	public function setProperty($property, $value)
 	{
 		global $mysql;
@@ -208,6 +295,10 @@ class Student
 		return $mysql->query("UPDATE students SET `".$property."` = '".$value."' WHERE `sid` = ".$this->getID());
 	}
 	
+	/**
+	 * Get all the properties associated with this object
+	 * @return An array of properties with the key being the property name
+	 */
 	public function getProperties()
 	{
 		global $mysql;
@@ -217,6 +308,10 @@ class Student
 		return mysqli_fetch_array($result);
 	}
 	
+	/**
+	 * Check if this Student is a Helper
+	 * @return A boolean representing if this Student is a Helper
+	 */
 	public function isHelper()
 	{
 		global $helpers;
@@ -228,6 +323,11 @@ class Student
 		return false;
 	}
 	
+	/**
+	 * Get the history associated with this Student
+	 * @param $sortBy The order, by timestamp, to sort the array. SORT_DESC or SORT_ASC. SORT_DESC is default.
+	 * @return An array containing an array of the history events associated with this Student.
+	 */
 	public function getHistory($sortBy = SORT_DESC)
 	{
 		global $mysql;
@@ -247,7 +347,11 @@ class Student
 		return $output;
 	}
 
-
+	/**
+	 * Utility function for converting the history array returned by Student's getHistory() to viewable HTML
+	 * @param $history The history array returned by Student's getHistory()
+	 * @return A string containing the HTML representation of $history
+	 */
 	public static function getHTMLForHistory($history)
 	{
 		global $issueTypes;
