@@ -2,8 +2,22 @@
 require_once("History.php");
 require_once("constants.php");
 
+/**
+ * Class for accessing Laptop data
+ * @author Andrew
+ */
 class Laptop
 {	
+	/**
+	 * Creates a Laptop
+	 * @param $hostname The laptop's hostname
+	 * @param $serial The laptop's serial
+	 * @param $assetTag The laptop's asset tag
+	 * @param $wirelessMAC The laptop's wireless MAC address
+	 * @param $ethernetMAC The laptop's ethernet MAC address
+	 * @param $building The laptop's building ID
+	 * @return A new Laptop object on success, false otherwise
+	 */
 	public static function create($hostname, $serial, $assetTag, $wirelessMAC, $ethernetMAC, $building)
 	{
 		global $mysql;
@@ -26,6 +40,11 @@ class Laptop
 		return $laptop;
 	}
 
+	/**
+	 * Utility function for converting the history array returned by Laptop's getHistory() to viewable HTML
+	 * @param $history The history array returned by Laptop's getHistory()
+	 * @return A string containing the HTML representation of $history
+	 */
 	public static function getHTMLForHistory($history, $laptops = false)
 	{
 		global $issueTypes;
@@ -49,7 +68,7 @@ class Laptop
 			else if ( $row['action'] == ACTION_ASSIGN )
 			{
 				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
-				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to ".$row['student']."<br>";
+				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to <a href=\"../students/student.php?sid=".$row['student']."\">".$row['student']."</a><br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
@@ -64,7 +83,13 @@ class Laptop
 		return $output;
 	}
 	
-	
+	/**
+	 * Search for Laptop objects where $query is in the value of $property. It does not look for an exact match.
+	 * @param $property The property to search in
+	 * @param $query The query string to look for in $property
+	 * @param $dupCheck Do not return any matching items already in this array. Useful when searching multiple properties. Defaults to an empty array.
+	 * @return The matched Laptop objects that do not already exist in the $dupCheck array
+	 */
 	public static function searchField($property, $query, $dupCheck = array())
 	{
 		global $mysql;
@@ -91,6 +116,11 @@ class Laptop
 		return $output;
 	}
 	
+	/**
+	 * Wraper for searchField() that searches by id, hostname, serial, asset tag, wireless MAC, wired MAC, and building
+	 * @param $query The query to search for
+	 * @return An array of the Laptop objects that match $query
+	 */
 	public static function search($query)
 	{
 		$output = array();
@@ -104,6 +134,12 @@ class Laptop
 		return $output;
 	}
 	
+	/**
+	 * Find all Laptop objects in the database where the value of $property matches $value
+	 * @param $property The property to look at
+	 * @param $value The value to look for
+	 * @return A Laptop object for the found object, false otherwise. If multiple Laptop match, the first one will be returned.
+	 */
 	public static function getByProperty($property, $value)
 	{
 		global $mysql;
@@ -114,6 +150,10 @@ class Laptop
 		return new Laptop(mysqli_result($result, 0, "id"));
 	}
 	
+	/**
+	 * Find all Laptops in the database
+	 * @return An array of all Laptop objects in the database
+	 */
 	public static function getAll()
 	{
 		global $mysql;
@@ -127,7 +167,10 @@ class Laptop
 		}
 		return $output;
 	}
-	
+	/**
+	 * Get the entire History database
+	 * @return An array containing every entry in the database
+	 */
 	public static function getAllHistory()
 	{
 		global $mysql;
@@ -145,17 +188,29 @@ class Laptop
 		return $output;
 	}
 	
-
+	/**
+	 * Create a new Laptop object
+	 * @param $id The ID of the Laptop that this object represents
+	 */
 	public function __construct($id)
 	{
 		$this->id = $id;
 	}
 	
+	/**
+	 * Get the ID for the Laptop that this object represents
+	 * @return The Laptop's ID
+	 */
 	public function getID()
 	{
 		return $this->id;
 	}
 	
+	/**
+	 * Get the value of a property
+	 * @param The property to get the value of
+	 * @return true on success, false on failure
+	 */
 	public function getProperty($property)
 	{
 		global $mysql;
@@ -167,6 +222,10 @@ class Laptop
 		return mysqli_result($result, 0, $property);
 	}
 	
+	/**
+	 * Get all the properties associated with this object
+	 * @return An array of properties with the key being the property name
+	 */
 	public function getProperties()
 	{
 		global $mysql;
@@ -176,6 +235,12 @@ class Laptop
 		return mysqli_fetch_array($result);
 	}
 	
+	/**
+	 * Set the value of a property
+	 * @param The property to get the value of
+	 * @param The new value for the property
+	 * @return true on success, false on failure
+	 */
 	public function setProperty($property, $value)
 	{
 		global $mysql;
@@ -185,6 +250,10 @@ class Laptop
 		return $mysql->query("UPDATE laptops SET `".$property."` = '".$value."' WHERE `id` = ".$this->getID());
 	}
 	
+	/**
+	 * Get the Student object of this laptop's owner
+	 * @return A Student object for the owner, false on failure or if unassigned
+	 */
 	public function getOwner()
 	{
 		global $mysql;
@@ -194,6 +263,11 @@ class Laptop
 		return new Student(mysqli_result($result, 0, "sid"));
 	}
 	
+	/**
+	 * Get the history associated with this Laptop
+	 * @param $sortBy The order, by timestamp, to sort the array. SORT_DESC or SORT_ASC. SORT_DESC is default.
+	 * @return An array containing an array of the history events associated with this Laptop.
+	 */
 	public function getHistory($sortBy = SORT_DESC)
 	{
 		global $mysql;
@@ -213,6 +287,10 @@ class Laptop
 		return $output;
 	}
 	
+	/**
+	 * Removes this Laptop
+	 * @return true on success, false on failure
+	 */
 	public function remove()
 	{
 		global $mysql;

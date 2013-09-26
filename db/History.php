@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Get all of the Laptop issues of a type
+ * @param $issueType The Laptop Service issue type
+ * @return An array of Laptops that have a service issue with the provided type.
+ */
 function getLaptopsByIssueType($issueType)
 {
 	global $mysql;
@@ -27,6 +32,15 @@ function getLaptopsByIssueType($issueType)
 	return $output;
 }
 
+/** 
+ * Add a history item to the database
+ * @param $laptop The laptop context. 0 if none
+ * @param $student The student context. -1 if none
+ * @param $action The action type
+ * @param $data The data as an array to be associated with this entry. Defaults to empty array
+ * @param $tOffset The time offset for this event. Useful when adding multiple items that need to be in a certain order. Defaults to zero.
+ * @return true on success, false on failure
+ */
 function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 0)
 {
 	global $mysql;
@@ -42,6 +56,18 @@ function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 
 	$data = real_escape_string(serialize($data));
 	return $mysql->query("INSERT INTO history (laptop, student,action,data,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).", 0)");
 }
+
+/** 
+ * Add a history item to the database. This function is different from addHistoryItem() because it adds ticket context.
+ * @param $laptop The laptop context. 0 if none
+ * @param $ticket The ticket context. 0 if none
+ * @param $student The student context. -1 if none
+ * @param $action The action type
+ * @param $data The data as an array to be associated with this entry. Defaults to empty array
+ * @param $tOffset The time offset for this event. Useful when adding multiple items that need to be in a certain order. Defaults to zero.
+ * @return true on success, false on failure
+ * TODO: Update calls of addHistoryItem to pass ticket context and rename this to addHistoryItem
+ */
 
 function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array(), $tOffset = 0)
 {

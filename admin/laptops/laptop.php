@@ -146,7 +146,7 @@ if ( array_key_exists("id", $_GET) )
 		<div class="navbar navbar-static-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="brand" href="../index.php">1:1</a>
+					<a class="brandimg" href="../index.php"><img src="../../img/pmsd.png"></a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
 						<li><a href="../tickets">Tickets</a></li>
@@ -224,12 +224,12 @@ if ( array_key_exists("id", $_GET) )
 				if ( $assignedTo )
 				{
 				?>
-				<span class="sectionHeader">Current</span>
+				<span class="sectionHeader">Current Owner</span>
 				<hr>
 				<table class="table table-bordered">
 					<tr>
 						<td><strong>Owner ID</strong></td>
-						<td><?php echo $assignedTo->getID(); ?></td>
+						<td><a href="../students/student.php?sid=<?php echo $assignedTo->getID(); ?>"><?php echo $assignedTo->getID(); ?></a></td>
 					</tr>
 					<tr>
 						<td><strong>Owner Name</strong></td>

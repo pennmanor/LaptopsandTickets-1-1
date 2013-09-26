@@ -1,6 +1,15 @@
 <?php
+
+/**
+ * Class for accessing a user's session data
+ * @author Andrew
+ */
 class UserSession
 {
+	/**
+	 * Create a UserSession object
+	 * This must be called in a place where headers may be sent, as it calls session_start()
+	 */
 	public function __construct()
 	{
 		session_start();
@@ -10,6 +19,10 @@ class UserSession
 		$this->authenticated = $this->initSessionVariable('USER_IS_LOGGEDIN');
 	}
 
+	/**
+	 * Returns $_SESSION[$name] if it exists. If it does not exist, it is initalized to false, then returned
+	 * @return $_SESSION[$name]
+	 */
 	public function initSessionVariable($name)
 	{
 		if ( array_key_exists($name, $_SESSION) )
@@ -21,21 +34,37 @@ class UserSession
 		}
 	}
 	
+	/**
+	 * Get the student ID of the currently logged in user
+	 * @return The user's student ID
+	 */
 	public function getID()
 	{
 		return $this->id;
 	}
 	
+	/**
+	 * Get the student name of the currently logged in user
+	 * @return The user's name
+	 */
 	public function getName()
 	{
 		return $this->name;
 	}
 	
+	/**
+	 * Check if this session is logged in
+	 * @return True if logged in, false otherwise
+	 */
 	public function isAuthenticated()
 	{
 		return $this->authenticated;
 	}
 	
+	/**
+	 * Check if this session is a helper
+	 * @return True if this user is a helper, false otherwise
+	 */
 	public function isHelper()
 	{
 		global $helpers;
@@ -47,6 +76,11 @@ class UserSession
 		return false;
 	}
 	
+	/**
+	 * Set this session as the provided student ID is logged in
+	 * This function DOES NOT check passwords. This should be called AFTER the user is authenticated with their password.
+	 * @param $id The ID to login
+	 */
 	public function login($id)
 	{
 		$this->id = $id;
@@ -65,6 +99,9 @@ class UserSession
 		return true;
 	}
 	
+	/**
+	 * Destroy this user's session
+	 */
 	public function logout()
 	{
 		$this->id = false;
@@ -77,6 +114,10 @@ class UserSession
 		session_destroy();
 	}
 	
+	/**
+	 * Get the Student object for the current user
+	 * @return Student object for the current user, false if no user is logged in
+	 */
 	public function getAsStudent()
 	{
 		if ( !$this->id )

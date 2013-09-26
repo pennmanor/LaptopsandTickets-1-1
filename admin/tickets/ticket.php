@@ -29,7 +29,11 @@ else if ( array_key_exists("reply", $_GET) )
 	header("Location: ticket.php?id=".$_GET['id']);
 	die();
 }
-
+else if ( array_key_exists("notesBox", $_GET) )
+{
+	$ticket->setProperty(PROPERTY_NOTES, $_GET['notesBox']);
+	header("Location: ticket.php?id=".$_GET['id']);
+}
 
 ?>
 <!DOCTYPE html>
@@ -45,10 +49,10 @@ else if ( array_key_exists("reply", $_GET) )
 		<div class="navbar navbar-static-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="brand" href="../index.php">1:1</a>
+					<a class="brandimg" href="../index.php"><img src="../../img/pmsd.png"></a>
 					<ul class="nav">
 						<li><a href="../index.php">Overview</a></li>
-						<li><a href="../tickets">Tickets</a></li>
+						<li class="active"><a href="../tickets">Tickets</a></li>
 						<li><a href="../laptops">Laptops</a></li>
 						<li><a href="../students">Students</a></li>
 						<li><a href="../calendar">Calendar</a></li>
@@ -126,6 +130,14 @@ else if ( array_key_exists("reply", $_GET) )
 			</form>
 			<hr>
 			<?php echo Ticket::getHTMLForHistory($ticket->getHistory(SORT_DESC)); ?>
+			<br>
+			<span class="sectionHeader">Notes</span>
+			<hr> 
+			<form action="" method="GET">
+				<textarea rows="5" name="notesBox" class="notesBox"><?php echo stripcslashes($properties[PROPERTY_NOTES]); ?></textarea>
+				<input type="hidden" name="id" value="<?php echo $properties[PROPERTY_ID]; ?>">
+				<input type="submit" class="btn btn-primary pull-right" value="Save">
+			</form>
 		</div>
 		
 		<script src="http://code.jquery.com/jquery.js"></script>
