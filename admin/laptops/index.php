@@ -82,7 +82,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 			</div>
 		</div>
 	</div>
-	<br><br>
+	<br>
 	<div class="container">
 		<?php
 		if ( $showBox == RESULT_SUCCESS )
@@ -110,11 +110,12 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		<?php	
 		}
 		?>
+			<h2>Laptops</h2>
 		<div class="manager large">
 			<div class="navbar navbar-static-top">
 				<div class="navbar-inner">
 					<div class="pull-left">
-						<button class="btn btn-primary" id="laptop-search" disabled><i class="icon-search icon-white"></i> Search</button>
+						<button class="btn btn-primary" id="laptop-search"><i class="icon-search icon-white"></i> Search</button>
 						<span id="searchQuery"></span>
 					</div>
 					<div class="pull-right">
@@ -195,6 +196,33 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		Format:<br>
 		host,serial,assetTag,wMAC,eMAC,building
 	</div>
+	<div id="search-modal" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+			<h3>Search</h3>
+		</div>
+		<form id="search-form">
+			<div class="modal-body">
+				<p class="text-error hide">Please fill out all of the required forms</p>
+				<fieldset>
+					<div class="form-item">
+						<label>Search by:</label>
+						<select id="search-field-by" name="by">
+							<option value="hostname">Host Name</option>
+						</select>
+					</div>
+					<div class="form-item">
+						<label>Search for:</label>
+						<input id="search-field-for" type="text" name="for">
+					</div>
+				</fieldset>
+			</div>
+		</form>
+		<div class="modal-footer">
+			<button class="btn" id="search-cancel" data-dismiss="modal">Cancel</button>
+			<button class="btn btn-primary" id="search-submit">Search</button>
+		</div>
+	</div>
 	<script src="../../js/jquery-1.9.1.js" type="text/javascript"></script>
 	<script src="../../js/bootstrap.min.js" type="text/javascript"></script>
 	<script src="../../js/object.js" type="text/javascript"></script>
@@ -248,26 +276,11 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		if(!valid)
 			return false;
 		searching = true;
-		limits = [];
-		$("#searchItem").remove();
-		$(".limit").remove();
-		if($("#search-form [name=limit-open]").is(":checked"))
-			addSearchLimit("open", "Open Tickets");
-		else
-			removeSearchLimit("open");
-		if($("#search-form [name=limit-unassigned]").is(":checked"))
-			addSearchLimit("unassigned", "Unassigned Tickets");
-		else
-			removeSearchLimit("unassigned");
-		if($("#search-form [name=limit-helper]").is(":checked"))
-			addSearchLimit("helper", "Assigned to me");
-		else
-			removeSearchLimit("helper");
 		$("#search-modal").modal("hide");
 		var byData = $("#search-field-by").val();
 		var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
 		if($.trim(forData).length != 0 ){
-			var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
+			var data = {"action":"search", "by":byData, "for":forData};
 			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
 			var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
 			var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
@@ -278,8 +291,9 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		}
 		else
 			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
-		ticketBar.reset();
-		getTickets(JSON.stringify(data));
+		laptopBar.reset();
+		window.console&&console.log(JSON.stringify(data));
+		getLaptops(JSON.stringify(data));
 	}
 	function refresh(){
 		if(searching){

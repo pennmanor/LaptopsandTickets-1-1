@@ -17,7 +17,6 @@ try{
 	$decodedData = json_decode($data, true);
 	$by = $decodedData[API_DATA_BY];
 	$for = $decodedData[API_DATA_FOR];
-	$limits = $decodedData[API_LIMIT] ? $decodedData[API_LIMIT]:Array();
 	
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
@@ -26,11 +25,12 @@ try{
 		case API_ACTION_GET:
 		if(!$by || !$for)
 			throw new Exception("Cannot get laptops, No \"by\" and/or \"for\" data provided.");
-		$laptops = Laptop::getAllByProperty($by, $for);
+		$laptops = Laptop::getByProperty($by, $for);
 		case API_ACTION_SEARCH:
 		if(!$by)
-			throw new Exception("Cannot search laptops, No \"by\" and/or \"for\" data provided.");
-		$laptops = Laptop::getByProperty($by, $for);
+			throw new Exception("Cannot search laptops, No \"by\" data provided.");
+		$laptops = Laptop::searchField($by, $for);
+		$output[API_INFO] = "Searching \"".$by."\" for \"".$for."\"";
 		break;
 		default:
 		throw new Exception("Invalid action.");
