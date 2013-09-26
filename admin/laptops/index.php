@@ -66,7 +66,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 	<div class="navbar navbar-static-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="../index.php">1:1</a>
+				<a class="brandimg" href="../index.php"><img src="../../img/pmsd.png"></a>
 				<ul class="nav">
 					<li><a href="../index.php">Overview</a></li>
 					<li><a href="../tickets">Tickets</a></li>
@@ -210,7 +210,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 	laptopTable.setProperties("table", {"class" : "table"});
 	laptopTable.setProperties("head-data", {"class" : "bold"});
 	laptopTable.addColumnProcessor("id", function(data){
-		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"ticket.php?id=" + data + "\""}, "View");
+		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"laptop.php?id=" + data + "\""}, "View");
 	});
 	function init(){
 		
@@ -305,7 +305,6 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 	function proccessLaptops(d){
 		window.console&&console.log(d);
 		var data = JSON.parse(d);
-		//window.console&&console.log(data);
 		if(data.success == 1){
 			$("#laptopBar-content").html(laptopTable.buildTable(data.result));
 		}
