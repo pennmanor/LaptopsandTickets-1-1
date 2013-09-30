@@ -203,19 +203,32 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		</div>
 		<form id="search-form">
 			<div class="modal-body">
-				<p class="text-error hide">Please fill out all of the required forms</p>
-				<fieldset>
-					<div class="form-item">
-						<label>Search by:</label>
-						<select id="search-field-by" name="by">
-							<option value="hostname">Host Name</option>
-						</select>
+				<ul class="nav nav-tabs" id="search-tabs">
+					<li class="active"><a href="#search-simple" data-toggle="tab">Simple</a></li>
+					<li><a href="#search-advanced" data-toggle="tab">Advanced</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="search-simple">
+						<div class="row-fluid">
+							<input type="text" class="offset1 span10" name="query" placeholder="Search Laptops">
+						</div>
 					</div>
-					<div class="form-item">
-						<label>Search for:</label>
-						<input id="search-field-for" type="text" name="for">
+					<div class="tab-pane" id="search-advanced">
+						<p class="text-error hide">Please fill out all of the required forms</p>
+						<fieldset>
+							<div class="form-item">
+								<label>Search by:</label>
+								<select id="search-field-by" name="by">
+									<option value="hostname">Host Name</option>
+								</select>
+							</div>
+							<div class="form-item">
+								<label>Search for:</label>
+								<input id="search-field-for" type="text" name="for">
+							</div>
+						</fieldset>
 					</div>
-				</fieldset>
+				</div>
 			</div>
 		</form>
 		<div class="modal-footer">
@@ -262,38 +275,49 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 	}
 	
 	function search(){
-		var valid = true;
-		$($("#search-form [required]").get().reverse()).each(function(key, ele){
-			if($.trim($(this).val()).length == 0){
-				$("#search-form .text-error").removeClass("hide");
-				valid = false;
-				$(this).focus();
-			}
-			else{
-				$("#search-form .text-error").addClass("hide");
-			}
+		var activeTab  = -1;
+		$("#search-tabs li").each(function(index) {
+		   if($(this).hasClass("active")){
+			   activeTab  = index;
+		   }
 		});
-		if(!valid)
-			return false;
-		searching = true;
-		$("#search-modal").modal("hide");
-		var byData = $("#search-field-by").val();
-		var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
-		if($.trim(forData).length != 0 ){
-			var data = {"action":"search", "by":byData, "for":forData};
-			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
-			var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
-			var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
-			close.innerHTML = "&times;";
-			insertElementAt(text, group);
-			insertElementAt(close, group);
-			$("#searchQuery").append(group);
+		switch(activeTab){
+		case 1:
+			var valid = true;
+			$($("#search-form [required]").get().reverse()).each(function(key, ele){
+				if($.trim($(this).val()).length == 0){
+					$("#search-form .text-error").removeClass("hide");
+					valid = false;
+					$(this).focus();
+				}
+				else{
+					$("#search-form .text-error").addClass("hide");
+				}
+			});
+			if(!valid)
+				return false;
+			searching = true;
+			var byData = $("#search-field-by").val();
+			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
+			if($.trim(forData).length != 0 ){
+				var data = {"action":"search", "by":byData, "for":forData};
+				var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
+				var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
+				var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
+				close.innerHTML = "&times;";
+				insertElementAt(text, group);
+				insertElementAt(close, group);
+				$("#searchQuery").append(group);
+			}
+			else
+				var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
+			break;
 		}
-		else
-			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
+		
 		laptopBar.reset();
 		window.console&&console.log(JSON.stringify(data));
 		getLaptops(JSON.stringify(data));
+		$("#search-modal").modal("hide");
 	}
 	function refresh(){
 		if(searching){
