@@ -136,7 +136,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 
 		<span class="sectionHeader">Management</span>
 		<hr>
-		<span class="alert">Any modifications that are made via this method will be removed if the auto-import script is run if they differ from the source database.</span>
+		<span class="alert">Any modifications that are made via this method will be removed if the auto-import script is run</span>
 
 		<h5>Add a Student</h5>
 		<form action="" method="post">
