@@ -26,10 +26,14 @@ try{
 		if(!$by || !$for)
 			throw new Exception("Cannot get laptops, No \"by\" and/or \"for\" data provided.");
 		$laptops = Laptop::getByProperty($by, $for);
+		break;
 		case API_ACTION_SEARCH:
 		if(!$by)
 			throw new Exception("Cannot search laptops, No \"by\" data provided.");
-		$laptops = Laptop::searchField($by, $for);
+		if($by == "all")
+			$laptops = Laptop::search($for);
+		else
+			$laptops = Laptop::searchField($by, $for);
 		$output[API_INFO] = "Searching \"".$by."\" for \"".$for."\"";
 		break;
 		default:

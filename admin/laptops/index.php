@@ -207,19 +207,23 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					<li class="active"><a href="#search-simple" data-toggle="tab">Simple</a></li>
 					<li><a href="#search-advanced" data-toggle="tab">Advanced</a></li>
 				</ul>
+				<p class="text-error hide">Please fill out all of the required forms</p>
 				<div class="tab-content">
 					<div class="tab-pane active" id="search-simple">
 						<div class="row-fluid">
-							<input type="text" class="offset1 span10" name="query" placeholder="Search Laptops">
+							<input type="text" class="offset1 span10" id="search-all-for" placeholder="Search Laptops">
 						</div>
 					</div>
 					<div class="tab-pane" id="search-advanced">
-						<p class="text-error hide">Please fill out all of the required forms</p>
 						<fieldset>
 							<div class="form-item">
 								<label>Search by:</label>
 								<select id="search-field-by" name="by">
 									<option value="hostname">Host Name</option>
+									<option value="serial">Serial Number</option>
+									<option value="assetTag">Asset Tag</option>
+									<option value="wirelessMAC">Wireless Mac</option>
+									<option value="ethernetMAC">Ethernet MAC</option>
 								</select>
 							</div>
 							<div class="form-item">
@@ -282,9 +286,27 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		   }
 		});
 		switch(activeTab){
+		case 0:
+			var valid = true;
+			$($("#search-form search-simple [required]").get().reverse()).each(function(key, ele){
+				if($.trim($(this).val()).length == 0){
+					$("#search-form .text-error").removeClass("hide");
+					valid = false;
+					$(this).focus();
+				}
+				else{
+					$("#search-form .text-error").addClass("hide");
+				}
+			});
+			if(!valid)
+				return false;
+			searching = true;
+			var byData = "all";
+			var forData = $("#search-all-for").val();
+			break;
 		case 1:
 			var valid = true;
-			$($("#search-form [required]").get().reverse()).each(function(key, ele){
+			$($("#search-form search-advanced [required]").get().reverse()).each(function(key, ele){
 				if($.trim($(this).val()).length == 0){
 					$("#search-form .text-error").removeClass("hide");
 					valid = false;
@@ -299,20 +321,21 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 			searching = true;
 			var byData = $("#search-field-by").val();
 			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
-			if($.trim(forData).length != 0 ){
-				var data = {"action":"search", "by":byData, "for":forData};
-				var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
-				var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
-				var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
-				close.innerHTML = "&times;";
-				insertElementAt(text, group);
-				insertElementAt(close, group);
-				$("#searchQuery").append(group);
-			}
-			else
-				var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
 			break;
 		}
+		if($.trim(forData).length != 0 ){
+			$("#searchItem").remove();
+			var data = {"action":"search", "by":byData, "for":forData};
+			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
+			var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
+			var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
+			close.innerHTML = "&times;";
+			insertElementAt(text, group);
+			insertElementAt(close, group);
+			$("#searchQuery").append(group);
+		}
+		else
+			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
 		
 		laptopBar.reset();
 		window.console&&console.log(JSON.stringify(data));
