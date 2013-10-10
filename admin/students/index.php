@@ -19,6 +19,13 @@ if ( array_key_exists("query", $_GET) )
 			$showBox = $student->getID()." does not have a laptop assigned.";
 	}
 }
+else if ( array_key_exists("add", $_POST) )
+{
+	if ( Student::create($_POST['sid'], $_POST['name'], $_POST['grade']) )
+		$showBox = "Student successfully created";
+	else
+		$showBox = "Student creation failed";
+}
 
 
 $students = Student::getAllWithLaptop();
@@ -126,6 +133,18 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		    <li class="<?php if ( $pageNumber == $nPages ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == $nPages ) echo "#"; else echo "index.php?page=".($pageNumber+1); ?>">Next</a></li>
 		  </ul>
 		</div>
+
+		<span class="sectionHeader">Management</span>
+		<hr>
+		<span class="alert">Any modifications that are made via this method will be removed if the auto-import script is run</span>
+
+		<h5>Add a Student</h5>
+		<form action="" method="post">
+			<input type="text" placeholder="Student ID" name="sid"><br>
+			<input type="text" placeholder="Student Name" name="name"><br>
+			<input type="text" placeholder="Grade" style="width:50px" name="grade"><br>
+			<input class="btn btn-primary" type="submit" value="Add" name="add">
+		</form>
 	</div>
 </body>
 </html>

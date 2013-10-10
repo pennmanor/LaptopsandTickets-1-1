@@ -82,7 +82,7 @@ class Student
 				$dup = false;
 				foreach ( $dupCheck as $row )
 				{
-					if ( $row['sid'] == $d['sid'] )
+					if ( $row->getID() == $d['sid'] )
 						$dup = true;
 				}
 				if ( !$dup )
@@ -100,7 +100,7 @@ class Student
 	public static function search($query)
 	{
 		$output = array();
-		$output = array_merge(Student::searchField(PROPERTY_ID, $query, $output), $output);
+		$output = array_merge(Student::searchField(PROPERTY_SID, $query, $output), $output);
 		$output = array_merge(Student::searchField(PROPERTY_NAME, $query, $output), $output);
 		return $output;
 	}
