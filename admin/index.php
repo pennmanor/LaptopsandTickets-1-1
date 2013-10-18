@@ -2,6 +2,20 @@
 $requiresAdmin = true;
 require_once("../include.php");
 
+$helper = new Helper($session->getID());
+if ( array_key_exists("signin", $_GET) )
+{
+	$helper->signin(0,0);
+	header("Location: index.php");
+	die();
+}
+else if ( array_key_exists("signout", $_GET) )
+{
+	$helper->signout(0,0);
+	header("Location: index.php");
+	die();
+}
+
 $laptops = Laptop::getAll();
 $nLaptopsAssigned = 0;
 
@@ -42,7 +56,24 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 					</ul>
 
 					<ul class="nav pull-right">
-						<li class="pull-right"><a href="../index.php">Exit</a></li>
+						<li>
+							<?php
+							$helper = new Helper($session->getID());
+							if ( $helper->isSignedIn() == HISTORYEVENT_SIGNIN )
+							{
+							?>
+								<button class="btn" onClick="window.location='./index.php?signout=true'">Show as Unavailable</button>
+							<?php
+							}
+							else
+							{
+							?>
+								<button class="btn" onClick="window.location='./index.php?signin=true'">Show as Available</button>
+							<?php
+							}
+							?>
+						</li>
+						<li><a href="../index.php">Exit</a></li>
 					</ul>
 				</div>
 			</div>
