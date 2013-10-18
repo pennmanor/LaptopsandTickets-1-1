@@ -67,9 +67,12 @@ if ( array_key_exists("service", $_GET) )
 	$laptop = Laptop::getByProperty(PROPERTY_ID, $_GET['service']);
 	if ( $laptop )
 	{
-		addHistoryItem($laptop, -1, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
+		$student = $laptop->getOwner();
+		if ( !$student )
+			$student = -1;
+		
+		addHistoryItem($laptop, $student, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
 	}
-	echo mysql_error();
 	header("Location: laptop.php?id=".$_GET['service']);
 	die();
 }
