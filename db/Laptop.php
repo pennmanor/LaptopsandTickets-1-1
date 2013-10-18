@@ -43,6 +43,7 @@ class Laptop
 	/**
 	 * Utility function for converting the history array returned by Laptop's getHistory() to viewable HTML
 	 * @param $history The history array returned by Laptop's getHistory()
+	 * @param $laptops An array from Laptop::getAll() for looking up the asset tag of computers referenced in history events. Defaults to false. If not specified, the laptop will be refered to as "This computer"
 	 * @return A string containing the HTML representation of $history
 	 */
 	public static function getHTMLForHistory($history, $laptops = false)
