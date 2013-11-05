@@ -43,7 +43,7 @@ class Ticket
 		if ( !$q )
 			return false;
 		$ticket = new Ticket($mysql->insert_id);
-		addTicketHistoryItem(-1, $ticket, $creator, HISTORYEVENT_TICKET_STATECHANGE, array("verb" => "created"), 1);
+		addTicketHistoryItem(-1, $ticket, $creator, HISTORYEVENT_TICKET_STATECHANGE, "created", 0, 1);
 		$ticket->addReply($creator, $body);
 		return $ticket;
 		
@@ -120,19 +120,19 @@ class Ticket
 		$output = "";
 		foreach ($history as $row)
 		{
-			if ( $row['action'] == HISTORYEVENT_TICKET_STATECHANGE )
+			if ( $row['type'] == HISTORYEVENT_TICKET_STATECHANGE )
 			{
 				$output .= "<div class=\"alert\">";
-				$output .= "<strong>Ticket ".$row['data']['verb']." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
+				$output .= "<strong>Ticket ".$row['body']." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == HISTORYEVENT_TICKET_INFO )
+			else if ( $row['type'] == HISTORYEVENT_TICKET_INFO )
 			{
 				$output .= "<div class=\"alert\">";
-				$output .= "<strong>".stripcslashes($row['data']['body'])." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
+				$output .= "<strong>".stripcslashes($row['body'])." on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</strong><br>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == HISTORYEVENT_TICKET_REPLY )
+			else if ( $row['type'] == HISTORYEVENT_TICKET_REPLY )
 			{
 				$author = new Student($row['student']);
 				if ( $author->isHelper() )
@@ -140,7 +140,7 @@ class Ticket
 				else
 					$output .= "<div class=\"alert alert-info\">";
 				$output .= "<strong>".$author->getName()."</strong> <small>".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small><br>";
-				$output .= stripcslashes(nl_fix($row['data']['body']));
+				$output .= stripcslashes(nl_fix($row['body']));
 				$output .= "</div>";
 			}
 		}
@@ -243,7 +243,7 @@ class Ticket
 		
 		$result = $this->setProperty("helper", $person);
 		if ( $result )
-			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_INFO, array("body" => "Ticket assigned to ".$obj->getName()));
+			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_INFO, "Ticket assigned to ".$obj->getName());
 		return $result;
 	}
 	
@@ -286,7 +286,6 @@ class Ticket
 		{
 			if ( !empty($d) )
 			{
-				$d['data'] = unserialize($d['data']);
 				$output[] = $d;
 				$sortPivot[] = $d['timestamp'];
 			}
@@ -306,7 +305,7 @@ class Ticket
 		if ( @get_class($author) == "Student" )
 			$author = $author->getID();
 		
-		return addTicketHistoryItem(-1, $this, $author, HISTORYEVENT_TICKET_REPLY, array("body"=>$body));
+		return addTicketHistoryItem(-1, $this, $author, HISTORYEVENT_TICKET_REPLY, $body);
 	}
 	
 	/**
@@ -318,7 +317,7 @@ class Ticket
 	{
 		$result = $this->setProperty(PROPERTY_STATE, TICKETSTATE_CLOSED);
 		if ( $result )
-			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, array("verb"=>"closed"));
+			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, "closed");
 		return $result;
 	}
 	
@@ -331,7 +330,7 @@ class Ticket
 	{
 		$result = $this->setProperty(PROPERTY_STATE, TICKETSTATE_OPEN);
 		if ( $result )
-			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, array("verb" => "reopened") );
+			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, "reopened" );
 		return $result;
 	}
 	

@@ -28,8 +28,7 @@ function getLaptopsByIssueType($issueType)
 	
 	while ( $d = mysqli_fetch_array($result) )
 	{
-		$data = unserialize($d['data']);
-		if ( $data['type'] == $issueType )
+		if ( $d['subtype'] == $issueType )
 		{
 			// Prevent duplicates (ex: one laptop with two keyboard issues logged )
 			$duplicate = false;
@@ -52,11 +51,11 @@ function getLaptopsByIssueType($issueType)
  * @param $laptop The laptop context. 0 if none
  * @param $student The student context. -1 if none
  * @param $action The action type
- * @param $data The data as an array to be associated with this entry. Defaults to empty array
+ * @param $body A string to be associated with this 
  * @param $tOffset The time offset for this event. Useful when adding multiple items that need to be in a certain order. Defaults to zero.
  * @return true on success, false on failure
  */
-function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 0)
+function addHistoryItem($laptop, $student, $action, $body ="", $subtype = 0, $tOffset = 0)
 {
 	global $mysql;
 	if ( @get_class($student) == "Student" )
@@ -65,11 +64,14 @@ function addHistoryItem($laptop, $student, $action, $data = array(), $tOffset = 
 		$laptop = $laptop->getID();
 	if ( ($laptop = intval($laptop)) == 0 )
 		return false;
+	if ( ($subtype = intval($subtype)) == 0 && !is_numeric($subtype) )
+		return false;
+
 	$student = real_escape_string($student);
+	$body = real_escape_string($body);
 	if ( ($action = intval($action)) == 0 )
 		return false;
-	$data = real_escape_string(serialize($data));
-	return $mysql->query("INSERT INTO history (laptop, student,action,data,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).", 0)");
+	return $mysql->query("INSERT INTO history (laptop, student,type,body,subtype,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$body."', ".$subtype.", ".(time()+$tOffset).", 0)");
 }
 
 /** 
@@ -102,7 +104,7 @@ function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array
 		return false;
 
 	$data = real_escape_string(serialize($data));
-	return $mysql->query("INSERT INTO history (laptop, ticket, student,action,data,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).")");
+	return $mysql->query("INSERT INTO history (laptop, ticket, student,type,data,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).")");
 }
 
 
