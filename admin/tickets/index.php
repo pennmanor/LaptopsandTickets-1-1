@@ -260,9 +260,10 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			});
 		}
 		function proccessTickets(d){
-			window.console&&console.log(d);
+			//window.console&&console.log(d);
 			var data = JSON.parse(d);
-			//window.console&&console.log(data);
+			
+			window.console&&console.log(data.result);
 			if(data.success == 1){
 				$("#ticketBar-content").html(ticketTable.buildTable(data.result));
 			}
