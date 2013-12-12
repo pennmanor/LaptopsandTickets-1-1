@@ -17,6 +17,7 @@ try{
 	$decodedData = json_decode($data, true);
 	$by = $decodedData[API_DATA_BY];
 	$for = $decodedData[API_DATA_FOR];
+	$limits = $decodedData[API_LIMIT] ? $decodedData[API_LIMIT]:Array();
 	
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
@@ -39,6 +40,24 @@ try{
 		default:
 		throw new Exception("Invalid action.");
 		
+	}
+	if(is_array($limits)){
+		$output[API_INFO] = $output[API_INFO]." Limits: ";
+		foreach($limits as $limit){
+			$output[API_INFO] = $output[API_INFO].$limit.", ";
+			foreach($students as $student){
+				switch($limit){
+					case API_LIMIT_ASSIGNED:
+					if($student->getProperty(PROPERTY_LAPTOP) != 0)
+						$limited[] = $student;
+					break;
+					default:
+					throw new Exception("Invalid limit \"".$limit."\".");
+				}
+			}
+			$students = $limited;
+			$limited = Array();
+		}
 	}
 	if(is_array($students)){
 		foreach($students as $student){

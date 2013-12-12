@@ -237,6 +237,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		else
 			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
 		ticketBar.reset();
+		window.console&&console.log(data);
 		getTickets(JSON.stringify(data));
 	}
 	function refresh(){
