@@ -374,28 +374,28 @@ class Student
 		foreach ($history as $row)
 		{
 			$laptop = new Laptop($row['laptop']);
-			if ( $row['action'] == ACTION_UNASSIGN )
+			if ( $row['type'] == ACTION_UNASSIGN )
 			{
 				$output .= "<div class=\"alert\"><strong>Returned</strong><br>";
 				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was returned.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == ACTION_ASSIGN )
+			else if ( $row['type'] == ACTION_ASSIGN )
 			{
 				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
 				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was assigned to ".$row['student']."<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == HISTORYEVENT_TICKET_STATECHANGE )
+			else if ( $row['type'] == HISTORYEVENT_TICKET_STATECHANGE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Ticket Change</strong><br>";
 				$output .= $row['student']." ".$row['data']['verb']." a <a href=\"../tickets/ticket.php?id=".$row['ticket']."\">ticket</a>.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == HISTORYEVENT_SERVICE )
+			else if ( $row['type'] == HISTORYEVENT_SERVICE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['data']['type']]."</strong><br>";
 				$output .= stripcslashes(nl_fix($row['data']['notes']))."<br>";
