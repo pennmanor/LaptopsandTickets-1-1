@@ -1,4 +1,19 @@
 <?php
+/*
+  Copyright 2013 Penn Manor School District, Andrew Lobos, and Benjamin Thomas
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
 $requiresAdmin = true;
 require_once("../../include.php");
 
@@ -67,9 +82,12 @@ if ( array_key_exists("service", $_GET) )
 	$laptop = Laptop::getByProperty(PROPERTY_ID, $_GET['service']);
 	if ( $laptop )
 	{
-		addHistoryItem($laptop, -1, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
+		$student = $laptop->getOwner();
+		if ( !$student )
+			$student = -1;
+		
+		addHistoryItem($laptop, $student, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
 	}
-	echo mysql_error();
 	header("Location: laptop.php?id=".$_GET['service']);
 	die();
 }
