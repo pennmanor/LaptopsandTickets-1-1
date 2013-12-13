@@ -51,6 +51,10 @@ try{
 					if($student->getProperty(PROPERTY_LAPTOP) != 0)
 						$limited[] = $student;
 					break;
+					case API_LIMIT_UNASSIGNED:
+					if($student->getProperty(PROPERTY_LAPTOP) == 0)
+						$limited[] = $student;
+					break;
 					default:
 					throw new Exception("Invalid limit \"".$limit."\".");
 				}

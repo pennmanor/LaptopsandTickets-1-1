@@ -79,16 +79,14 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			</div>
 		</div>
 	</div>
-	<br><br>
+	<br>
 	<div class="container">
 		
 		<?php if ( is_string($showBox) ) { ?>
 			<div class="alert"><?php echo $showBox; ?></div>
 		<?php } ?>
 		
-		<span class="sectionHeader">Students</span>
-		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
-		<hr>
+		<h2>Students<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button></h2>
 		<div class="manager large">
 			<div class="navbar navbar-static-top">
 				<div class="navbar-inner">
@@ -148,6 +146,11 @@ $students = array_subset($students, $itemStart, $itemEnd);
 					<div class="form-item">
 						<label class="checkbox">
 							<input name="limit-assigned" type="checkbox">Assigned a Laptop
+						</label>
+					</div>
+					<div class="form-item">
+						<label class="checkbox">
+							<input name="limit-unassigned" type="checkbox">Not assigned a Laptop
 						</label>
 					</div>
 				</fieldset>
@@ -219,6 +222,10 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		$(".limit").remove();
 		if($("#search-form [name=limit-assigned]").is(":checked"))
 			addSearchLimit("assigned", "Assigned a Laptop");
+		else
+			removeSearchLimit("assigned");
+		if($("#search-form [name=limit-unassigned]").is(":checked"))
+			addSearchLimit("unassigned", "Not assigned a Laptop");
 		else
 			removeSearchLimit("assigned");
 		$("#search-modal").modal("hide");

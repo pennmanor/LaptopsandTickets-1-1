@@ -133,8 +133,8 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 				</div>
 			</section>
 		</div>
-		<button class="btn btn-info pull-right" onclick="csvDL()" disabled>Download as CSV</button>
-		<button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()" disabled>Download as DHCP config</button><br>
+		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
+		<button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()">Download as DHCP config</button><br>
 		<h2>Add</h2>
 		<hr>
 		<form action="" method="POST">
@@ -258,7 +258,6 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"laptop.php?id=" + data + "\""}, "View");
 	});
 	function init(){
-		
 		var data = {"action":"all"};
 		getLaptops(JSON.stringify(data));
 		laptopBar.init();
