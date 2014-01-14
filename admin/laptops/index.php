@@ -90,10 +90,6 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					<li><a href="../calendar">Calendar</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
-			
-				<form class="navbar-search pull-right" action="./query.php">
-				  <input type="text" class="search-query" name="query" placeholder="Search Laptops">
-				</form>
 			</div>
 		</div>
 	</div>
@@ -125,7 +121,10 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		<?php	
 		}
 		?>
-			<h2>Laptops</h2>
+			<h2>Laptops
+				<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
+				<button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()">Download as DHCP config</button>
+			</h2>
 		<div class="manager large">
 			<div class="navbar navbar-static-top">
 				<div class="navbar-inner">
@@ -148,8 +147,6 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 				</div>
 			</section>
 		</div>
-		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
-		<button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()">Download as DHCP config</button><br>
 		<h2>Add</h2>
 		<hr>
 		<form action="" method="POST">
@@ -289,6 +286,11 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		});
 		$("#laptop-refresh").click(function(){
 			refresh();
+		});
+		$("#search-form input").keypress(function(e) {
+		    if(e.which == 13) {
+		        search();
+		    }
 		});
 	}
 	

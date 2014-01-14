@@ -37,7 +37,10 @@ try{
 		case API_ACTION_SEARCH:
 		if(!$by)
 			throw new Exception("Cannot search tickets, No \"by\" and/or \"for\" data provided.");
-		$tickets = Ticket::searchField($by, $for);
+		if($by == "all")
+			$tickets = Ticket::search($for);
+		else
+			$tickets = Ticket::searchField($by, $for);
 		$output[API_INFO] = API_ACTION_SEARCH;
 		break;
 		default:

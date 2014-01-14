@@ -210,6 +210,11 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			$("#ticket-refresh").click(function(){
 				refresh();
 			});
+			$("#search-form input").keypress(function(e) {
+			    if(e.which == 13) {
+			        search();
+			    }
+			});
 		}
 		
 		function search(){
@@ -267,11 +272,10 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 					addSearchLimit("helper", "Assigned to me");
 				else
 					removeSearchLimit("helper");
-				$("#search-modal").modal("hide");
 				var byData = $("#search-field-by").val();
 				var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
 			}
-			
+			$("#search-modal").modal("hide");
 			if($.trim(forData).length != 0 ){
 				var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
 				var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
@@ -322,6 +326,7 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 		}
 		function removeSearchQuery(){
 			$("#search-field-by").val("");
+			$("#search-all-for").val("");
 			$("#search-field-for").val("");
 			searching = false;
 			$("#searchItem").remove();

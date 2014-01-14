@@ -87,10 +87,6 @@ $students = array_subset($students, $itemStart, $itemEnd);
 					<li><a href="../calendar">Calendar</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
-				
-				<form class="navbar-search pull-right" action="query.php">
-				  <input type="text" class="search-query" name="query" placeholder="Search Students">
-				</form>
 			</div>
 		</div>
 	</div>
@@ -144,31 +140,44 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		</div>
 		<form id="search-form">
 			<div class="modal-body">
+				<ul class="nav nav-tabs" id="search-tabs">
+					<li class="active"><a href="#search-simple" data-toggle="tab">Simple</a></li>
+					<li><a href="#search-advanced" data-toggle="tab">Advanced</a></li>
+				</ul>
 				<p class="text-error hide">Please fill out all of the required forms</p>
-				<fieldset>
-					<div class="form-item">
-						<label>Search by:</label>
-						<select id="search-field-by" name="by">
-							<option value="name">Name</option>
-							<option value="sid">Student ID</option>
-							<option value="grade">Grade</option>
-						</select>
+				<div class="tab-content">
+					<div class="tab-pane active" id="search-simple">
+						<div class="row-fluid">
+							<input type="text" class="offset1 span10" id="search-all-for" placeholder="Search Students">
+						</div>
 					</div>
-					<div class="form-item">
-						<label>Search for:</label>
-						<input id="search-field-for" type="text" name="for">
+					<div class="tab-pane" id="search-advanced">
+						<fieldset>
+							<div class="form-item">
+								<label>Search by:</label>
+								<select id="search-field-by" name="by">
+									<option value="name">Name</option>
+									<option value="sid">Student ID</option>
+									<option value="grade">Grade</option>
+								</select>
+							</div>
+							<div class="form-item">
+								<label>Search for:</label>
+								<input id="search-field-for" type="text" name="for">
+							</div>
+							<div class="form-item">
+								<label class="checkbox">
+									<input name="limit-assigned" type="checkbox">Assigned a Laptop
+								</label>
+							</div>
+							<div class="form-item">
+								<label class="checkbox">
+									<input name="limit-unassigned" type="checkbox">Not assigned a Laptop
+								</label>
+							</div>
+						</fieldset>
 					</div>
-					<div class="form-item">
-						<label class="checkbox">
-							<input name="limit-assigned" type="checkbox">Assigned a Laptop
-						</label>
-					</div>
-					<div class="form-item">
-						<label class="checkbox">
-							<input name="limit-unassigned" type="checkbox">Not assigned a Laptop
-						</label>
-					</div>
-				</fieldset>
+				</div>
 			</div>
 		</form>
 		<div class="modal-footer">
@@ -199,15 +208,16 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	});
 	function init(){
 		var data = {"action":"all"};
-		getTickets(JSON.stringify(data));
+		getLaptops(JSON.stringify(data));
 		ticketBar.init();
 		ticketBar.step(1);
 		$("#search-submit").click(function(){
 			search();
 		});
 		$("#search-form").submit(function(e){
-			e.preventDefault();
 			search();
+			e.preventDefault();
+
 		})
 		$("#ticket-search").click(function(){
 			$("#search-modal").modal("show");
@@ -215,37 +225,69 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		$("#ticket-refresh").click(function(){
 			refresh();
 		});
+		$("#search-form input").keypress(function(e) {
+		    if(e.which == 13) {
+		        search();
+		    }
+		});
 	}
 	
 	function search(){
-		var valid = true;
-		$($("#search-form [required]").get().reverse()).each(function(key, ele){
-			if($.trim($(this).val()).length == 0){
-				$("#search-form .text-error").removeClass("hide");
-				valid = false;
-				$(this).focus();
-			}
-			else{
-				$("#search-form .text-error").addClass("hide");
-			}
+		var activeTab  = -1;
+		$("#search-tabs li").each(function(index) {
+		   if($(this).hasClass("active")){
+			   activeTab  = index;
+		   }
 		});
-		if(!valid)
-			return false;
-		searching = true;
-		limits = [];
-		$("#searchItem").remove();
-		$(".limit").remove();
-		if($("#search-form [name=limit-assigned]").is(":checked"))
-			addSearchLimit("assigned", "Assigned a Laptop");
-		else
-			removeSearchLimit("assigned");
-		if($("#search-form [name=limit-unassigned]").is(":checked"))
-			addSearchLimit("unassigned", "Not assigned a Laptop");
-		else
-			removeSearchLimit("assigned");
-		$("#search-modal").modal("hide");
-		var byData = $("#search-field-by").val();
-		var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
+		switch(activeTab) {
+		case 0:
+			var valid = true;
+			$($("#search-form search-simple [required]").get().reverse()).each(function(key, ele){
+				if($.trim($(this).val()).length == 0){
+					$("#search-form .text-error").removeClass("hide");
+					valid = false;
+					$(this).focus();
+				}
+				else{
+					$("#search-form .text-error").addClass("hide");
+				}
+			});
+			if(!valid)
+				return false;
+			searching = true;
+			var byData = "all";
+			var forData = $("#search-all-for").val();
+			break;
+		case 1:
+			var valid = true;
+			$($("#search-form [required]").get().reverse()).each(function(key, ele){
+				if($.trim($(this).val()).length == 0){
+					$("#search-form .text-error").removeClass("hide");
+					valid = false;
+					$(this).focus();
+				}
+				else{
+					$("#search-form .text-error").addClass("hide");
+				}
+			});
+			if(!valid)
+				return false;
+			searching = true;
+			limits = [];
+			$("#searchItem").remove();
+			$(".limit").remove();
+			if($("#search-form [name=limit-assigned]").is(":checked"))
+				addSearchLimit("assigned", "Assigned a Laptop");
+			else
+				removeSearchLimit("assigned");
+			if($("#search-form [name=limit-unassigned]").is(":checked"))
+				addSearchLimit("unassigned", "Not assigned a Laptop");
+			else
+				removeSearchLimit("assigned");
+			var byData = $("#search-field-by").val();
+			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
+			break;
+		}
 		if($.trim(forData).length != 0 ){
 			var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
 			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
@@ -259,8 +301,8 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		else
 			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
 		ticketBar.reset();
-		window.console&&console.log(data);
-		getTickets(JSON.stringify(data));
+		getLaptops(JSON.stringify(data));
+		$("#search-modal").modal("hide");
 	}
 	function refresh(){
 		if(searching){
@@ -272,18 +314,18 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			var data = {"action":"all", "limit":limits};
 		
 		ticketBar.reset();
-		getTickets(JSON.stringify(data));
+		getLaptops(JSON.stringify(data));
 	}
-	function getTickets(d){
+	function getLaptops(d){
 		$("#ticket-refresh").button("loading");
 		$.ajax({
 			url : "../../api/student.php",
 			type : "POST",
 			data : "data=" + d,
-			success : proccessTickets
+			success : proccessLaptops
 		});
 	}
-	function proccessTickets(d){
+	function proccessLaptops(d){
 		window.console&&console.log(d);
 		 var data = JSON.parse(d);
 		
