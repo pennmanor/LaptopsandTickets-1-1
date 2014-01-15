@@ -83,6 +83,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 					<li><a href="../index.php">Overview</a></li>
 					<li><a href="../tickets">Tickets</a></li>
 					<li><a href="../laptops">Laptops</a></li>
+					<li><a href="../issues">Issues</a></li>
 					<li class="active"><a href="../students">Students</a></li>
 					<li><a href="../calendar">Calendar</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>

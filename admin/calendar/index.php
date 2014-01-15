@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+$requiresAdmin = true;
 include_once("../../include.php");
 ?>
 <!DOCTYPE html>
@@ -37,6 +38,7 @@ include_once("../../include.php");
 					<li><a href="../index.php">Overview</a></li>
 					<li><a href="../tickets">Tickets</a></li>
 					<li><a href="../laptops">Laptops</a></li>
+					<li><a href="../issues">Issues</a></li>
 					<li><a href="../students">Students</a></li>
 					<li class="active"><a href="#">Calendar</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>

@@ -4,6 +4,7 @@ $session = new UserSession();
 $key = $_POST["key"];
 $data = $_POST["data"];
 $properties = Array();
+$limited = Array();
 
 $output = Array(API_SUCCESS => 1, API_STATUS => -1, API_INFO => "Functioning normally.", API_RESULT => "");
 try{
@@ -16,21 +17,34 @@ try{
 	$decodedData = json_decode($data, true);
 	$by = $decodedData[API_DATA_BY];
 	$for = $decodedData[API_DATA_FOR];
-	
+	$issues = Array();
+	$allHistory = Laptop::getAllHistory();
+
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
-		$laptops = Laptop::getAll();
+		$issues = Array();
+		$allHistory = Laptop::getAllHistory();
+		foreach ( $allHistory as $event )
+		{
+			if ( $event['action'] == HISTORYEVENT_SERVICE )
+			{
+				$issues[] = $event;
+			}
+		}
 		break;
 		case API_ACTION_GET:
 		if(!$by || !$for)
 			throw new Exception("Cannot get laptops, No \"by\" and/or \"for\" data provided.");
-		$laptops = Laptop::getByProperty($by, $for);
+		throw new Exception("Getting Issues is not supported.");
 		break;
 		case API_ACTION_SEARCH:
 		if(!$by)
 			throw new Exception("Cannot search laptops, No \"by\" data provided.");
-		if($by == "all")
-			$laptops = Laptop::search($for);
+		if($by == "all") {
+			if(strpos($a,'are') !== false) {
+				$limited = 
+			}
+		}
 		else
 			$laptops = Laptop::searchField($by, $for);
 		$output[API_INFO] = "Searching \"".$by."\" for \"".$for."\"";

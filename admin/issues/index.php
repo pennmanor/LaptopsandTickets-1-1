@@ -16,57 +16,6 @@
 */
 $requiresAdmin = true;
 require_once("../../include.php");
-$showBox = RESULT_NONE;
-if ( array_key_exists("file", $_FILES) )
-{
-	$data = file_get_contents($_FILES['file']['tmp_name']);
-	if ( $data )
-	{
-		$data = trim($data);
-		$data = str_replace("\r", "\n", $data);
-		$lines = explode("\n", $data);
-		foreach ($lines as $line)
-		{
-			$line = explode(",", $line);
-			if ( count($line) == 6 )
-			{
-				if ( !(Laptop::getByProperty(PROPERTY_HOSTNAME, $line[0]) || Laptop::getByProperty(PROPERTY_ASSETTAG, $line[2]) || Laptop::getByProperty(PROPERTY_SERIAL, $line[1]) || Laptop::getByProperty(PROPERTY_WMAC, $line[3]) || Laptop::getByProperty(PROPERTY_EMAC, $line[4])) )
-					Laptop::create($line[0], $line[1], $line[2], $line[3], $line[4], $line[5]);
-			}
-		}
-		$showBox = RESULT_SUCCESS;
-	}
-	else
-	{
-		$showBox = RESULT_FAIL;
-	}
-}
-
-if ( array_key_exists("submit", $_POST) )
-{
-	htmlspecialcharsArray($_POST);
-	if ( empty($_POST['hostname']) || empty($_POST['serial']) || empty($_POST['asset']) || empty($_POST['building']) )
-		$showBox = RESULT_FAIL;
-	else if ( Laptop::getByProperty(PROPERTY_HOSTNAME, $_POST['hostname']) || Laptop::getByProperty(PROPERTY_ASSETTAG, $_POST['asset']) || Laptop::getByProperty(PROPERTY_SERIAL, $_POST['serial']) || Laptop::getByProperty(PROPERTY_WMAC, $_POST['wirelessMAC']) || Laptop::getByProperty(PROPERTY_EMAC, $_POST['ethernetMAC']))
-		$showBox = RESULT_DUP;
-	else if ( Laptop::create($_POST['hostname'], $_POST['serial'], $_POST['asset'], $_POST['wirelessMAC'], $_POST['ethernetMAC'], $_POST['building']) )
-		$showBox = RESULT_SUCCESS;
-	else
-		$showBox = RESULT_FAIL;
-}
-
-$pageNumber = intval($_GET['page']);
-if ( $pageNumber < 1 )
-{
-	$pageNumber = 1;
-}
-
-$laptops = Laptop::getAll();
-$nPages = ceil(count($laptops)/$itemsPerPage);
-
-$itemStart = ($pageNumber-1)*$itemsPerPage;
-$itemEnd = $itemStart+$itemsPerPage;
-$laptops = array_subset($laptops, $itemStart, $itemEnd);
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,8 +34,8 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 				<ul class="nav">
 					<li><a href="../index.php">Overview</a></li>
 					<li><a href="../tickets">Tickets</a></li>
-					<li class="active"><a href="../laptops">Laptops</a></li>
-					<li><a href="../issues">Issues</a></li>
+					<li><a href="../laptops">Laptops</a></li>
+					<li class="active"><a href="../issues">Issues</a></li>
 					<li><a href="../students">Students</a></li>
 					<li><a href="../calendar">Calendar</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
@@ -122,10 +71,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 		<?php	
 		}
 		?>
-			<h2>Laptops
-				<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
-				<button class="btn btn-info pull-right buttonSpacer" onclick="dhcpDL()">Download as DHCP config</button>
-			</h2>
+		<h2>Issues</h2>
 		<div class="manager large">
 			<div class="navbar navbar-static-top">
 				<div class="navbar-inner">
@@ -148,66 +94,6 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 				</div>
 			</section>
 		</div>
-		<h2>Add</h2>
-		<hr>
-		<form action="" method="POST">
-			<table class="table table-bordered">
-				<tr>
-					<td><strong>Hostname</strong></td>
-					<td><input type="text" name="hostname"></td>
-				</tr>
-			
-				<tr>
-					<td><strong>Serial #</strong></td>
-					<td><input type="text" name="serial"></td>
-				</tr>
-			
-				<tr>
-					<td><strong>Asset Tag</strong></td>
-					<td><input type="text" name="asset"></td>
-				</tr>
-			
-				<tr>
-					<td><strong>Wireless MAC</strong></td>
-					<td><input type="text" name="wirelessMAC"></td>
-				</tr>
-			
-				<tr>
-					<td><strong>Ethernet MAC</strong></td>
-					<td><input type="text" name="ethernetMAC"></td>
-				</tr>
-				
-				<tr>
-					<td><strong>Building</strong></td>
-					<td>
-						<select name="building">
-							<?php
-							foreach ( $buildingList as $buildingKey => $building )
-							{
-								echo "<option value=\"".$buildingKey."\">".$building."</option>\n";
-							}
-							?>
-						</select>
-					</td>
-				</tr>
-				
-				<tr>
-					<td></td>
-					<td><input type="submit" name="submit" class="btn btn-success" value="Create"></td>
-				</tr>
-			</table>
-		</form>
-		<br>
-		<span class="sectionHeader">Mass Upload</span>
-		<hr>
-		Upload a CSV containing laptop information to add to the database.<br>
-		<form action="" method="post" enctype="multipart/form-data">
-			<input type="file" name="file" id="file">
-			<input type="submit" name="submitfile" class="btn btn-success" value="Upload">
-		</form>
-		<br>
-		Format:<br>
-		host,serial,assetTag,wMAC,eMAC,building
 	</div>
 	<div id="search-modal" class="modal hide fade">
 		<div class="modal-header">
@@ -417,7 +303,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 			limits.splice(index, 1);
 		refresh();
 	}
-	window.onload = init;
+	//window.onload = init;
 	</script>
 	<script type="text/javascript">
 	
