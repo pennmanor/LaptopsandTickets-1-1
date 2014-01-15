@@ -28,7 +28,7 @@ if ( array_key_exists("file", $_FILES) )
 		foreach ($lines as $line)
 		{
 			$line = explode(",", $line);
-			if ( count($line) == 6 )
+			if ( count($line) >= 6 )
 			{
 				if ( !(Laptop::getByProperty(PROPERTY_HOSTNAME, $line[0]) || Laptop::getByProperty(PROPERTY_ASSETTAG, $line[2]) || Laptop::getByProperty(PROPERTY_SERIAL, $line[1]) || Laptop::getByProperty(PROPERTY_WMAC, $line[3]) || Laptop::getByProperty(PROPERTY_EMAC, $line[4])) )
 					Laptop::create($line[0], $line[1], $line[2], $line[3], $line[4], $line[5]);
