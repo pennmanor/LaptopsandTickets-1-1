@@ -62,6 +62,8 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	<title>1:1 Inventory</title>
 	<link href="../../css/bootstrap.css" rel="stylesheet">
 	<link href="../../css/style.css" rel="stylesheet">
+	<link href="../../css/manager.css" rel="stylesheet">
+	<link href="../../css/order-form.css" rel="stylesheet">
 	
 	<script type="text/javascript">
 	function csvDL()
@@ -92,63 +94,37 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			</div>
 		</div>
 	</div>
-	<br><br>
+	<br>
 	<div class="container">
 		
 		<?php if ( is_string($showBox) ) { ?>
 			<div class="alert"><?php echo $showBox; ?></div>
 		<?php } ?>
 		
-		<span class="sectionHeader">All Students with Laptops Assigned</span>
-		<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button>
-		<hr>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Student ID</th>
-					<th>Name</th>
-					<th>Grade</th>
-					<th>Building</th>
-					<th></th>
-				</tr>
-			</thead>
-			
-			<tbody>
-				<?php
-				foreach ( $students as $student )
-				{
-					$properties = $student->getProperties();
-					$laptop = $student->getLaptop();
-				?>
-					<tr>
-						<td><?php echo $student->getID(); ?></td>
-						<td><?php echo $properties[PROPERTY_NAME]; ?></td>
-						<td><?php echo $properties[PROPERTY_GRADE]; ?></td>
-						<td><?php echo $buildingList[$laptop->getProperty(PROPERTY_BUILDING)]; ?></td>
-						<td><a href="../laptops/laptop.php?id=<?php echo $laptop->getID(); ?>" class="btn btn-inverse">Laptop</a> <a href="student.php?sid=<?php echo $student->getID(); ?>" class="btn btn-inverse">History</a></td>
-					</tr>
-				<?php
-				}
-				?>
-			</tbody>
-		</table>
-		
-		<div class="pagination pagination-centered">
-		  <ul>
-		    <li class="<?php if ( $pageNumber == 1 ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == 1 ) echo "#"; else echo "index.php?page=".($pageNumber-1); ?>">Prev</a></li>
-			<?php 
-			for ( $i = 0; $i < $nPages; $i++ )
-			{
-				$p = $i+1;
-			?>
-		    <li class="<?php if ( $pageNumber == $p ) echo "active"; ?>"><a href="index.php?page=<?php echo $p; ?>"><?php echo $p; ?></a></li>
-			<?php
-			}
-			?>
-		    <li class="<?php if ( $pageNumber == $nPages ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == $nPages ) echo "#"; else echo "index.php?page=".($pageNumber+1); ?>">Next</a></li>
-		  </ul>
+		<h2>Students<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button></h2>
+		<div class="manager large">
+			<div class="navbar navbar-static-top">
+				<div class="navbar-inner">
+					<div class="pull-left">
+						<button class="btn btn-primary" id="ticket-search"><i class="icon-search icon-white"></i> Search</button>
+						<span id="searchQuery"></span>
+					</div>
+					<div class="pull-right">
+						<button class="btn" id="ticket-refresh" data-loading-text="Refreshing..."><i class="icon-refresh"></i> Refresh Table</button>
+					</div>
+				</div>
+			</div>
+			<section class="manager-results">
+				<div class="progressBar">
+					<div id="ticketBar" class="progress">
+						<div id="ticketBar-inner" class="bar" data-percentage="0"></div>
+					</div>
+				</div>
+				<div id="ticketBar-content">
+				</div>
+			</section>
 		</div>
-
+		
 		<span class="sectionHeader">Management</span>
 		<hr>
 		<span class="alert">Any modifications that are made via this method will be removed if the auto-import script is run</span>
@@ -161,5 +137,192 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			<input class="btn btn-primary" type="submit" value="Add" name="add">
 		</form>
 	</div>
+	<div id="search-modal" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"> &times;</button>
+			<h3>Search</h3>
+		</div>
+		<form id="search-form">
+			<div class="modal-body">
+				<p class="text-error hide">Please fill out all of the required forms</p>
+				<fieldset>
+					<div class="form-item">
+						<label>Search by:</label>
+						<select id="search-field-by" name="by">
+							<option value="name">Name</option>
+							<option value="sid">Student ID</option>
+							<option value="grade">Grade</option>
+						</select>
+					</div>
+					<div class="form-item">
+						<label>Search for:</label>
+						<input id="search-field-for" type="text" name="for">
+					</div>
+					<div class="form-item">
+						<label class="checkbox">
+							<input name="limit-assigned" type="checkbox">Assigned a Laptop
+						</label>
+					</div>
+					<div class="form-item">
+						<label class="checkbox">
+							<input name="limit-unassigned" type="checkbox">Not assigned a Laptop
+						</label>
+					</div>
+				</fieldset>
+			</div>
+		</form>
+		<div class="modal-footer">
+			<button class="btn" id="search-cancel" data-dismiss="modal">Cancel</button>
+			<button class="btn btn-primary" id="search-submit">Search</button>
+		</div>
+	</div>
+	<script src="../../js/jquery-1.9.1.js" type="text/javascript"></script>
+	<script src="../../js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="../../js/object.js" type="text/javascript"></script>
+	<script src="../../js/Progress.js" type="text/javascript"></script>
+	<script src="../../js/Table.js" type="text/javascript"></script>
+	<script>
+	var searching = false;
+	var limits = [];
+	var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
+		$("#ticket-refresh").button("reset");
+	});
+	var ticketTable = new Table(["name", "sid", "grade", "id"], ["Name", "Student ID", "Grade", ""]);
+	ticketTable.setProperties("table", {"class" : "table"});
+	ticketTable.setProperties("head-data", {"class" : "bold"});
+	ticketTable.addAdvancedColumnProcessor("title", function(data){
+		var label = createElement("span", {"class" : "label " + (data["state"] == 1 ? "label-success" : "label-inverse")}, (data["state"] == 1 ? "Open" : "Closed"));
+		return createElement("span", null, data["title"] + " ", label);
+	});
+	ticketTable.addAdvancedColumnProcessor("id", function(data){
+		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"student.php?sid=" + data["sid"] + "\""}, "View");
+	});
+	function init(){
+		var data = {"action":"all"};
+		getTickets(JSON.stringify(data));
+		ticketBar.init();
+		ticketBar.step(1);
+		$("#search-submit").click(function(){
+			search();
+		});
+		$("#search-form").submit(function(e){
+			e.preventDefault();
+			search();
+		})
+		$("#ticket-search").click(function(){
+			$("#search-modal").modal("show");
+		});
+		$("#ticket-refresh").click(function(){
+			refresh();
+		});
+	}
+	
+	function search(){
+		var valid = true;
+		$($("#search-form [required]").get().reverse()).each(function(key, ele){
+			if($.trim($(this).val()).length == 0){
+				$("#search-form .text-error").removeClass("hide");
+				valid = false;
+				$(this).focus();
+			}
+			else{
+				$("#search-form .text-error").addClass("hide");
+			}
+		});
+		if(!valid)
+			return false;
+		searching = true;
+		limits = [];
+		$("#searchItem").remove();
+		$(".limit").remove();
+		if($("#search-form [name=limit-assigned]").is(":checked"))
+			addSearchLimit("assigned", "Assigned a Laptop");
+		else
+			removeSearchLimit("assigned");
+		if($("#search-form [name=limit-unassigned]").is(":checked"))
+			addSearchLimit("unassigned", "Not assigned a Laptop");
+		else
+			removeSearchLimit("assigned");
+		$("#search-modal").modal("hide");
+		var byData = $("#search-field-by").val();
+		var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
+		if($.trim(forData).length != 0 ){
+			var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
+			var group = createElement("div", {"class":"btn-group", "id":"searchItem"});
+			var text = createElement("button", {"class":"btn"}, byData + ": " + forData);
+			var close = createElement("button", {"class":"btn", "onclick":"removeSearchQuery()"});
+			close.innerHTML = "&times;";
+			insertElementAt(text, group);
+			insertElementAt(close, group);
+			$("#searchQuery").append(group);
+		}
+		else
+			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
+		ticketBar.reset();
+		window.console&&console.log(data);
+		getTickets(JSON.stringify(data));
+	}
+	function refresh(){
+		if(searching){
+			var byData = $("#search-field-by").val();
+			var forData = $("#search-field-for").val();
+			var data = {"action":"search", "by":byData, "for":forData, "limit":limits};
+		}
+		else
+			var data = {"action":"all", "limit":limits};
+		
+		ticketBar.reset();
+		getTickets(JSON.stringify(data));
+	}
+	function getTickets(d){
+		$("#ticket-refresh").button("loading");
+		$.ajax({
+			url : "../../api/student.php",
+			type : "POST",
+			data : "data=" + d,
+			success : proccessTickets
+		});
+	}
+	function proccessTickets(d){
+		window.console&&console.log(d);
+		 var data = JSON.parse(d);
+		
+		window.console&&console.log(data.result);
+		if(data.success == 1){
+			$("#ticketBar-content").html(ticketTable.buildTable(data.result));
+		}
+		else{
+			$("#ticketBar-content").html(createElement("p", {"class":"text-center lead"},"Error. There was a problem with the request"));
+		}
+		ticketBar.step(2);
+	}
+	function removeSearchQuery(){
+		$("#search-field-by").val("");
+		$("#search-field-for").val("");
+		searching = false;
+		$("#searchItem").remove();
+		refresh();
+	}
+	function addSearchLimit(limit, name){
+		$("#search-form #check-" + limit).prop("checked", true);
+		var group = createElement("div", {"class":"btn-group limit", "id":"limit-" + limit});
+		var text = createElement("button", {"class":"btn"}, name);
+		var close = createElement("button", {"class":"btn", "onclick":"removeSearchLimit(\"" + limit + "\")"});
+		close.innerHTML = "&times;";
+		insertElementAt(text, group);
+		insertElementAt(close, group);
+		$("#searchQuery").append(group);
+		limits.push(limit);
+	}
+	function removeSearchLimit(limit){
+		$("#search-form [name=limit-" + limit + "]").prop("checked", false);
+		$("#limit-" + limit).remove();
+		var index = limits.indexOf(limit);
+		if(index > -1)
+			limits.splice(index, 1);
+		refresh();
+	}
+	window.onload = init;
+	</script>
 </body>
 </html>
