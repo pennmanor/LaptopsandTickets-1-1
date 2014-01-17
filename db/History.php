@@ -86,7 +86,7 @@ function addHistoryItem($laptop, $student, $action, $body ="", $subtype = 0, $tO
  * TODO: Update calls of addHistoryItem to pass ticket context and rename this to addHistoryItem
  */
 
-function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array(), $tOffset = 0)
+function addTicketHistoryItem($laptop, $ticket, $student, $action, $body = "", $tOffset = 0)
 {
 	global $mysql;
 	if ( @get_class($student) == "Student" )
@@ -103,8 +103,8 @@ function addTicketHistoryItem($laptop, $ticket, $student, $action, $data = array
 	if ( ($action = intval($action)) == 0 )
 		return false;
 
-	$data = real_escape_string(serialize($data));
-	return $mysql->query("INSERT INTO history (laptop, ticket, student,type,data,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$data."', ".(time()+$tOffset).")");
+	$body = real_escape_string($body);
+	return $mysql->query("INSERT INTO history (laptop, ticket, student,type,body, subtype,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$body."', 0, ".(time()+$tOffset).")");
 }
 
 
