@@ -2,7 +2,6 @@
 require_once("../config.php");
 require_once("../db/include.php");
 
-$mysql->query("use olddb");
 $result = $mysql->query("SELECT * FROM history");
 $mysql->query("ALTER TABLE history CHANGE action type int(11)");
 $mysql->query("ALTER TABLE history ADD subtype int(11) AFTER type");
