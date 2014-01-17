@@ -150,11 +150,11 @@ require_once("../../include.php");
 	var laptopBar = new Progress("#laptopBar-inner", "#laptopBar", "#laptopBar-content", 2, function(){
 		$("#laptop-refresh").button("reset");
 	});
-	var laptopTable = new Table(["hostname", "assetTag", "serial", "ethernetMAC", "wirelessMAC", "building", "id"], ["Hostname", "Asset Tag", "Serial Number", "Ethernet MAC", "Wireless MAC", "Building", ""]);
+	var laptopTable = new Table(["type", "body", "laptop"], ["Issue Type", "Discription", ""]);
 	laptopTable.setProperties("table", {"class" : "table"});
 	laptopTable.setProperties("head-data", {"class" : "bold"});
-	laptopTable.addColumnProcessor("id", function(data){
-		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"laptop.php?id=" + data + "\""}, "View");
+	laptopTable.addColumnProcessor("laptop", function(data){
+		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"../laptops/laptop.php?id=" + data + "\""}, "View Laptop");
 	});
 	function init(){
 		var data = {"action":"all"};
@@ -260,7 +260,7 @@ require_once("../../include.php");
 	function getLaptops(d){
 		$("#laptop-refresh").button("loading");
 		$.ajax({
-			url : "../../api/laptop.php",
+			url : "../../api/issue.php",
 			type : "POST",
 			data : "data=" + d,
 			success : proccessLaptops
@@ -303,7 +303,7 @@ require_once("../../include.php");
 			limits.splice(index, 1);
 		refresh();
 	}
-	//window.onload = init;
+	window.onload = init;
 	</script>
 	<script type="text/javascript">
 	

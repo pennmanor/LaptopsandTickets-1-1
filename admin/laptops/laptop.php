@@ -210,7 +210,6 @@ if ( array_key_exists("id", $_GET) )
 					echo "<span class=\"label\">Unassigned</span> <button class=\"btn btn-success btn-mini\" onClick=\"handleAssign()\">Assign</button>";
 				?>
 				<hr>
-			
 				<span class="sectionHeader">System Info</span>
 				<hr>
 				<table class="table table-bordered">

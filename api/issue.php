@@ -22,15 +22,14 @@ try{
 
 	switch($decodedData[API_DATA_ACTION]){
 		case API_ACTION_ALL:
-		$issues = Array();
-		$allHistory = Laptop::getAllHistory();
 		foreach ( $allHistory as $event )
 		{
-			if ( $event['action'] == HISTORYEVENT_SERVICE )
+			if ( $event['type'] == HISTORYEVENT_SERVICE )
 			{
 				$issues[] = $event;
 			}
 		}
+		$output[API_INFO] = "Getting all issues.";
 		break;
 		case API_ACTION_GET:
 		if(!$by || !$for)
@@ -41,21 +40,29 @@ try{
 		if(!$by)
 			throw new Exception("Cannot search laptops, No \"by\" data provided.");
 		if($by == "all") {
-			if(strpos($a,'are') !== false) {
-				$limited = 
+			foreach ( $allHistory as $event ) {
+				if(strpos($event['body'], $for) !== false) {
+					$issues[] = $event;
+				}
+			}
+			
+		}
+		else {
+			foreach ( $allHistory as $event ) {
+				if($event['type'] = $by && strpos($event['body'], $for) !== false) {
+					$issues[] = $event;
+				}
 			}
 		}
-		else
-			$laptops = Laptop::searchField($by, $for);
 		$output[API_INFO] = "Searching \"".$by."\" for \"".$for."\"";
 		break;
 		default:
-		throw new Exception("Invalid action.");
+		throw new Exception("Invalid action. This may have happened because you failed to provide the correct information. ");
 		
 	}
-	if(is_array($laptops)){
-		foreach($laptops as $laptop){
-			$properties[] = $laptop->getProperties();
+	if(is_array($issues)){
+		foreach($issues as $issue){
+			$properties[] = $issue;
 		}
 		$output[API_RESULT] = $properties;
 	}
