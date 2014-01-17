@@ -116,6 +116,17 @@ if ( array_key_exists("logout", $_GET) )
 				</div>
 			</div>
 		</div> -->
+		<div id="footer" class="navbar navbar-fixed-bottom nav-fix">
+			<div class="navbar-inner">
+			     <div class="container">
+			           <ul class="nav">
+			              <li><p class="navbar-text">© 2013 Penn Manor School District. All rights reserved. Built by Andrew Lobos and Benjamin Thomas. Licensed under the <a target="_blank" href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>.</p></li>
+			           </ul>
+			      </div>
+                                
+			</div>
+                        
+		</div>
 	</div>
 </body>	
 </html>

@@ -14,6 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+
 $requiresAdmin = true;
 require_once("../../include.php");
 
@@ -86,7 +87,7 @@ if ( array_key_exists("service", $_GET) )
 		if ( !$student )
 			$student = -1;
 		
-		addHistoryItem($laptop, $student, HISTORYEVENT_SERVICE, array("notes"=>htmlspecialchars($_GET['serviceNotes']), "type"=>htmlspecialchars($_GET['type'])));
+		addHistoryItem($laptop, $student, HISTORYEVENT_SERVICE, htmlspecialchars($_GET['serviceNotes']), $_GET['type']);
 	}
 	header("Location: laptop.php?id=".$_GET['service']);
 	die();

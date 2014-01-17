@@ -68,11 +68,30 @@ define("HISTORYEVENT_SIGNOUT", 11);
 
 define("TICKETSTATE_CLOSED", 0);
 define("TICKETSTATE_OPEN", 1);
+define("TICKETSTATE_ONHOLD", 2);
+define("TICKETSTATE_DELETED", 3);
 
 define("API_SUCCESS", "success");
 define("API_STATUS", "status");
 define("API_INFO", "info");
+define("API_RESULT", "result");
 
 define("API_DATA_ID", "id");
 define("API_DATA_NAME", "name");
+define("API_DATA_STUDENT", "student");
+define("API_DATA_ACTION", "action");
+define("API_DATA_BY", "by");
+define("API_DATA_FOR", "for");
+
+define("API_LIMIT", "limit");
+define("API_LIMIT_MY", "my");
+define("API_LIMIT_OPEN", "open");
+define("API_LIMIT_CLOSED", "closed");
+define("API_LIMIT_HELPER", "helper");
+define("API_LIMIT_ASSIGNED", "assigned");
+define("API_LIMIT_UNASSIGNED", "unassigned");
+
+define("API_ACTION_ALL", "all");
+define("API_ACTION_SEARCH", "search");
+define("API_ACTION_GET", "get");
 ?>
