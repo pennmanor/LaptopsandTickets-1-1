@@ -335,6 +335,31 @@ class Ticket
 	}
 	
 	/**
+	 * Sets the ticket state as "Deleted"
+	 * Users will not see the ticket anymore, but it will still be available to admins via the all ticket list or search
+	 * @return true on success, false on failure
+	 */
+	public function delete()
+	{
+		$result = $this->setProperty(PROPERTY_STATE, TICKETSTATE_DELETED);
+		if ( $result )
+			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, "deleted" );
+		return $result;
+	}
+	
+	/**
+	 * Sets the ticket state as "On hold"
+	 * @return true on success, false on failure
+	 */
+	public function hold()
+	{
+		$result = $this->setProperty(PROPERTY_STATE, TICKETSTATE_ONHOLD);
+		if ( $result )
+			addTicketHistoryItem(-1, $this, -1, HISTORYEVENT_TICKET_STATECHANGE, "deleted" );
+		return $result;
+	}
+	
+	/**
 	 * Get the value of $property for this ticket
 	 * @property $property The property to return the value of. This should be a constant from constants.php, but can also be a string with the column name.
 	 * @return The value of $property, false on failure
@@ -386,8 +411,11 @@ class Ticket
 	{
 		$mostRecentEntry = $this->getHistory();
 		$mostRecentEntry = $mostRecentEntry[0];
-		if ( $this->getProperty(PROPERTY_STATE) == TICKETSTATE_CLOSED )
+		$state = $this->getProperty(PROPERTY_STATE);
+		if ( $state == TICKETSTATE_CLOSED )
 			return "<span class=\"label label-inverse\">Closed</span>";
+		else if ( $state == TICKETSTATE_DELETED )
+				return "<span class=\"label label-important\">Deleted</span>";
 		else if ( !$this->getHelper() || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_INFO )
 		{
 			return "<span class=\"label label-important\">New Ticket</span>";
