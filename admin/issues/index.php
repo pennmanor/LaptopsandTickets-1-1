@@ -145,16 +145,26 @@ require_once("../../include.php");
 	<script src="../../js/Progress.js" type="text/javascript"></script>
 	<script src="../../js/Table.js" type="text/javascript"></script>
 	<script>
-	var searching = false;
+	var searching = false
+	var issueList = <?php echo json_encode($issueTypes); ?>;
 	var limits = [];
 	var laptopBar = new Progress("#laptopBar-inner", "#laptopBar", "#laptopBar-content", 2, function(){
 		$("#laptop-refresh").button("reset");
 	});
-	var laptopTable = new Table(["type", "body", "laptop"], ["Issue Type", "Discription", ""]);
+	var laptopTable = new Table(["type", "assetTag", "body", "laptop"], ["Issue Type", "Asset Tag", "Discription", ""]);
 	laptopTable.setProperties("table", {"class" : "table"});
 	laptopTable.setProperties("head-data", {"class" : "bold"});
-	laptopTable.addColumnProcessor("laptop", function(data){
-		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"../laptops/laptop.php?id=" + data + "\""}, "View Laptop");
+	laptopTable.addAdvancedColumnProcessor("type", function(data){
+		return issueList[data["issue"].subtype];
+	});
+	laptopTable.addAdvancedColumnProcessor("assetTag", function(data){
+		return data["laptop"].assetTag;
+	});
+	laptopTable.addAdvancedColumnProcessor("body", function(data){
+		return data["issue"].body;
+	});
+	laptopTable.addAdvancedColumnProcessor("laptop", function(data){
+		return createElement("button", {"class":"btn btn-inverse pull-right", "onclick" : "window.location = \"../laptops/laptop.php?id=" + data["laptop"].id + "\""}, "View Laptop");
 	});
 	function init(){
 		var data = {"action":"all"};
@@ -323,5 +333,4 @@ require_once("../../include.php");
 		}
 	</script>
 </body>
-
 </html>

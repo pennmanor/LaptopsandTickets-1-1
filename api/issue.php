@@ -62,7 +62,8 @@ try{
 	}
 	if(is_array($issues)){
 		foreach($issues as $issue){
-			$properties[] = $issue;
+			$laptop = Laptop::getByProperty(PROPERTY_ID, $issue['laptop']);
+			$properties[] = Array("issue" => $issue, "laptop" =>$laptop->getProperties());
 		}
 		$output[API_RESULT] = $properties;
 	}
