@@ -65,6 +65,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<li class="active"><a href="./index.php">Overview</a></li>
 						<li><a href="./tickets">Tickets</a></li>
 						<li><a href="./laptops">Laptops</a></li>
+						<li><a href="./issues">Issues</a></li>
 						<li><a href="./students">Students</a></li>
 						<li><a href="./calendar">Calendar</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedback">Feedback</a></li><?php } ?>
@@ -162,7 +163,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 								$color="badge-warning";
 						?>
 						<tr>
-							<td><a href="laptops/issueInfo.php?issueType=<?php echo $k; ?>"><strong><?php echo $issue; ?></strong></a> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
+							<td><a href="issues/issueInfo.php?issueType=<?php echo $k; ?>"><strong><?php echo $issue; ?></strong></a> <span class="badge <?php echo $color; ?> pull-right"><?php echo $count; ?></span></td>
 						</tr>
 						<?php
 						}

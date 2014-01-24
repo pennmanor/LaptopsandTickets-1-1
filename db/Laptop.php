@@ -51,7 +51,11 @@ class Laptop
 		$result = $mysql->query("INSERT INTO laptops (hostname, serial, assetTag, wirelessMAC, ethernetMAC, building) VALUES('".$hostname."', '".$serial."', ".$assetTag.", '".$wirelessMAC."', '".$ethernetMAC."', '".$building."')");
 		$laptop = new Laptop($mysql->insert_id); 
 		if ( $result )
-			addHistoryItem($laptop, -1, HISTORYEVENT_CREATION, array());
+		{
+			$d = addHistoryItem($laptop, -1, HISTORYEVENT_CREATION);
+			echo $d->error;
+		}
+
 		return $laptop;
 	}
 
@@ -67,31 +71,31 @@ class Laptop
 		$output = "";
 		foreach ($history as $row)
 		{
-			if ( $row['action'] == ACTION_CREATE )
+			if ( $row['type'] == ACTION_CREATE )
 			{
 				$output .= "<div class=\"alert action-info\"><strong>Created</strong><br>";
 				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was added to the database.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == ACTION_UNASSIGN )
+			else if ( $row['type'] == ACTION_UNASSIGN )
 			{
 				$output .= "<div class=\"alert\"><strong>Returned</strong><br>";
 				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was returned.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == ACTION_ASSIGN )
+			else if ( $row['type'] == ACTION_ASSIGN )
 			{
 				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
 				$output .= ($laptops?$laptops[$row['laptop']['id']]['assetTag']:"This computer")." was assigned to <a href=\"../students/student.php?sid=".$row['student']."\">".$row['student']."</a><br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
-			else if ( $row['action'] == HISTORYEVENT_SERVICE )
+			else if ( $row['type'] == HISTORYEVENT_SERVICE )
 			{
-				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['data']['type']]."</strong><br>";
-				$output .= stripcslashes(nl_fix($row['data']['notes']))."<br>";
+				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['subtype']]."</strong><br>";
+				$output .= stripcslashes(nl_fix($row['body']))."<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
@@ -196,10 +200,7 @@ class Laptop
 		while ( $d = mysqli_fetch_array($result) )
 		{
 			if ( !empty($d) )
-			{
-				$d['data'] = unserialize($d['data']);
 				$output[] = $d;
-			}
 		}
 		return $output;
 	}
