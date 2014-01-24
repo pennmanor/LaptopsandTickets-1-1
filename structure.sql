@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.1.44)
 # Database: OnetoOne
-# Generation Time: 2013-09-13 12:55:11 +0000
+# Generation Time: 2014-01-24 13:15:22 +0000
 # ************************************************************
 
 
@@ -23,8 +23,6 @@
 # Dump of table apikeys
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `apikeys`;
-
 CREATE TABLE `apikeys` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `key` text,
@@ -36,8 +34,6 @@ CREATE TABLE `apikeys` (
 
 # Dump of table feedback
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `feedback`;
 
 CREATE TABLE `feedback` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,15 +48,14 @@ CREATE TABLE `feedback` (
 # Dump of table history
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `history`;
-
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `laptop` int(11) NOT NULL DEFAULT '0',
   `student` text NOT NULL,
   `ticket` int(11) NOT NULL DEFAULT '0',
-  `action` int(11) NOT NULL,
-  `data` text NOT NULL,
+  `type` int(11) NOT NULL,
+  `subtype` int(11) DEFAULT NULL,
+  `body` text,
   `timestamp` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -69,8 +64,6 @@ CREATE TABLE `history` (
 
 # Dump of table laptops
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `laptops`;
 
 CREATE TABLE `laptops` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -89,8 +82,6 @@ CREATE TABLE `laptops` (
 # Dump of table students
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `students`;
-
 CREATE TABLE `students` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `sid` text NOT NULL,
@@ -105,8 +96,6 @@ CREATE TABLE `students` (
 # Dump of table tickets
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `tickets`;
-
 CREATE TABLE `tickets` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
@@ -115,6 +104,7 @@ CREATE TABLE `tickets` (
   `student` text NOT NULL,
   `state` int(11) NOT NULL,
   `timestamp` int(11) DEFAULT NULL,
+  `notes` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
