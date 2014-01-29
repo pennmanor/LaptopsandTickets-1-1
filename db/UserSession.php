@@ -73,7 +73,7 @@ class UserSession
 	 */
 	public function isAuthenticated()
 	{
-		return $this->authenticated;
+		return $this->authenticated && !empty($this->id);
 	}
 	
 	/**
