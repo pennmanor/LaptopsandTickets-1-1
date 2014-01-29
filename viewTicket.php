@@ -80,7 +80,7 @@ else if ( array_key_exists("reply", $_GET) )
 			if ( $properties[PROPERTY_STATE] == TICKETSTATE_OPEN )
 			{
 			?>
-				<button class="btn btn-danger pull-right" onClick="window.location = 'viewTicket.php?id=<?php echo $_GET['id']; ?>&close=true'">Close Ticket</button>
+				<button class="btn btn-success pull-right" onClick="window.location = 'viewTicket.php?id=<?php echo $_GET['id']; ?>&close=true'">Mark as Solved</button>
 			<?php
 				}
 			else
