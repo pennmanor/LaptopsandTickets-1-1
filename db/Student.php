@@ -391,13 +391,13 @@ class Student
 			else if ( $row['type'] == HISTORYEVENT_TICKET_STATECHANGE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Ticket Change</strong><br>";
-				$output .= $row['student']." ".$row['data']['verb']." a <a href=\"../tickets/ticket.php?id=".$row['ticket']."\">ticket</a>.<br>";
+				$output .= $row['student']." ".$row['body']." a <a href=\"../tickets/ticket.php?id=".$row['ticket']."\">ticket</a>.<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
 			}
 			else if ( $row['type'] == HISTORYEVENT_SERVICE )
 			{
-				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['data']['type']]."</strong><br>";
+				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes['body']."</strong><br>";
 				$output .= stripcslashes(nl_fix($row['data']['notes']))."<br>";
 				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
 				$output .= "</div>";
