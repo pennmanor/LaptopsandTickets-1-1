@@ -20,13 +20,13 @@ require_once("../include.php");
 $helper = new Helper($session->getID());
 if ( array_key_exists("signin", $_GET) )
 {
-	$helper->signin(0,0);
+	$helper->signin();
 	header("Location: index.php");
 	die();
 }
 else if ( array_key_exists("signout", $_GET) )
 {
-	$helper->signout(0,0);
+	$helper->signout();
 	header("Location: index.php");
 	die();
 }

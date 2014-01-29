@@ -27,13 +27,13 @@ class Helper extends Student{
 	 */
 	public function isSignedIn(){
 		global $mysql;
-		$query = "SELECT `action` FROM `history` WHERE `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNIN."\" OR `student` = \"".$this->getID()."\" AND `action` = \"".HISTORYEVENT_SIGNOUT."\" ORDER BY `timestamp` DESC LIMIT 1";
+		$query = "SELECT `type` FROM `history` WHERE `student` = \"".$this->getID()."\" AND `type` = \"".HISTORYEVENT_SIGNIN."\" OR `student` = \"".$this->getID()."\" AND `type` = \"".HISTORYEVENT_SIGNOUT."\" ORDER BY `timestamp` DESC LIMIT 1";
 		$result = $mysql->query($query);
 		if(!$result)
 			return false;
 		$row = mysqli_fetch_assoc($result);
 		
-		return $row["action"];
+		return $row["type"];
 	}
 	
 	/**
@@ -41,8 +41,8 @@ class Helper extends Student{
 	 * @param $id The ID of the API key being used
 	 * @param $name The name of the API key being used
 	 */
-	public function signin($id, $name){
-		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNIN, array("id" => $id, "name" => $name));
+	public function signin(){
+		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNIN);
 	}
 
 	/**
@@ -50,8 +50,8 @@ class Helper extends Student{
 	 * @param $id The ID of the API key being used
 	 * @param $name The name of the API key being used
 	 */
-	public function signout($id, $name){
-		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNOUT, array("id" => $id, "name" => $name));
+	public function signout(){
+		addHistoryItem(-1, $this->getID(), HISTORYEVENT_SIGNOUT);
 	}
 	
 	/**

@@ -35,7 +35,7 @@ try{
 		case HISTORYEVENT_SIGNIN:
 		$output[API_STATUS] = HISTORYEVENT_SIGNOUT;
 		$output[API_INFO] = "Logging ".$helper->getID()." out.";
-		$helper->signout($request->getID(), $request->getName());
+		$helper->signout();
 		break;
 	}
 }
