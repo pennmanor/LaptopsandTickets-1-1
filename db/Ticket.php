@@ -416,11 +416,11 @@ class Ticket
 			return "<span class=\"label label-inverse\">Closed</span>";
 		else if ( $state == TICKETSTATE_DELETED )
 				return "<span class=\"label label-important\">Deleted</span>";
-		else if ( !$this->getHelper() || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_INFO )
+		else if ( !$this->getHelper() || $mostRecentEntry['type'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['type'] == HISTORYEVENT_TICKET_INFO )
 		{
 			return "<span class=\"label label-important\">New Ticket</span>";
 		}
-		else if ( $mostRecentEntry['action'] == HISTORYEVENT_TICKET_REPLY )
+		else if ( $mostRecentEntry['type'] == HISTORYEVENT_TICKET_REPLY )
 		{
 			$studentReply = new Student($mostRecentEntry['student']);
 			if ( $studentReply->isHelper() )
