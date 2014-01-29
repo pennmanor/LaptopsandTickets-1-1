@@ -404,6 +404,7 @@ class Ticket
 	
 	/**
 	 * Get the state label for this ticket. (New ticket, helper replied, closed, etc)
+	 * TODO: Move the HTML generation out of this function
 	 * @return The label as HTML for this ticket
 	 */
 	public function getStateLabel()
@@ -412,23 +413,23 @@ class Ticket
 		$mostRecentEntry = $mostRecentEntry[0];
 		$state = $this->getProperty(PROPERTY_STATE);
 		if ( $state == TICKETSTATE_CLOSED )
-			return "Closed";
+			return "<span class=\"label label-inverse\">Closed</span>";
 		else if ( $state == TICKETSTATE_DELETED )
-				return "Delete";
+				return "<span class=\"label label-important\">Deleted</span>";
 		else if ( !$this->getHelper() || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_STATECHANGE || $mostRecentEntry['action'] == HISTORYEVENT_TICKET_INFO )
 		{
-			return "New Ticket";
+			return "<span class=\"label label-important\">New Ticket</span>";
 		}
 		else if ( $mostRecentEntry['action'] == HISTORYEVENT_TICKET_REPLY )
 		{
 			$studentReply = new Student($mostRecentEntry['student']);
 			if ( $studentReply->isHelper() )
 			{
-				return "Helper Replied";
+				return "<span class=\"label label-success\">Helper Replied</span>";
 			}
 			else
 			{
-				return "Student Replied";
+				return "<span class=\"label label-warning\">Student Replied</span>";
 			}
 		}
 
