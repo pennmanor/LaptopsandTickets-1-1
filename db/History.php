@@ -24,7 +24,7 @@ function getLaptopsByIssueType($issueType)
 {
 	global $mysql;
 	$output = array();
-	$result = $mysql->query("SELECT * FROM `history` WHERE `action` = 4");
+	$result = $mysql->query("SELECT * FROM `history` WHERE `type` = 4");
 	
 	while ( $d = mysqli_fetch_array($result) )
 	{

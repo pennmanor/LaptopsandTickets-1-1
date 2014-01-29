@@ -132,9 +132,9 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						$highestIssueCount = -1;
 						foreach ( $allHistory as $event )
 						{
-							if ( $event['action'] == HISTORYEVENT_SERVICE )
+							if ( $event['type'] == HISTORYEVENT_SERVICE )
 							{
-								$issueCounts[$event['data']['type']]++;
+								$issueCounts[$event['subtype']]++;
 							}
 						}
 						
