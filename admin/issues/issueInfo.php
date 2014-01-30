@@ -84,7 +84,7 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 						$numIssues = 0;
 						foreach ( $history as $event )
 						{
-							if ( $event['action'] == HISTORYEVENT_SERVICE )
+							if ( $event['type'] == HISTORYEVENT_SERVICE )
 								$numIssues++;
 						}
 					?>
@@ -96,7 +96,7 @@ $laptops = getLaptopsByIssueType($_GET['issueType']);
 						<td><?php echo $laptop->getProperty(PROPERTY_WMAC); ?></td>
 						<td><?php echo $numIssues; ?></td>
 						<td><?php echo $buildingList[$laptop->getProperty(PROPERTY_BUILDING)]; ?></td>
-						<td><a class="btn btn-inverse" href="laptop.php?id=<?php echo $laptop->getProperty(PROPERTY_ID); ?>">Details</a></td>
+						<td><a class="btn btn-inverse" href="../laptops/laptop.php?id=<?php echo $laptop->getProperty(PROPERTY_ID); ?>">Details</a></td>
 					</tr>
 					<?php
 					}
