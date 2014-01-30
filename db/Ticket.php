@@ -261,13 +261,13 @@ class Ticket
 	
 	/**
 	 * Get the student who created this ticket.
-	 * @return The Student object of the student who created this ticket. false on failure
+	 * @return The Student object of the student who created this ticket. Returns a student with id=0 on failure
 	 */
 	public function getStudent()	
 	{
 		$student = $this->getProperty("student");
 		if ( !$student )
-			return false;
+			return new Student(0);
 		return new Student($student);
 	}
 	
