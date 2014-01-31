@@ -135,16 +135,13 @@ $tickets = Ticket::getAllByProperty(PROPERTY_STUDENT, $session->getID());
 		var ticketBar = new Progress("#ticketBar-inner", "#ticketBar", "#ticketBar-content", 2, function(){
 			$("#ticket-refresh").button("reset");
 		});
-		var ticketTable = new Table(["title", "timestamp", "helper", "id"], ["Title", "Date", "Helper", ""]);
+		var ticketTable = new Table(["title", "date", "helper", "id"], ["Title", "Date", "Helper", ""]);
 		ticketTable.setProperties("table", {"class" : "table"});
 		ticketTable.setProperties("head-data", {"class" : "bold"});
 		ticketTable.addAdvancedColumnProcessor("title", function(data){
-			var label = createElement("span", {"class" : "label " + (data["state"] == 1 ? "label-success" : "label-inverse")}, (data["state"] == 1 ? "Open" : "Closed"));
-			return createElement("span", null, data["title"] + " ", label);
-		});
-		ticketTable.addColumnProcessor("timestamp", function(data){
-			var date = new Date(parseInt(data)*1000);
-			return date.toDateString();
+			var title = createElement("span", null, data["title"] + " ");
+			$(title).append(data["tag"]);
+			return title;
 		});
 		ticketTable.addColumnProcessor("helper", function(data){
 			return $.trim(data).length != 0 ? data:"Unassigned";

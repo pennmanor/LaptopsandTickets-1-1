@@ -85,8 +85,13 @@ try{
 		}
 	}
 	if(is_array($tickets)){
-		foreach($tickets as $ticket){
-			$properties[] = $ticket->getProperties();
+		foreach($tickets as $k => $ticket){
+			$properties[$k] = $ticket->getProperties();
+			$t= new Student($properties[$k]["helper"]);
+			if($t->getProperty("name"))
+				$properties[$k]["helper"] = $t->getProperty("name");
+			$properties[$k]["date"] = date("F j, Y h:i A", $properties[$k]["timestamp"]);
+			$properties[$k]["tag"] = $ticket->getStateLabel();
 		}
 		$output[API_RESULT] = $properties;
 	}
