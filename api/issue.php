@@ -39,17 +39,11 @@ try{
 		case API_ACTION_SEARCH:
 		if(!$by)
 			throw new Exception("Cannot search laptops, No \"by\" data provided.");
-		if($by == "all") {
-			foreach ( $allHistory as $event ) {
-				if(strpos($event['body'], $for) !== false) {
-					$issues[] = $event;
-				}
-			}
-			
-		}
+		if($by == "all") 
+			throw new Exception("Searching all Issues is not supported.");
 		else {
 			foreach ( $allHistory as $event ) {
-				if($event['type'] = $by && strpos($event['body'], $for) !== false) {
+				if(stripos($event[$by], $for) !== false) {
 					$issues[] = $event;
 				}
 			}
@@ -62,7 +56,8 @@ try{
 	}
 	if(is_array($issues)){
 		foreach($issues as $issue){
-			$laptop = Laptop::getByProperty(PROPERTY_ID, $issue['laptop']);
+			if(!$laptop = Laptop::getByProperty(PROPERTY_ID, $issue['laptop']))
+				$laptop = new Laptop(0);
 			$properties[] = Array("issue" => $issue, "laptop" =>$laptop->getProperties());
 		}
 		$output[API_RESULT] = $properties;

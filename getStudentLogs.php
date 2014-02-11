@@ -26,7 +26,7 @@ foreach($helpers as $helper){
     $students[$helper] = $i;
     $i++;
 }
-$query = "SELECT `student`, `timestamp` FROM `history` WHERE `action` = \"".HISTORYEVENT_SIGNIN."\" AND `timestamp` BETWEEN ".($from/1000)." AND ".($to/1000);
+$query = "SELECT `student`, `timestamp` FROM `history` WHERE `type` = \"".HISTORYEVENT_SIGNIN."\" AND `timestamp` BETWEEN ".($from/1000)." AND ".($to/1000);
 $result = $mysql->query($query);
 $first = true;
 ?>
