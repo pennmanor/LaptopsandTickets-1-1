@@ -54,19 +54,6 @@ if ( array_key_exists("submit", $_POST) )
 	else
 		$showBox = RESULT_FAIL;
 }
-
-$pageNumber = intval($_GET['page']);
-if ( $pageNumber < 1 )
-{
-	$pageNumber = 1;
-}
-
-$laptops = Laptop::getAll();
-$nPages = ceil(count($laptops)/$itemsPerPage);
-
-$itemStart = ($pageNumber-1)*$itemsPerPage;
-$itemEnd = $itemStart+$itemsPerPage;
-$laptops = array_subset($laptops, $itemStart, $itemEnd);
 ?>
 <!DOCTYPE html>
 <html>

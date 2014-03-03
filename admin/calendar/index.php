@@ -16,6 +16,12 @@
 */
 $requiresAdmin = true;
 include_once("../../include.php");
+
+$from = array_key_exists("from",$_GET) && $_GET["from"] != "" ? $_GET["from"] : "Monday this week";
+$to = array_key_exists("to",$_GET) && $_GET["to"] != "" ? $_GET["to"] : "Friday this week";
+
+$fromStamp = strtotime($from);
+$toStamp = strtotime($to);
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +29,6 @@ include_once("../../include.php");
 	<title>Sign log</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../css/calendar.min.css">
 	<link rel="stylesheet" href="../../css/main.css">
 	<link rel="stylesheet" href="../../css/style.css">
 	<link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
@@ -46,32 +51,30 @@ include_once("../../include.php");
 			</div>
 		</div>
 	</div>
+	<br>
 	<div class="container">
-		<div class="page-header">
-			<div class="pull-right form-inline">
-				<div class="btn-group">
-					<button class="btn btn-primary" data-calendar-nav="prev">Prev</button>
-					<button class="btn" data-calendar-nav="today">Today</button>
-					<button class="btn btn-primary" data-calendar-nav="next">Next</button>
-				</div>
-				<div class="btn-group">
-					<button class="btn btn-warning" data-calendar-view="year">Year</button>
-					<button class="btn btn-warning active" data-calendar-view="month">Month</button>
-					<button class="btn btn-warning" data-calendar-view="week">Week</button>
-					<button class="btn btn-warning" data-calendar-view="day">Day</button>
-				</div>
-			</div>
-			<h3><span class="date"></span></h3>
-		</div>
-		<div class="row">
-			<div class="span10">
-				<div id="calendar"></div>
-			</div>
-			<div class="span2">
-				<ul id="eventlist" class="cal-event-list unstyled"></ul>
-			</div>
-		</div>
-		<br><br>
+		<p class="lead" id="filter">Help Desk Logs from <?php echo $from ?> to <?php echo $to ?>.</p>
+		<form>
+			<fieldset>
+				<legend>Log Filter</legend>
+				<label>From:</label>
+				<input type="date" name="from" value="<?php echo $from; ?>">
+				<label>To:</label>
+				<input type="date" name="to" value="<?php echo $to; ?>"><br>
+				<button type="submit" class="btn">Submit</button>
+			</fieldset>
+		</form>
+	<?php
+	
+	$query = "SELECT `student`, `type`, `timestamp` FROM `history` WHERE `type` in (\"".HISTORYEVENT_SIGNIN."\",\" ".HISTORYEVENT_SIGNOUT."\") AND `timestamp` BETWEEN ".($fromStamp)." AND ".($toStamp);
+	$result = $mysql->query($query);
+	while($row = mysqli_fetch_array($result)) {
+		$student = new Student($row["student"]);
+		$status = $row["type"] == HISTORYEVENT_SIGNIN ? "signed in" : "signed out";
+		$color = $row["type"] == HISTORYEVENT_SIGNIN ? "success" : "info";
+		?>
+		<div class="alert alert-<?php echo $color; ?>"><strong><?php echo $student->getName()?></strong> <?php echo $status;?> on <strong><?php echo date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])?></strong></div>
+	<?php } ?>
 	</div>
 		<script type="text/javascript" src="../../js/jquery-1.9.1.js"></script>
 		<script type="text/javascript" src="../../js/underscore-min.js"></script>
