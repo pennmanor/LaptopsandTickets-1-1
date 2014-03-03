@@ -172,7 +172,7 @@ if ( array_key_exists("id", $_GET) )
 						<li class="active"><a href="./index.php">Laptops</a></li>
 						<li><a href="../issues">Issues</a></li>
 						<li><a href="../students">Students</a></li>
-						<li><a href="../calendar">Calendar</a></li>
+						<li><a href="../calendar">Logs</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
 				

@@ -26,7 +26,7 @@ $toStamp = strtotime($to);
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sign log</title>
+	<title>Help Desk Logs</title>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../../css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/main.css">
@@ -45,7 +45,7 @@ $toStamp = strtotime($to);
 					<li><a href="../laptops">Laptops</a></li>
 					<li><a href="../issues">Issues</a></li>
 					<li><a href="../students">Students</a></li>
-					<li class="active"><a href="#">Calendar</a></li>
+					<li class="active"><a href="#">Logs</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
 			</div>
@@ -54,13 +54,13 @@ $toStamp = strtotime($to);
 	<br>
 	<div class="container">
 		<p class="lead" id="filter">Help Desk Logs from <?php echo $from ?> to <?php echo $to ?>.</p>
-		<form>
+		<form class="form-inline">
 			<fieldset>
 				<legend>Log Filter</legend>
 				<label>From:</label>
 				<input type="date" name="from" value="<?php echo $from; ?>">
 				<label>To:</label>
-				<input type="date" name="to" value="<?php echo $to; ?>"><br>
+				<input type="date" name="to" value="<?php echo $to; ?>">
 				<button type="submit" class="btn">Submit</button>
 			</fieldset>
 		</form>
