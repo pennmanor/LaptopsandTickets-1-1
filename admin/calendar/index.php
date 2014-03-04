@@ -20,8 +20,6 @@ include_once("../../include.php");
 $from = array_key_exists("from",$_GET) && $_GET["from"] != "" ? $_GET["from"] : "Monday this week";
 $to = array_key_exists("to",$_GET) && $_GET["to"] != "" ? $_GET["to"] : "Friday this week";
 
-$fromStamp = strtotime($from);
-$toStamp = strtotime($to);
 ?>
 <!DOCTYPE html>
 <html>
@@ -53,7 +51,26 @@ $toStamp = strtotime($to);
 	</div>
 	<br>
 	<div class="container">
-		<p class="lead" id="filter">Help Desk Logs from <?php echo $from ?> to <?php echo $to ?>.</p>
+		<p class="lead" id="filter">Help Desk Logs from <strong><?php echo $from ?></strong> to <strong><?php echo $to ?></strong>.</p>
+		<?php
+		if (($fromStamp = strtotime($from)) === false) {
+		    echo "<p>Could not read ($from). using Monday this week.</p>";
+			$fromStamp = strtotime("Monday this week");
+		}
+		if (($toStamp = strtotime($to)) === false) {
+		    echo "<p>Could not read ($to). using Friday this week.</p>";
+			$toStamp = strtotime("Friday this week");
+		}
+		if($fromStamp > $toStamp ) {
+			echo "<p>\"From\" time cannot be after \"To\" time. Using Monday this week and Friday this week.</p>";
+			$fromStamp = strtotime("Monday this week");
+			$toStamp = strtotime("Friday this week");
+		}
+		if($fromStamp == $toStamp ) {
+			echo "<p>\"From\" time cannot be the same \"To\" time. Adding a day to \"To\" time.";
+			$toStamp = strtotime("+1 day", $toStamp);
+		}
+		?>
 		<form class="form-inline">
 			<fieldset>
 				<legend>Log Filter</legend>
