@@ -67,7 +67,7 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						<li><a href="./laptops">Laptops</a></li>
 						<li><a href="./issues">Issues</a></li>
 						<li><a href="./students">Students</a></li>
-						<li><a href="./calendar">Calendar</a></li>
+						<li><a href="./calendar">Logs</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="./feedback">Feedback</a></li><?php } ?>
 					</ul>
 
@@ -141,9 +141,12 @@ $nTicketsClosed = $nTickets-$nTicketsOpen;
 						$issueMean = 0;
 						foreach ( $issueTypes as $k => $issue )
 						{
-							if ( $issueCounts[$k] > $highestIssueCount )
-								$highestIssueCount = $issueCounts[$k];
-							$issueMean += $issueCounts[$k];
+							if ( array_key_exists($k, $issueCounts) )
+							{
+								if ( $issueCounts[$k] > $highestIssueCount )
+									$highestIssueCount = $issueCounts[$k];
+								$issueMean += $issueCounts[$k];
+							}
 						}
 						
 						$issueMean /= count($issueTypes);

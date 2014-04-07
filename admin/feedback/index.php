@@ -47,7 +47,7 @@ $entries = Feedback::getAll();
 						<li><a href="../laptops">Laptops</a></li>
 						<li><a href="../issues">Issues</a></li>
 						<li><a href="../students">Students</a></li>
-						<li><a href="../calendar">Calendar</a></li>
+						<li><a href="../calendar">Logs</a></li>
 						<li class="active"><a href="../feedback">Feedback</a></li>
 					</ul>
 				</div>

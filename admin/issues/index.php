@@ -37,7 +37,7 @@ require_once("../../include.php");
 					<li><a href="../laptops">Laptops</a></li>
 					<li class="active"><a href="../issues">Issues</a></li>
 					<li><a href="../students">Students</a></li>
-					<li><a href="../calendar">Calendar</a></li>
+					<li><a href="../calendar">Logs</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
 			</div>
@@ -102,36 +102,19 @@ require_once("../../include.php");
 		</div>
 		<form id="search-form">
 			<div class="modal-body">
-				<ul class="nav nav-tabs" id="search-tabs">
-					<li class="active"><a href="#search-simple" data-toggle="tab">Simple</a></li>
-					<li><a href="#search-advanced" data-toggle="tab">Advanced</a></li>
-				</ul>
 				<p class="text-error hide">Please fill out all of the required forms</p>
-				<div class="tab-content">
-					<div class="tab-pane active" id="search-simple">
-						<div class="row-fluid">
-							<input type="text" class="offset1 span10" id="search-all-for" placeholder="Search Laptops">
-						</div>
+				<fieldset>
+					<div class="form-item">
+						<label>Search by:</label>
+						<select id="search-field-by" name="by">
+							<option value="body">Description</option>
+						</select>
 					</div>
-					<div class="tab-pane" id="search-advanced">
-						<fieldset>
-							<div class="form-item">
-								<label>Search by:</label>
-								<select id="search-field-by" name="by">
-									<option value="hostname">Host Name</option>
-									<option value="serial">Serial Number</option>
-									<option value="assetTag">Asset Tag</option>
-									<option value="wirelessMAC">Wireless Mac</option>
-									<option value="ethernetMAC">Ethernet MAC</option>
-								</select>
-							</div>
-							<div class="form-item">
-								<label>Search for:</label>
-								<input id="search-field-for" type="text" name="for">
-							</div>
-						</fieldset>
+					<div class="form-item">
+						<label>Search for:</label>
+						<input id="search-field-for" type="text" name="for">
 					</div>
-				</div>
+				</fieldset>
 			</div>
 		</form>
 		<div class="modal-footer">
@@ -151,7 +134,7 @@ require_once("../../include.php");
 	var laptopBar = new Progress("#laptopBar-inner", "#laptopBar", "#laptopBar-content", 2, function(){
 		$("#laptop-refresh").button("reset");
 	});
-	var laptopTable = new Table(["type", "assetTag", "body", "laptop"], ["Issue Type", "Asset Tag", "Discription", ""]);
+	var laptopTable = new Table(["type", "assetTag", "body", "laptop"], ["Issue Type", "Asset Tag", "Description", ""]);
 	laptopTable.setProperties("table", {"class" : "table"});
 	laptopTable.setProperties("head-data", {"class" : "bold"});
 	laptopTable.addAdvancedColumnProcessor("type", function(data){
@@ -192,50 +175,22 @@ require_once("../../include.php");
 	}
 	
 	function search(){
-		var activeTab  = -1;
-		$("#search-tabs li").each(function(index) {
-		   if($(this).hasClass("active")){
-			   activeTab  = index;
-		   }
+		var valid = true;
+		$($("#search-form search-advanced [required]").get().reverse()).each(function(key, ele){
+			if($.trim($(this).val()).length == 0){
+				$("#search-form .text-error").removeClass("hide");
+				valid = false;
+				$(this).focus();
+			}
+			else{
+				$("#search-form .text-error").addClass("hide");
+			}
 		});
-		switch(activeTab){
-		case 0:
-			var valid = true;
-			$($("#search-form search-simple [required]").get().reverse()).each(function(key, ele){
-				if($.trim($(this).val()).length == 0){
-					$("#search-form .text-error").removeClass("hide");
-					valid = false;
-					$(this).focus();
-				}
-				else{
-					$("#search-form .text-error").addClass("hide");
-				}
-			});
-			if(!valid)
-				return false;
-			searching = true;
-			var byData = "all";
-			var forData = $("#search-all-for").val();
-			break;
-		case 1:
-			var valid = true;
-			$($("#search-form search-advanced [required]").get().reverse()).each(function(key, ele){
-				if($.trim($(this).val()).length == 0){
-					$("#search-form .text-error").removeClass("hide");
-					valid = false;
-					$(this).focus();
-				}
-				else{
-					$("#search-form .text-error").addClass("hide");
-				}
-			});
-			if(!valid)
-				return false;
-			searching = true;
-			var byData = $("#search-field-by").val();
-			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
-			break;
-		}
+		if(!valid)
+			return false;
+		searching = true;
+		var byData = $("#search-field-by").val();
+		var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
 		if($.trim(forData).length != 0 ){
 			$("#searchItem").remove();
 			var data = {"action":"search", "by":byData, "for":forData};
@@ -249,7 +204,6 @@ require_once("../../include.php");
 		}
 		else
 			var data = {"action":"all", "by":byData, "for":forData, "limit":limits};
-		
 		laptopBar.reset();
 		window.console&&console.log(JSON.stringify(data));
 		getLaptops(JSON.stringify(data));

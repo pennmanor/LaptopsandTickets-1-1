@@ -51,7 +51,7 @@ if ( array_key_exists("sid", $_GET) )
 						<li><a href="../tickets">Tickets</a></li>
 						<li><a href="./index.php">Laptops</a></li>
 						<li class="active"><a href="../students">Students</a></li>
-						<li><a href="../calendar">Calendar</a></li>
+						<li><a href="../calendar">Logs</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
 				

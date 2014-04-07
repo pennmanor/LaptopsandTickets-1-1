@@ -54,19 +54,6 @@ if ( array_key_exists("submit", $_POST) )
 	else
 		$showBox = RESULT_FAIL;
 }
-
-$pageNumber = intval($_GET['page']);
-if ( $pageNumber < 1 )
-{
-	$pageNumber = 1;
-}
-
-$laptops = Laptop::getAll();
-$nPages = ceil(count($laptops)/$itemsPerPage);
-
-$itemStart = ($pageNumber-1)*$itemsPerPage;
-$itemEnd = $itemStart+$itemsPerPage;
-$laptops = array_subset($laptops, $itemStart, $itemEnd);
 ?>
 <!DOCTYPE html>
 <html>
@@ -88,7 +75,7 @@ $laptops = array_subset($laptops, $itemStart, $itemEnd);
 					<li class="active"><a href="../laptops">Laptops</a></li>
 					<li><a href="../issues">Issues</a></li>
 					<li><a href="../students">Students</a></li>
-					<li><a href="../calendar">Calendar</a></li>
+					<li><a href="../calendar">Logs</a></li>
 					<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 				</ul>
 			</div>

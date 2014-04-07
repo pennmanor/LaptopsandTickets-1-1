@@ -53,8 +53,9 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 						<li><a href="../index.php">Overview</a></li>
 						<li class="active"><a href="../tickets">Tickets</a></li>
 						<li><a href="../laptops">Laptops</a></li>
+						<li><a href="../issues">Issues</a></li>
 						<li><a href="../students">Students</a></li>
-						<li><a href="../calendar">Calendar</a></li>
+						<li><a href="../calendar">Logs</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
 				
@@ -79,6 +80,13 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 			?>
 			
 			<button class="btn btn-small btn-inverse" onclick="window.location = 'all.php'">View All Tickets</button><br><br>
+			<span class="sectionHeader">Create Ticket</span>
+			<hr>
+			<form action="" method="post">
+				<input type="text" name="title" placeholder="Title"><br>
+				<input type="text" name="student" placeholder="Student ID"><br>
+				<input type="submit" name="create" value="Create" class="btn btn-success">
+			</form>
 			<span class="sectionHeader">Unassigned Tickets</span>
 			<hr>
 			<table class="table table-bordered">
@@ -178,15 +186,6 @@ $tickets = Ticket::getAllByProperty("state", TICKETSTATE_OPEN);
 				}
 				?>
 			</table>
-			<br>
-			
-			<span class="sectionHeader">Create Ticket</span>
-			<hr>
-			<form action="" method="post">
-				<input type="text" name="title" placeholder="Title"><br>
-				<input type="text" name="student" placeholder="Student"><br>
-				<input type="submit" name="create" value="Create" class="btn btn-success">
-			</form>
 			<br>
 		</div>
 	</body>
