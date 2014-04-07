@@ -58,6 +58,7 @@ function getLaptopsByIssueType($issueType)
 function addHistoryItem($laptop, $student, $action, $body ="", $subtype = 0, $tOffset = 0)
 {
 	global $mysql;
+  global $session;
 	if ( @get_class($student) == "Student" )
 		$student = $student->getID();
 	if ( @get_class($laptop) == "Laptop" )
@@ -71,7 +72,12 @@ function addHistoryItem($laptop, $student, $action, $body ="", $subtype = 0, $tO
 	$body = real_escape_string($body);
 	if ( ($action = intval($action)) == 0 )
 		return false;
-	return $mysql->query("INSERT INTO history (laptop, student,type,body,subtype,timestamp, ticket) VALUES(".$laptop.", '".$student."', ".$action.", '".$body."', ".$subtype.", ".(time()+$tOffset).", 0)");
+  
+  $initiated_by = 0;
+  if ( $session )
+    $initiated_by = mysql_real_escape_string($session->getID());
+  
+	return $mysql->query("INSERT INTO history (laptop, student,type,body,subtype,timestamp, ticket, initiated_by) VALUES(".$laptop.", '".$student."', ".$action.", '".$body."', ".$subtype.", ".(time()+$tOffset).", 0, '".$initiated_by."')");
 }
 
 /** 
@@ -89,6 +95,7 @@ function addHistoryItem($laptop, $student, $action, $body ="", $subtype = 0, $tO
 function addTicketHistoryItem($laptop, $ticket, $student, $action, $body = "", $tOffset = 0)
 {
 	global $mysql;
+  global $session;
 	if ( @get_class($student) == "Student" )
 		$student = $student->getID();
 	if ( @get_class($laptop) == "Laptop" )
@@ -103,8 +110,13 @@ function addTicketHistoryItem($laptop, $ticket, $student, $action, $body = "", $
 	if ( ($action = intval($action)) == 0 )
 		return false;
 
+  $initiated_by = 0;
+  if ( $session )
+    $initiated_by = mysql_real_escape_string($session->getID());
+  
+
 	$body = real_escape_string($body);
-	return $mysql->query("INSERT INTO history (laptop, ticket, student,type,body, subtype,timestamp) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$body."', 0, ".(time()+$tOffset).")");
+	return $mysql->query("INSERT INTO history (laptop, ticket, student,type,body, subtype,timestamp, initiated_by) VALUES(".$laptop.", ".$ticket.", '".$student."', ".$action.", '".$body."', 0, ".(time()+$tOffset).", '".$initiated_by."')");
 }
 
 

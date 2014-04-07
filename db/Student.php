@@ -371,35 +371,41 @@ class Student
 	{
 		global $issueTypes;
 		$output = "";
+    
 		foreach ($history as $row)
 		{
 			$laptop = new Laptop($row['laptop']);
+      $recorded_by = new Student($row['initiated_by']);
+      $recorded_by_string = "";
+      if ( !empty($row['initiated_by']) && $recorded_by )
+        $recorded_by_string = "- Recorded by ".$recorded_by->getProperty("name");
+      
 			if ( $row['type'] == ACTION_UNASSIGN )
 			{
 				$output .= "<div class=\"alert\"><strong>Returned</strong><br>";
 				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was returned.<br>";
-				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])." ".$recorded_by_string."</small>";
 				$output .= "</div>";
 			}
 			else if ( $row['type'] == ACTION_ASSIGN )
 			{
 				$output .= "<div class=\"alert alert-success\"><strong>Assigned</strong><br>";
 				$output .= "<a href=\"../laptops/laptop.php?id=".$laptop->getID()."\">".$laptop->getProperty(PROPERTY_HOSTNAME)."</a> was assigned to ".$row['student']."<br>";
-				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])." ".$recorded_by_string."</small>";
 				$output .= "</div>";
 			}
 			else if ( $row['type'] == HISTORYEVENT_TICKET_STATECHANGE )
 			{
 				$output .= "<div class=\"alert alert-info\"><strong>Ticket Change</strong><br>";
 				$output .= $row['student']." ".$row['body']." a <a href=\"../tickets/ticket.php?id=".$row['ticket']."\">ticket</a>.<br>";
-				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])." ".$recorded_by_string."</small>";
 				$output .= "</div>";
 			}
 			else if ( $row['type'] == HISTORYEVENT_SERVICE )
 			{
-				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes['body']."</strong><br>";
-				$output .= stripcslashes(nl_fix($row['data']['notes']))."<br>";
-				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])."</small>";
+				$output .= "<div class=\"alert alert-info\"><strong>Service - ".$issueTypes[$row['subtype']]."</strong><br>";
+				$output .= stripcslashes(nl_fix($row['body']))."<br>";
+				$output .= "<small>Recorded on ".date("M d, Y", $row['timestamp'])." at ".date("g:i A", $row['timestamp'])." ".$recorded_by_string."</small>";
 				$output .= "</div>";
 			}
 		}
