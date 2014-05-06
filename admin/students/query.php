@@ -108,17 +108,17 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		
 		<div class="pagination pagination-centered">
 		  <ul>
-		    <li class="<?php if ( $pageNumber == 1 ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == 1 ) echo "#"; else echo "index.php?page=".($pageNumber-1); ?>">Prev</a></li>
+		    <li class="<?php if ( $pageNumber == 1 ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == 1 ) echo "#"; else echo "query.php?page=".($pageNumber-1); ?>">Prev</a></li>
 			<?php 
 			for ( $i = 0; $i < $nPages; $i++ )
 			{
 				$p = $i+1;
 			?>
-		    <li class="<?php if ( $pageNumber == $p ) echo "active"; ?>"><a href="index.php?page=<?php echo $p; ?>"><?php echo $p; ?></a></li>
+		    <li class="<?php if ( $pageNumber == $p ) echo "active"; ?>"><a href="query.php?page=<?php echo $p; ?>"><?php echo $p; ?></a></li>
 			<?php
 			}
 			?>
-		    <li class="<?php if ( $pageNumber == $nPages ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == $nPages ) echo "#"; else echo "index.php?page=".($pageNumber+1); ?>">Next</a></li>
+		    <li class="<?php if ( $pageNumber == $nPages ) echo "disabled"; ?>"><a href="<?php if ( $pageNumber == $nPages ) echo "#"; else echo "query.php?page=".($pageNumber+1); ?>">Next</a></li>
 		  </ul>
 		</div>
 	</div>
