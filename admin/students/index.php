@@ -64,7 +64,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	<link href="../../css/style.css" rel="stylesheet">
 	<link href="../../css/manager.css" rel="stylesheet">
 	<link href="../../css/order-form.css" rel="stylesheet">
-	
+
 	<script type="text/javascript">
 	function csvDL()
 	{
@@ -93,11 +93,11 @@ $students = array_subset($students, $itemStart, $itemEnd);
 	</div>
 	<br>
 	<div class="container">
-		
+
 		<?php if ( is_string($showBox) ) { ?>
 			<div class="alert"><?php echo $showBox; ?></div>
 		<?php } ?>
-		
+
 		<h2>Students<button class="btn btn-info pull-right" onclick="csvDL()">Download as CSV</button></h2>
 		<div class="manager large">
 			<div class="navbar navbar-static-top">
@@ -121,7 +121,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 				</div>
 			</section>
 		</div>
-		
+
 		<span class="sectionHeader">Management</span>
 		<hr>
 		<span class="alert">Any modifications that are made via this method will be removed if the auto-import script is run</span>
@@ -232,7 +232,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		    }
 		});
 	}
-	
+
 	function search(){
 		var activeTab  = -1;
 		$("#search-tabs li").each(function(index) {
@@ -284,7 +284,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 			if($("#search-form [name=limit-unassigned]").is(":checked"))
 				addSearchLimit("unassigned", "Not assigned a Laptop");
 			else
-				removeSearchLimit("assigned");
+				removeSearchLimit("unassigned");
 			var byData = $("#search-field-by").val();
 			var forData = $("#search-field-for").val() != "" ? $("#search-field-for").val() : " ";
 			break;
@@ -313,7 +313,7 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		}
 		else
 			var data = {"action":"all", "limit":limits};
-		
+
 		ticketBar.reset();
 		getLaptops(JSON.stringify(data));
 	}
@@ -327,10 +327,8 @@ $students = array_subset($students, $itemStart, $itemEnd);
 		});
 	}
 	function proccessLaptops(d){
-		window.console&&console.log(d);
 		 var data = JSON.parse(d);
-		
-		window.console&&console.log(data.result);
+
 		if(data.success == 1){
 			$("#ticketBar-content").html(ticketTable.buildTable(data.result));
 		}
