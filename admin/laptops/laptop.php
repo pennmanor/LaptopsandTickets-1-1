@@ -177,7 +177,7 @@ if ( array_key_exists("id", $_GET) )
 					</ul>
 				
 					<form class="navbar-search pull-right" action="./query.php">
-					  <input type="text" class="search-query" name="query" placeholder="Search Laptops">
+					  <input type="text" class="search-query" name="query" placeholder="Search Laptops" autofocus>
 					</form>
 				</div>
 			</div>
