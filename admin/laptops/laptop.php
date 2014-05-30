@@ -56,7 +56,7 @@ if ( array_key_exists("assign", $_GET) )
 		header("Location: laptop.php?id=".$_GET['assign']);
 		die();
 	}
-	else 
+	else
 	{
 		header("Location: laptop.php?id=".$_GET['assign']."&studentDoesNotExist=".$_GET['to']);
 		die();
@@ -86,7 +86,7 @@ if ( array_key_exists("service", $_GET) )
 		$student = $laptop->getOwner();
 		if ( !$student )
 			$student = -1;
-		
+
 		addHistoryItem($laptop, $student, HISTORYEVENT_SERVICE, htmlspecialchars($_GET['serviceNotes']), $_GET['type']);
 	}
 	header("Location: laptop.php?id=".$_GET['service']);
@@ -112,11 +112,11 @@ if ( array_key_exists("id", $_GET) )
 	<link href="../../css/style.css" rel="stylesheet">
 	<script type="text/javascript">
 	var thisLaptopID = <?php echo $_GET['id']; ?>
-	
+
 	function handleAssign()
 	{
 		var newOwner = false;
-		
+
 		while ( !newOwner )
 		{
 			newOwner = prompt("Please enter a valid student ID for the new owner.");
@@ -125,7 +125,7 @@ if ( array_key_exists("id", $_GET) )
 		}
 		window.location = "laptop.php?assign="+thisLaptopID+"&to="+newOwner;
 	}
-	
+
 	function handleUnassign()
 	{
 		var yes = confirm("Are you sure you want to unassign this computer from it's current owner?");
@@ -134,7 +134,7 @@ if ( array_key_exists("id", $_GET) )
 			window.location = "laptop.php?unassign="+thisLaptopID;
 		}
 	}
-	
+
 	function confirmDelete()
 	{
 		var yes = confirm("Are you sure you want to remove this computer from the database? You can not undo this change.");
@@ -143,7 +143,7 @@ if ( array_key_exists("id", $_GET) )
 			window.location = "laptop.php?delete="+thisLaptopID;
 		}
 	}
-	
+
 	function saveNotes()
 	{
 		$.ajax("laptop.php",
@@ -152,12 +152,12 @@ if ( array_key_exists("id", $_GET) )
 			type:"POST"
 		});
 	}
-	
+
 	function csvDL()
 	{
 		window.location = "reportGen.php?getHistoryCSV="+thisLaptopID;
 	}
-	
+
 	</script>
 </head>
 
@@ -175,7 +175,7 @@ if ( array_key_exists("id", $_GET) )
 						<li><a href="../calendar">Logs</a></li>
 						<?php if ( $showFeedbackForm ) { ?><li><a href="../feedback">Feedback</a></li><?php } ?>
 					</ul>
-				
+
 					<form class="navbar-search pull-right" action="./query.php">
 					  <input type="text" class="search-query" name="query" placeholder="Search Laptops" autofocus>
 					</form>
@@ -185,13 +185,13 @@ if ( array_key_exists("id", $_GET) )
 		<br>
 		<div class="container">
 			<?php
-			if ( array_key_exists("studentAlreadyAssignedTo", $_GET) ) 
+			if ( array_key_exists("studentAlreadyAssignedTo", $_GET) )
 			{
 			?>
 				<div class="alert alert-error">This student already has a <a href="laptop.php?id=<?php echo $_GET['studentAlreadyAssignedTo']; ?>">laptop</a> assigned</div>
 			<?php
 			}
-			else if ( array_key_exists("studentDoesNotExist", $_GET) ) 
+			else if ( array_key_exists("studentDoesNotExist", $_GET) )
 			{
 			?>
 				<div class="alert alert-error">Student ID <?php echo $_GET['studentDoesNotExist']; ?> does not exist in the database.</div>
@@ -202,8 +202,8 @@ if ( array_key_exists("id", $_GET) )
 			{
 				$properties = $laptop->getProperties();
 			?>
-				<h1><?php echo $properties[PROPERTY_HOSTNAME]; ?></h1> 
-				
+				<h1><?php echo $properties[PROPERTY_HOSTNAME]; ?></h1>
+
 				<?php
 				if ( $assignedTo )
 					echo "<span class=\"label label-success\">Assigned</span> <button class=\"btn btn-warning btn-mini\" onClick=\"handleUnassign()\">Unassign</button>";
@@ -218,22 +218,22 @@ if ( array_key_exists("id", $_GET) )
 						<td><strong>Asset Tag</strong></td>
 						<td><?php echo $properties[PROPERTY_ASSETTAG]; ?></td>
 					</tr>
-				
+
 					<tr>
 						<td><strong>Serial</strong></td>
 						<td><?php echo $properties[PROPERTY_SERIAL]; ?></td>
 					</tr>
-				
+
 					<tr>
 						<td><strong>Ethernet MAC</strong></td>
 						<td><?php echo $properties[PROPERTY_EMAC]; ?></td>
 					</tr>
-				
+
 					<tr>
 						<td><strong>Wireless MAC</strong></td>
 						<td><?php echo $properties[PROPERTY_WMAC]; ?></td>
 					</tr>
-					
+
 					<tr>
 						<td><strong>Building</strong></td>
 						<td><?php echo $buildingList[$properties[PROPERTY_BUILDING]]; ?></td>
@@ -254,15 +254,19 @@ if ( array_key_exists("id", $_GET) )
 						<td><strong>Owner Name</strong></td>
 						<td><?php echo $assignedTo->getName(); ?></td>
 					</tr>
+          <tr>
+            <td><strong>Owner Grade</strong></td>
+            <td><?php echo $assignedTo->getProperty("grade"); ?></td>
+          </tr>
 
 				</table>
 				<?php
 				}
 				?>
 				<br>
-				
+
 				<span class="sectionHeader">Notes</span>
-				<hr> 
+				<hr>
 				<form action="" method="GET">
 					<textarea rows="5" name="notesBox" class="notesBox"><?php echo stripcslashes($properties[PROPERTY_NOTES]); ?></textarea>
 					<input type="hidden" name="id" value="<?php echo $properties[PROPERTY_ID]; ?>">
@@ -270,15 +274,15 @@ if ( array_key_exists("id", $_GET) )
 				</form>
 				<br><br><br><br>
 				<span class="sectionHeader">Service</span>
-				<hr> 
+				<hr>
 				<form action="" method="GET">
 					Issue Type<br>
 					<select name="type">
-						<?php 
+						<?php
 						foreach ( $issueTypes as $k => $issue )
 						{
 						?>
-						<option value="<?php echo $k; ?>"><?php echo $issue; ?></option>	
+						<option value="<?php echo $k; ?>"><?php echo $issue; ?></option>
 						<?php
 						}
 						?>
@@ -308,7 +312,7 @@ if ( array_key_exists("id", $_GET) )
 			</div>
 			<?php
 			}
-			?>	
+			?>
 		</div>
 	</body>
 
